@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local/lop_eval/eval_result.schema.json",
+  "title": "LoP consistency evaluation result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "document_id",
+    "eval_version",
+    "overall_score",
+    "passed",
+    "issues",
+    "summary"
+  ],
+  "properties": {
+    "document_id": {
+      "type": "string",
+      "description": "Identifier of the evaluated document"
+    },
+    "eval_version": {
+      "type": "string",
+      "description": "Evaluator package / spec version"
+    },
+    "overall_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "0-100 aggregate score after deductions"
+    },
+    "passed": {
+      "type": "boolean",
+      "description": "True if score meets threshold and no critical issues (per config)"
+    },
+    "threshold": {
+      "type": "number",
+      "description": "Pass threshold that was applied"
+    },
+    "issues": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/issue" }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["critical", "major", "minor"],
+      "properties": {
+        "critical": { "type": "integer", "minimum": 0 },
+        "major": { "type": "integer", "minimum": 0 },
+        "minor": { "type": "integer", "minimum": 0 }
+      }
+    }
+  },
+  "$defs": {
+    "issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "severity",
+        "description",
+        "offending_text",
+        "expected_text_or_rule"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Checker-defined type, e.g. numeric_conflict"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["critical", "major", "minor"]
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable explanation"
+        },
+        "offending_text": {
+          "type": "string",
+          "description": "Quoted or summarized problematic span"
+        },
+        "expected_text_or_rule": {
+          "type": "string",
+          "description": "What should match, or which rule was violated"
+        },
+        "location": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "section_id": { "type": "string" },
+            "section_title": { "type": "string" },
+            "block_index": { "type": "integer", "minimum": 0 },
+            "block_id": { "type": "string" },
+            "note": { "type": "string" }
+          }
+        },
+        "related_locations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "description": "Optional additional anchors (e.g. contrasting mentions)"
+        },
+        "checker_id": {
+          "type": "string",
+          "description": "Implementing checker name"
+        },
+        "evidence": {
+          "type": "object",
+          "description": "Structured hints for debugging (normalized values, cluster ids, etc.)",
+          "additionalProperties": true
+        }
+      }
+    }
+  }
+}

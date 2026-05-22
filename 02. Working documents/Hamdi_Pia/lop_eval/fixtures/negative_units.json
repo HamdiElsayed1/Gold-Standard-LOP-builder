@@ -1,0 +1,19 @@
+{
+  "document_id": "negative_units",
+  "title": "Mixed currency",
+  "sections": [
+    {
+      "id": "fees",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fees are USD 2 mln for the core team."
+        },
+        {
+          "type": "paragraph",
+          "text": "Travel is billed at EUR 2 mln pass-through."
+        }
+      ]
+    }
+  ]
+}

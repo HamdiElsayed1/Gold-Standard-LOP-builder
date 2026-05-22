@@ -1,0 +1,180 @@
+# Gold-pattern catalog — trace hints to workspace Background Material files (stems).
+# Do not treat as client facts; patterns scaffold drafting and coach gates only.
+version: 1
+
+sections:
+  context_objectives:
+    structure_hints:
+      - Executive summary of client situation (neutral / no invented facts)
+      - Stated objectives aligned to RFP or confirmed intake
+      - Scope boundaries and explicit exclusions where known
+    win_logic:
+      - Restate the buy using client vocabulary when sourced
+      - Link objectives to measurable outcomes only if manifest supports it
+    must_have_evidence:
+      - manifest_row_or_source_for_objectives
+    sources:
+      - stem: "928635 Gold Standard Asset-enabled Commercial IDP GEM LOP Guide"
+        note: "Standard LoP framing / chapter spine reference"
+      - stem: "22-05-2021 - Proposal Aberkyn for the TenneT Executive Board Journey 2021 and 2022 - signed"
+        note: "Signed proposal — context and journey framing"
+      - stem: "20230905 Achmea leiderschap ondersteuning_vCase"
+        note: "Case-style LoP — leadership support context"
+    category_overrides:
+      competitive:
+        structure_hints:
+          - Explicit evaluation criteria mapping (only if in RFP/manifest)
+        win_logic:
+          - Differentiated positioning vs alternatives — evidence-bound only
+      relationship_building:
+        structure_hints:
+          - Relationship history and trust-building narrative (sourced only)
+        win_logic:
+          - Long-term partnership angle without speculative ROI
+
+  why_mckinsey:
+    structure_hints:
+      - Distinctive firm assets relevant to this pursuit
+      - Proof points — named credentials / past work only from manifest
+      - Risk posture (how we work with client) — generic unless sourced
+    win_logic:
+      - "Have we done this before?" → cite credential or prior engagement snippet
+      - Pair each proof bullet with manifest # or TBD
+    must_have_evidence:
+      - proof_bullet_manifest_citation_or_evidence_required_flag
+    sources:
+      - stem: "928635 Gold Standard Asset-enabled Commercial IDP GEM LOP Guide"
+        note: "Why McKinsey / proof patterns"
+      - stem: "20251022 - Aberkyn introduction"
+        note: "Capability narrative for Aberkyn-related pursuits"
+    category_overrides:
+      competitive:
+        win_logic:
+          - Three crisp differentiators with mandatory source tags
+      exploratory:
+        structure_hints:
+          - Lighter proof set; flag gaps as workshop topics
+
+  timeline_team:
+    structure_hints:
+      - Phased timeline with milestones (no invented dates)
+      - Staffing model and governance (neutral role labels)
+      - Client inputs / workshops called out as dependencies
+    win_logic:
+      - Show cadence alignment to client decision moments when known
+    must_have_evidence:
+      - timeline_TBD_if_dates_not_in_manifest
+    sources:
+      - stem: "928635 Gold Standard Asset-enabled Commercial IDP GEM LOP Guide"
+        note: "Timeline and resourcing tables"
+      - stem: "20260422 Defensie CST_vLP slide 15"
+        note: "Example CST / pursuit timing slide"
+    category_overrides:
+      non_competitive:
+        structure_hints:
+          - Collaborative governance emphasis
+
+  team:
+    structure_hints:
+      - Core team roles (EM, experts, specialists) — placeholders if names not approved
+      - Time allocation / FTE only if sourced; else TBD
+      - Diversity & inclusion callout if firm boilerplate in manifest
+    win_logic:
+      - Match team shape to workstreams in Approach
+    must_have_evidence:
+      - named_individuals_only_from_CV_or_manifest
+    sources:
+      - stem: "928635 Gold Standard Asset-enabled Commercial IDP GEM LOP Guide"
+        note: "Team slide patterns"
+    category_overrides:
+      competitive:
+        structure_hints:
+          - Highlight partner sponsor and delivery leads if named in manifest
+
+  credentials:
+    structure_hints:
+      - Relevant experience grid (industry / topic / geography)
+      - Outcomes as bullets — only from approved credential sources
+      - Logos / references only if manifest allows
+    win_logic:
+      - Mirror client's sector language from public or supplied sources
+    must_have_evidence:
+      - each_outcome_traceable_to_source
+    sources:
+      - stem: "20230905 Achmea leiderschap ondersteuning_vCase"
+        note: "Sector case credentials"
+      - stem: "20251022 - Aberkyn introduction"
+        note: "Aberkyn credentials deck"
+
+  market_trends:
+    structure_hints:
+      - 3–5 macro or sector trends with external citations
+      - Implications for the client's agenda (framed as hypotheses if not client-confirmed)
+      - Separate public trends from confidential client facts
+    win_logic:
+      - So-what line tying trends to proposed approach
+    must_have_evidence:
+      - trend_claims_need_non_client_citation_or_label_as_hypothesis
+    sources:
+      - stem: "928635 Gold Standard Asset-enabled Commercial IDP GEM LOP Guide"
+        note: "Market / context slide patterns"
+    category_overrides:
+      relationship_building:
+        must_have_evidence:
+          - market_section_may_be_shorter_if_not_RFP_required
+
+  approach:
+    structure_hints:
+      - Workstreams / phases with clear outputs
+      - Methods and assets (named only if in manifest)
+      - Governance, cadence, client involvement
+    win_logic:
+      - Each workstream ties back to objectives in Context
+    must_have_evidence:
+      - scope_outline_until_partner_gate_B
+      - no_invented_deliverables
+    sources:
+      - stem: "928635 Gold Standard Asset-enabled Commercial IDP GEM LOP Guide"
+        note: "Approach architecture"
+      - stem: "22-05-2021 - Proposal Aberkyn for the TenneT Executive Board Journey 2021 and 2022 - signed"
+        note: "Journey-based delivery design"
+
+  fees:
+    structure_hints:
+      - Fee structure types (time & materials, fixed, hybrid) — TBD unless sourced
+      - Assumptions table (currency, tax, pass-throughs)
+      - Commercial approval note for BD/partner
+    win_logic:
+      - Transparency on what drives fee magnitude without invented numbers
+    must_have_evidence:
+      - numeric_fee_only_from_authorized_source_else_TBD
+    sources:
+      - stem: "22-05-2021 - Proposal Aberkyn for the TenneT Executive Board Journey 2021 and 2022 - signed"
+        note: "Commercial framing reference (do not copy numbers cross-client)"
+    category_overrides:
+      exploratory:
+        structure_hints:
+          - Explicit placeholders for workshops / phases pending scope lock
+
+  appendix:
+    structure_hints:
+      - Supporting detail pulled forward from body (methods, glossary)
+      - Data consent / confidentiality markers per boilerplate files only
+    win_logic:
+      - Keep core deck tight; push depth here
+    must_have_evidence:
+      - disclaimers_only_from_boilerplate_manifest
+
+  references:
+    structure_hints:
+      - Reference clients / engagements list with contact approval status
+      - Clear linkage to credentials bullets in body
+    must_have_evidence:
+      - references_named_only_if_manifest_allows
+
+  team_cvs:
+    structure_hints:
+      - CV pack alignment to named team slide
+      - One-pagers vs full CV per firm standard
+    must_have_evidence:
+      - cv_names_match_team_section

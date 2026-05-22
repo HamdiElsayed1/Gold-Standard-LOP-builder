@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920, height=1080">
+<link rel="stylesheet" href="../../css/slide.css">
+<script src="../../js/chart-renderer.js" defer></script>
+<style>
+  .separator {
+    position:absolute; left:0; right:0; height:1px; background:var(--gray-20);
+  }
+</style>
+
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:_dlc_DocId msdt:dt="string">DE7XN4DZS357-1263605440-18959</mso:_dlc_DocId>
+<mso:_dlc_DocIdItemGuid msdt:dt="string">05e97e1e-afd2-4313-b6b8-822238de626b</mso:_dlc_DocIdItemGuid>
+<mso:_dlc_DocIdUrl msdt:dt="string">https://mckinsey.sharepoint.com/sites/spt-int-6jj6kewnj5r70j/_layouts/15/DocIdRedir.aspx?ID=DE7XN4DZS357-1263605440-18959, DE7XN4DZS357-1263605440-18959</mso:_dlc_DocIdUrl>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+<body>
+<section class="slide" data-layout="Default">
+
+  <div data-pptx="chrome" class="chrome">
+    <span class="slide-number">3</span>
+    <span class="logo">McKinsey &amp; Company</span>
+  </div>
+
+  <div class="title">
+    <div data-pptx="placeholder" data-ph-idx="0"
+         style="position:absolute; left:1.2px; top:28.7px; width:1745.3px; height:115.2px">
+      Portfolio Companies Show Varied Performance Across Key Metrics
+    </div>
+  </div>
+
+  <div class="content" style="display:flex; flex-direction:column">
+
+    <!-- Column headers -->
+    <div style="display:grid; grid-template-columns:160px 1fr 1fr 1fr 1fr; column-gap:16px; align-items:end; padding-bottom:8px; font-size:22px">
+      <p><strong>Company</strong></p>
+      <p><strong>Revenue</strong>, $M</p>
+      <p><strong>EBITDA margin</strong>, %</p>
+      <p><strong>Growth rate</strong>, %</p>
+      <p><strong>Market share</strong>, %</p>
+    </div>
+    <div style="height:2px; background:var(--gray-50); flex-shrink:0"></div>
+
+    <!-- Chart grid: shared labels + 4 native bar charts -->
+    <div style="display:grid; flex:1; min-height:0; column-gap:16px;
+                grid-template-columns:minmax(0,160px) minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);
+                position:relative; margin-top:2px">
+
+      <div data-chart-labels style="min-width:0; font-size:20px">
+        <div>Acme Corp</div>
+        <div>Bolt Industries</div>
+        <div>Crane Tech</div>
+        <div>Delta Solutions</div>
+        <div>Echo Systems</div>
+        <div>Forge Analytics</div>
+        <div>Grid Power</div>
+        <div>Helix Bio</div>
+        <div>Ion Networks</div>
+        <div>Jet Logistics</div>
+        <div>Kappa Robotics</div>
+        <div>Luna Materials</div>
+      </div>
+
+      <!-- Chart 1: Revenue -->
+      <div data-pptx="chart" style="min-width:0; min-height:0">
+        <script type="application/json">
+        {
+          "type": "bar_stacked",
+          "categories": ["Acme Corp","Bolt Industries","Crane Tech","Delta Solutions","Echo Systems","Forge Analytics","Grid Power","Helix Bio","Ion Networks","Jet Logistics","Kappa Robotics","Luna Materials"],
+          "series": [
+            { "name": "Revenue", "values": [420, 310, 280, 195, 540, 165, 390, 225, 470, 350, 290, 180], "color": "#061F79" }
+          ],
+          "dataLabels": { "show": true, "fontColor": "#FFFFFF", "numberFormat": "0", "fontSize": 16 },
+          "gapWidth": 40
+        }
+        </script>
+      </div>
+
+      <!-- Chart 2: EBITDA margin -->
+      <div data-pptx="chart" style="min-width:0; min-height:0">
+        <script type="application/json">
+        {
+          "type": "bar_stacked",
+          "categories": ["Acme Corp","Bolt Industries","Crane Tech","Delta Solutions","Echo Systems","Forge Analytics","Grid Power","Helix Bio","Ion Networks","Jet Logistics","Kappa Robotics","Luna Materials"],
+          "series": [
+            { "name": "EBITDA margin", "values": [28, 19, 34, 22, 31, 15, 38, 26, 21, 33, 24, 17], "color": "#061F79" }
+          ],
+          "dataLabels": { "show": true, "fontColor": "#FFFFFF", "numberFormat": "0", "fontSize": 16 },
+          "gapWidth": 40
+        }
+        </script>
+      </div>
+
+      <!-- Chart 3: Growth rate -->
+      <div data-pptx="chart" style="min-width:0; min-height:0">
+        <script type="application/json">
+        {
+          "type": "bar_stacked",
+          "categories": ["Acme Corp","Bolt Industries","Crane Tech","Delta Solutions","Echo Systems","Forge Analytics","Grid Power","Helix Bio","Ion Networks","Jet Logistics","Kappa Robotics","Luna Materials"],
+          "series": [
+            { "name": "Growth rate", "values": [12, 8, 22, 15, 18, 45, 6, 28, 10, 14, 32, 20], "color": "#061F79" }
+          ],
+          "dataLabels": { "show": true, "fontColor": "#FFFFFF", "numberFormat": "0", "fontSize": 16 },
+          "gapWidth": 40
+        }
+        </script>
+      </div>
+
+      <!-- Chart 4: Market share -->
+      <div data-pptx="chart" style="min-width:0; min-height:0">
+        <script type="application/json">
+        {
+          "type": "bar_stacked",
+          "categories": ["Acme Corp","Bolt Industries","Crane Tech","Delta Solutions","Echo Systems","Forge Analytics","Grid Power","Helix Bio","Ion Networks","Jet Logistics","Kappa Robotics","Luna Materials"],
+          "series": [
+            { "name": "Market share", "values": [18, 12, 9, 15, 24, 5, 21, 14, 28, 16, 11, 7], "color": "#061F79" }
+          ],
+          "dataLabels": { "show": true, "fontColor": "#FFFFFF", "numberFormat": "0", "fontSize": 16 },
+          "gapWidth": 40
+        }
+        </script>
+      </div>
+
+      <!-- Row separators -->
+      <div class="separator" style="top:8.33%"></div>
+      <div class="separator" style="top:16.67%"></div>
+      <div class="separator" style="top:25%"></div>
+      <div class="separator" style="top:33.33%"></div>
+      <div class="separator" style="top:41.67%"></div>
+      <div class="separator" style="top:50%"></div>
+      <div class="separator" style="top:58.33%"></div>
+      <div class="separator" style="top:66.67%"></div>
+      <div class="separator" style="top:75%"></div>
+      <div class="separator" style="top:83.33%"></div>
+      <div class="separator" style="top:91.67%"></div>
+    </div>
+
+  </div>
+
+  <div class="source">
+    <p>Source: Portfolio company reporting, Q1 2026; McKinsey analysis</p>
+  </div>
+
+</section>
+</body>
+</html>

@@ -1,0 +1,36 @@
+# Secrets and local env
+.env
+.env.*
+.env.local
+config/.env
+**/api-keys.env
+**/*api-keys*.env
+
+# Python virtual environments and caches
+.venv/
+.venv*/
+.venv-local/
+venv/
+.venvs/
+**/__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Node
+node_modules/
+
+# Run artifacts (per-project outputs/runs — keep .gitkeep if present)
+**/outputs/*
+!**/outputs/.gitkeep
+**/runs/*
+!**/runs/.gitkeep
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini

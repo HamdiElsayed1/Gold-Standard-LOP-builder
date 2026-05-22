@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LoP Cursor workflow — what we built (v0.1)</title>
+  <style>
+    :root {
+      --bg: #f7f5f2;
+      --card: #fff;
+      --text: #1a1a1a;
+      --muted: #5c5c5c;
+      --accent: #0d47a1;
+      --accent-soft: #e3ecf7;
+      --border: #e0dcd4;
+      --ok: #1b5e20;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      line-height: 1.55;
+      color: var(--text);
+      background: var(--bg);
+      margin: 0;
+      padding: 0 1.25rem 3rem;
+    }
+    .wrap { max-width: 44rem; margin: 0 auto; }
+    header {
+      padding: 2.5rem 0 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    .lede {
+      font-size: 1.1rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin: 2rem 0 0.75rem;
+      color: var(--text);
+    }
+    p { margin: 0.75rem 0; }
+    ul { margin: 0.5rem 0 1rem; padding-left: 1.25rem; }
+    li { margin: 0.35rem 0; }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+    a:hover { border-bottom-color: var(--accent); }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.35rem;
+      margin: 1rem 0;
+      box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    }
+    .card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .card p { margin: 0.4rem 0; font-size: 0.95rem; }
+    .path {
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 0.82rem;
+      color: var(--muted);
+      word-break: break-all;
+    }
+    .steps {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0;
+    }
+    .steps li {
+      counter-increment: step;
+      position: relative;
+      padding: 0.85rem 0 0.85rem 2.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .steps li:last-child { border-bottom: none; }
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0.85rem;
+      width: 1.85rem;
+      height: 1.85rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 50%;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      margin: 1rem 0;
+    }
+    th, td {
+      text-align: left;
+      padding: 0.55rem 0.65rem;
+      border: 1px solid var(--border);
+    }
+    th { background: var(--accent-soft); font-weight: 600; }
+    .tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      background: #e8f5e9;
+      color: var(--ok);
+      padding: 0.2rem 0.45rem;
+      border-radius: 4px;
+    }
+    footer {
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+  </style>
+
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:_dlc_DocId msdt:dt="string">DE7XN4DZS357-1263605440-222</mso:_dlc_DocId>
+<mso:_dlc_DocIdItemGuid msdt:dt="string">555bb67d-e454-47b5-b4f5-cac3237fddfd</mso:_dlc_DocIdItemGuid>
+<mso:_dlc_DocIdUrl msdt:dt="string">https://mckinsey.sharepoint.com/sites/spt-int-6jj6kewnj5r70j/_layouts/15/DocIdRedir.aspx?ID=DE7XN4DZS357-1263605440-222, DE7XN4DZS357-1263605440-222</mso:_dlc_DocIdUrl>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <p class="tag">v0.1 overview</p>
+      <h1>Letter of Proposal (LoP) workflow in Cursor</h1>
+      <p class="lede">A plain-language map of what lives in this repo, how a beach consultant would use it, and where to click next. Built to speed up a <strong>strong first draft</strong> with clear guardrails—not to replace your partner.</p>
+    </header>
+
+    <h2>Start here (30 seconds)</h2>
+    <ol class="steps">
+      <li><strong>Open the project index.</strong> <a href="../../AGENTS.md">AGENTS.md</a> at the repo root lists rules and links to the runbook and prompts.</li>
+      <li><strong>Follow the runbook.</strong> It walks through Step&nbsp;0 (which files count for <em>this</em> LoP), intake, gates, chapters, coach, then PPT + HTML packaging.</li>
+      <li><strong>Copy prompts into chat</strong> with <code>@</code> on your sources—see the prompt pack README for order.</li>
+    </ol>
+
+    <h2>What you actually “got”</h2>
+    <p>Four layers of product, all in markdown except this page:</p>
+
+    <div class="card">
+      <h3>1. Project brain (Cursor rules)</h3>
+      <p>Files under <span class="path">.cursor/rules/</span> tell every chat how to behave: spine (including <strong>Why McKinsey</strong>), input hygiene (Step&nbsp;0 manifest, no invented disclaimers), tools and data sources, and peer-folder etiquette.</p>
+      <p><strong>Your review:</strong> open <span class="path">lop-builder-workflow.mdc</span>, <span class="path">lop-builder-core.mdc</span>, <span class="path">lop-builder-tools-data.mdc</span> in the repo.</p>
+    </div>
+
+    <div class="card">
+      <h3>2. Tracker template (per pursuit)</h3>
+      <p>Copy into each opportunity folder as <code>lop-build-tracker.md</code>. It now includes a <strong>Step&nbsp;0 source manifest</strong> (so inputs don’t get mixed across LoPs), <strong>HITL gates A/B/C</strong>, boilerplate row, pilot timing, and an updated spine row for <strong>Why McKinsey</strong>.</p>
+      <p><a href="../Fleur/lop-build-tracker.template.md">Fleur — lop-build-tracker.template.md</a></p>
+      <p class="path">Also mirrored in: Jasper/templates/lop-pursuit-template/lop-build-tracker.md</p>
+    </div>
+
+    <div class="card">
+      <h3>3. Runbook (the “how to” script)</h3>
+      <p>One document: ordered steps from manifest → intake → Gate&nbsp;A → chapter passes (with v0.1 policy: e.g. agent-first Why McKinsey / Team / Credentials; human-first Approach) → merge appendix → Gate&nbsp;B → LoP coach → fixes → <strong>assembler (PPT + HTML)</strong> → Gate&nbsp;C.</p>
+      <p><a href="lop-cursor-runbook.md">lop-cursor-runbook.md</a> <span class="path">(this folder)</span></p>
+    </div>
+
+    <div class="card">
+      <h3>4. Prompt pack (copy-paste into Cursor)</h3>
+      <p>Small files you paste into chat—one role at a time—with rules about sources, evidence, and TBDs. Covers the <strong>full spine</strong> (context, timeline/team, market, fees, appendix merge, etc.), plus coach and assembler.</p>
+      <p><a href="prompts/README.md">prompts/README.md</a> <span class="path">— table shows recommended order</span></p>
+    </div>
+
+    <h2>How this feels for a beach user</h2>
+    <table>
+      <thead>
+        <tr><th>They used to…</th><th>Now they can…</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Guess what “good” looks like from a vague email</td><td>Run <strong>Step&nbsp;0</strong> and lock sources in the tracker before drafting</td></tr>
+        <tr><td>Mix RFP A with notes from another client</td><td>Keep a manifest and restate <strong>which rows</strong> each step uses</td></tr>
+        <tr><td>Invent footers or disclaimers</td><td>Pull only from <strong>Background Material</strong> or pursuit <code>inputs/</code></td></tr>
+        <tr><td>Only ship PPT</td><td>Get a parallel <strong>HTML-shaped</strong> draft in v0.1 to compare quality</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Related design doc (not the runbook)</h2>
+    <p>The multi-agent <em>design</em> (orchestrator, roster, Mermaid) stays here for reference—it is not the day-to-day click path.</p>
+    <p><a href="LOP-agent-workflow.md">LOP-agent-workflow.md</a> — Approach row notes v0.1 Cursor = outline until partner scope.</p>
+
+    <h2>Fleur workspace note</h2>
+    <p>Gold-standard pursuit folders and <code>Background Material</code> for team boilerplate are described in:</p>
+    <p><a href="../Fleur/README.md">Fleur/README.md</a></p>
+
+    <footer>
+      <p>This file: <span class="path">02. Working documents/Jasper/lop-workflow-overview.html</span> — open in a browser (double-click or “Open with Live Preview”) to read comfortably. Links point to markdown in the repo; open them from Cursor if your browser cannot.</p>
+      <p>Built for McKinsey LoP / beach workflow v0.1 — April 2026.</p>
+    </footer>
+  </div>
+</body>
+</html>

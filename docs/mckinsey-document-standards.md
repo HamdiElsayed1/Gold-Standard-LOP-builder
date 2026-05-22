@@ -1,0 +1,663 @@
+# McKinsey Document Formatting Standards — Cursor Instructions
+
+### Cursor usage in this repository
+
+- **Apply these standards** when producing or editing **client- or stakeholder-facing** material: LoP chapters and outlines, pursuit memos, workshop/client **HTML slide decks**, and **exported workplan pages** meant to read like firm slides.
+- **Do not treat as McKinsey slide output** internal tooling such as intake **dashboards** and form UIs (e.g. `**/html-decks/*dashboard*.html`), trackers, scripts, or repo docs — keep **existing code/style**, clarity, and accessibility unless the user explicitly asks for full firm deck polish there.
+
+Use these rules whenever producing McKinsey-quality documents: slide decks, memos, one-pagers, reports, or any client-facing deliverable. These standards apply to both PowerPoint-style presentations and written documents.
+
+---
+
+## 1. The Pyramid Principle (Foundational)
+
+Every McKinsey document follows Barbara Minto's Pyramid Principle. This is non-negotiable.
+
+### Structure: Top-Down Communication
+
+- **Lead with the answer.** The main conclusion comes first, not last. Never build up to a punchline.
+- **Group supporting arguments.** Below the answer, organize 2-5 supporting arguments that are MECE (Mutually Exclusive, Collectively Exhaustive).
+- **Support each argument with evidence.** Each supporting argument has its own data, analysis, or examples beneath it.
+
+### The SCR Framework (Situation-Complication-Resolution)
+
+Every document, section, or slide implicitly follows SCR:
+
+- **Situation**: The shared, accepted context (what the reader already knows)
+- **Complication**: The tension, problem, or change that demands action
+- **Resolution**: The answer, recommendation, or path forward
+
+Example:
+> **Situation**: HEMA and Jumbo have identified 12 synergy workstreams across both organizations.
+> **Complication**: Without structured business cases and milestone plans, the EUR 60 mln synergy potential will not materialize by the target date.
+> **Resolution**: By mid-June, every workstream must deliver a validated business case (L2) and milestone plan (L3) in WAVE.
+
+### Horizontal and Vertical Logic
+
+- **Horizontal logic**: Reading only the slide titles (action titles) in sequence should tell the complete story. A reader who reads nothing but titles should understand the narrative arc and key conclusions.
+- **Vertical logic**: Within each slide, the title (assertion) is supported by the body content (evidence). Every element on the slide must support the title claim.
+
+---
+
+## 2. Slide / Page Structure
+
+### Action Titles (Most Important Rule)
+
+Action titles are the single most important formatting element. They are **declarative statements that communicate the "so what"** — never descriptive labels.
+
+**Rules:**
+- Every slide title must be a complete, declarative sentence
+- It must state the conclusion or insight, not describe the content
+- Maximum 2 lines (~15-20 words)
+- Written in sentence case (capitalize first word only, plus proper nouns)
+- No periods at the end unless it's a two-sentence title
+
+**Correct examples:**
+- "COGS assessment identifies EUR 15.7 mln potential with 95% of food validated"
+- "Three-layer governance ensures execution through line organization with fixed cadence"
+- "Cost-based settlement provides simplicity and the right collaborative mindset"
+
+**Incorrect examples (never use these):**
+- "COGS Overview" (descriptive, not declarative)
+- "Synergy Dashboard" (label, no insight)
+- "Next Steps" (no "so what")
+- "Financial Analysis Results" (describes content, doesn't state the conclusion)
+
+### Slide Anatomy
+
+Every slide has these zones (top to bottom):
+
+```
++---------------------------------------------+
+|  Section Label (optional, small caps)        | <- "COST SYNERGIES" / "EXECUTIVE SUMMARY"
+|  Action Title (bold, declarative sentence)   | <- The key takeaway
++---------------------------------------------+
+|                                              |
+|              Body Content                    | <- Charts, tables, text, cards
+|         (supports the title claim)           |
+|                                              |
++---------------------------------------------+
+|  Source footer (small, gray, italic)         | <- "Source: Management interviews; BCG analysis"
++---------------------------------------------+
+```
+
+### Slide Types
+
+| Type | When to Use | Body Content |
+|---|---|---|
+| **Title slide** | Opening/closing | Title, subtitle, date, context paragraph |
+| **Executive summary** | Key findings overview | 3-4 cards in a grid, each with a bold finding |
+| **Findings / analysis** | Presenting evidence | Cards, tables, charts supporting the action title |
+| **Data table** | Detailed comparisons | Structured table with clear headers and highlighting |
+| **Dashboard / metrics** | Status tracking | KPI cards, status indicators, progress bars |
+| **Next steps** | Closing with actions | Timeline table, owner assignments, deadlines |
+| **Recommendation** | Proposing action | Numbered recommendation blocks with rationale |
+
+---
+
+## 3. Typography
+
+### Font Hierarchy
+
+| Element | Size | Weight | Color | Case |
+|---|---|---|---|---|
+| Section label | 11-12px / 0.75rem | 600 (Semibold) | Muted blue / teal | UPPERCASE with letter-spacing |
+| Action title | 28-32px / 2rem | 700 (Bold) | Deep Navy (#051C2C) | Sentence case |
+| Card title | 16px / 1rem | 700 (Bold) | Deep Navy | Sentence case |
+| Body text | 14-15px / 0.9rem | 400 (Regular) | Secondary gray (#4A5568) | Sentence case |
+| Narrative text | 16-17px / 1.05rem | 400 (Regular) | Secondary gray | Sentence case |
+| Source text | 12px / 0.75rem | 400 (Regular) | Light gray (#718096) | Sentence case, italic |
+| Metric / KPI value | 24-28px / 1.6rem | 800 (Extra Bold) | Accent teal (#2251FF) | As-is |
+| Metric label | 10-11px / 0.65rem | 400 (Regular) | Light gray | UPPERCASE with letter-spacing |
+
+### Font Stack
+
+```
+font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+```
+
+In traditional PowerPoint: **Georgia** for titles, **Arial** for body text. In modern decks: **Bower** (McKinsey proprietary) or **system-ui** as fallback.
+
+### Line Heights
+
+- Titles: 1.15-1.2 (tight)
+- Body text: 1.6-1.7 (comfortable reading)
+- Narrative paragraphs: 1.8 (generous, editorial feel)
+- Tables: 1.4 (compact)
+- Source text: 1.6
+
+### Letter Spacing
+
+- Section labels and metric labels: 0.15-0.2em (wide tracking for uppercase text)
+- Titles: -0.01 to -0.02em (slightly tight for large text)
+- Body text: normal (0)
+
+---
+
+## 4. Color Palette
+
+### Primary Colors
+
+| Name | Hex | Usage |
+|---|---|---|
+| Deep Navy / McKinsey Blue | `#051C2C` | Primary text, headers, dark backgrounds |
+| Navy Light | `#0A2E45` | Gradients, secondary dark |
+| Electric Blue | `#2251FF` | Accent, links, highlighted metrics, card borders |
+| Electric Blue Light | `#4A73FF` | Hover states, secondary accent |
+
+### Semantic Colors
+
+| Name | Hex | Usage |
+|---|---|---|
+| Marine Green / Teal | `#0BDACB` | Positive status, "on track", success indicators |
+| Amber | `#FFA800` | Caution, "attention required", warning indicators |
+| Coral / Red | `#FF4757` | Negative, "off track", critical issues |
+
+### Neutrals
+
+| Name | Hex | Usage |
+|---|---|---|
+| Warm Gray (background) | `#F5F3F0` | Page/slide background |
+| Warm Gray Dark | `#E8E4DF` | Borders on warm backgrounds |
+| Text Primary | `#051C2C` | Primary body text (same as navy) |
+| Text Secondary | `#4A5568` | Secondary text, descriptions |
+| Text Light | `#718096` | Tertiary text, sources, labels |
+| Border Light | `#B3B3B3` | Table borders, dividers |
+| White | `#FFFFFF` | Card backgrounds, content areas |
+
+### Color Rules
+
+1. **Never use more than 3 colors on a single slide** (excluding neutrals)
+2. **Status colors are functional, not decorative** — green means "on track", amber means "needs attention", red means "off track"
+3. **Accent color (Electric Blue) is used sparingly** — for the single most important metric or element on the slide, not for general decoration
+4. **Dark backgrounds (Navy) are reserved for title slides and section dividers only** — never for content slides
+5. **Charts use the accent palette in order**: Electric Blue first, then Marine Green, then Amber. Use grays for less important series
+6. **Text is always high-contrast**: dark text on light backgrounds, light text on dark backgrounds. Never medium-gray text on medium-gray backgrounds
+
+---
+
+## 5. Layout and Spacing
+
+### Grid System
+
+- **Maximum content width**: 960-1040px (centered on slide)
+- **Side padding**: 4rem (64px) on desktop, 1.5rem on mobile
+- **Top padding**: 4rem (for section label + action title)
+- **Bottom padding**: 3rem (room for source footer)
+
+### Card Grid
+
+Cards are the primary content container. They sit on a responsive grid:
+
+- **2 cards**: `grid-template-columns: repeat(2, 1fr)` — side by side
+- **3 cards**: `grid-template-columns: repeat(3, 1fr)` or `repeat(auto-fit, minmax(260px, 1fr))`
+- **4+ cards**: Consider stacking or using a more compact layout
+- **Grid gap**: 1.5rem between cards
+
+### Card Anatomy
+
+```
++-----------------------------------+
+|  === (3px top border, accent)     | <- Colored top border indicates category/status
+|                                   |
+|  Card Title (bold)                | <- One line, the key point
+|                                   |
+|  Card body text (regular,         | <- Supporting evidence, 2-4 lines max
+|  secondary color)                 |
+|                                   |
+|  +-----------------------------+  |
+|  | Metric: EUR 9.1 mln        |  | <- Optional metric callout
+|  | Label: identified savings   |  |
+|  +-----------------------------+  |
+|                                   |
++-----------------------------------+
+```
+
+### Whitespace Rules
+
+1. **Section label to title**: 0.75rem
+2. **Title to first content element**: 1.5rem
+3. **Between cards**: 1.5rem
+4. **Inside cards (padding)**: 1.75rem
+5. **Between card title and body**: 0.75rem
+6. **Content to source footer**: auto-fill remaining space (sources pin to bottom)
+7. **Never let a slide feel "full"** — if content touches all edges, reduce or split into two slides
+
+### Content Density
+
+- **Maximum body text on a slide**: 5-7 lines of narrative, OR a table with up to 8 rows, OR 3-4 cards with 3 lines each
+- **If you need more**: Split into two slides or use an appendix reference
+- **The 6-second rule**: A reader should grasp the slide's message within 6 seconds of looking at it. If they can't, the slide is too complex.
+
+---
+
+## 6. Tables
+
+### Formatting Rules
+
+| Rule | Specification |
+|---|---|
+| Header row | Bold, navy text, light gray bottom border (2px), background: warm gray or white |
+| Body rows | Regular weight, secondary text color, 1px border between rows |
+| Total / summary row | Bold, navy text, 2px top border in navy, slightly larger font or highlighted background |
+| Numeric columns | Right-aligned, monospace or tabular figures |
+| Text columns | Left-aligned |
+| Column headers | Left-aligned for text, right-aligned for numbers |
+| Cell padding | 0.5-0.75rem vertical, 0.75-1rem horizontal |
+| Highlight row | Light teal/blue background (#F0F7FF) to draw attention |
+
+### Table Best Practices
+
+1. **No vertical borders** — McKinsey tables use horizontal rules only (no gridlines)
+2. **Minimal horizontal borders** — header border (thick), row separators (thin), total row border (thick)
+3. **Zebra striping is optional** — use only when the table has 8+ rows and readability suffers
+4. **Bold the numbers that matter** — highlight the key metric in each row, not all numbers
+5. **Use EUR, USD, etc. symbols in the header**, not in every cell (e.g., header says "Revenue (EUR mln)", cells say "12.5", not "EUR 12.5 mln" repeated)
+6. **Right-align all numeric columns** — including the header
+7. **Wrap text at ~30 characters per cell** — if a cell needs more, the column is too narrow or the content should be shortened
+8. **Never use more than 6-7 columns** — if you need more, split the table or remove less important columns
+
+### Example Table Structure (HTML)
+
+```html
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Werkstroom</th>
+      <th style="text-align: right">Potentieel (EUR mln)</th>
+      <th style="text-align: left">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>COGS Food & Non-Food</td>
+      <td style="text-align: right; font-weight: 700">16</td>
+      <td><span style="color: #0BDACB">&#9679;</span> Op schema</td>
+    </tr>
+    <tr>
+      <td>Retail Media & Data</td>
+      <td style="text-align: right; font-weight: 700">10</td>
+      <td><span style="color: #0BDACB">&#9679;</span> Op schema</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr style="font-weight: 700; border-top: 2px solid #051C2C">
+      <td>Totaal</td>
+      <td style="text-align: right">60+</td>
+      <td></td>
+    </tr>
+  </tfoot>
+</table>
+```
+
+---
+
+## 7. Charts and Exhibits
+
+### Chart Title Convention
+
+Every chart or exhibit has:
+1. **Exhibit title** (small caps label): "EXHIBIT 1" or descriptive label
+2. **Chart title** (declarative): States the insight, not the chart type
+3. **Axis labels**: Clear, with units
+4. **Source line**: Bottom-left, small italic text
+
+**Correct**: "Market share declined 3pp in Q3 driven by pricing pressure in the South region"
+**Incorrect**: "Market Share by Region Over Time"
+
+### Chart Type Selection
+
+| Data Relationship | Preferred Chart Type |
+|---|---|
+| Comparison across categories | Horizontal bar chart |
+| Change over time | Line chart (few series) or area chart |
+| Part-to-whole | Stacked bar or waterfall |
+| Correlation | Scatter plot |
+| Distribution | Histogram or box plot |
+| Flow / process | Sankey or waterfall |
+| Single KPI | Large number with label (no chart needed) |
+
+### Chart Color Rules
+
+1. **One emphasis color, rest in gray** — highlight the series that supports your argument. Everything else is context.
+2. **Maximum 5 series** — if you have more, group or filter
+3. **Direct labeling over legends** — label data points or series directly on the chart, avoid separate legends
+4. **No 3D effects, shadows, or gradients on chart elements** — flat, clean, minimal
+5. **Grid lines in very light gray** (#E8E4DF) — never dark or prominent
+6. **Y-axis starts at zero** for bar charts (unless explicitly noted as indexed)
+
+### Waterfall Charts (McKinsey Signature)
+
+McKinsey heavily favors waterfall charts for showing additive/subtractive breakdowns:
+
+```
+Starting value -> [+A] [+B] [-C] [-D] -> Ending value
+```
+
+- Positive increments in Electric Blue
+- Negative decrements in Amber or Coral
+- Starting and ending bars in Navy (full bars)
+- Connector lines between bars in light gray
+
+---
+
+## 8. Bullet Points and Lists
+
+### Formatting Rules
+
+1. **Maximum 5-7 bullets per list** — if you have more, group into sub-categories
+2. **Parallel grammatical structure** — all bullets start with the same part of speech (all verbs, all nouns, all "We will..." statements)
+3. **No orphan bullets** — never have a single sub-bullet under a parent. Either have 2+ sub-bullets or fold the content into the parent
+4. **Consistent punctuation** — either all bullets end with periods (for complete sentences) or none do (for fragments). Never mix.
+5. **Front-load the key word** — the most important word or phrase comes first in each bullet, often in bold
+
+### Bullet Style
+
+- **Level 1**: Solid disc or em dash, 1rem indent
+- **Level 2**: Endash or hollow circle, 2rem indent
+- **Level 3**: Avoid if possible. If needed, use a smaller dot or hyphen, 3rem indent
+- **Never exceed 3 levels of nesting**
+
+### Example (Good)
+
+```
+Key findings from the COGS assessment:
+
+- **EUR 9.1 mln identified** in food harmonization potential across 327 SKUs
+- **95% of theoretical maximum** reached after 25 additional products reclassified
+- **EUR 0.4 mln residual potential** deemed commercially non-viable due to spec differences
+```
+
+### Example (Bad)
+
+```
+COGS findings:
+
+- We have identified potential
+- The assessment covered food items
+- There are some items that are exact matches and some that are exchangeable
+  and some where Jumbo has no alternative
+- 95% of the theoretical maximum has been identified which is good
+- There is still 0.4 million left but we decided not to pursue it because
+  the specs are too different
+```
+
+---
+
+## 9. Source Citations
+
+### Placement
+
+- **One consolidated source footer per slide** — never scatter sources inside cards or next to individual data points
+- **Position**: Bottom of the slide, left-aligned
+- **Separated from content** by a thin horizontal rule (1px, light gray)
+
+### Format
+
+```
+Source: [Author/Organization], [Document/Report name], [Date]; [Additional source]; Team analysis
+```
+
+Examples:
+- "Source: Management interviews (n=12); Euromonitor 2025; Team analysis"
+- "Source: Company financials; BCG Gamma analysis based on transaction data 2023-2025"
+- "Source: solution.md (Project Thuis Fase II internal analysis)"
+
+### Rules
+
+1. **Every slide with data must have a source** — even if it's "Team analysis" or "Expert interviews"
+2. **"Source:" prefix** is always present (not "Sources:" — singular even for multiple)
+3. **Semicolons** separate multiple sources
+4. **No URLs in source footers** — use document names or organization names
+5. **Font**: 12px, light gray (#718096), italic
+
+---
+
+## 10. Numbers and Metrics
+
+### Formatting Conventions
+
+| Convention | Example | Rule |
+|---|---|---|
+| Currency | EUR 12.5 mln | Currency code (not symbol), space, number, space, unit |
+| Large numbers | 15.7 mln | Use mln (millions), bln (billions), trn (trillions) |
+| Percentages | 95% | No space between number and % |
+| Percentage points | 3pp | "pp" not "percentage points" or "ppts" |
+| Ranges | EUR 5-9 mln | En dash or hyphen, no spaces around |
+| Precision | EUR 9.1 mln | One decimal max for millions. Round to whole for billions |
+| FY references | FY2025 | No space between FY and year |
+| Quarters | 2027 Q1 | Year first, space, Q + number |
+| CAGR | 8.2% CAGR | Number + % + CAGR |
+| Multiples | 4.2x | Number + "x" (lowercase, no space) |
+
+### Metric Display
+
+When displaying a single key metric prominently:
+
+```html
+<div class="metric">
+  <span class="metric-value">EUR 9.1 mln</span>
+  <span class="metric-label">IDENTIFIED SAVINGS POTENTIAL</span>
+</div>
+```
+
+- Value: Large (24-28px), extra bold (800), accent color
+- Label: Small (10-11px), uppercase, letter-spaced, light gray
+- Optional arrow indicator for directional change (up green, down red)
+
+### Non-Breaking Spans
+
+Numeric expressions that should never line-break mid-phrase:
+
+```html
+<span class="nowrap">EUR 9.1 mln</span>
+<span class="nowrap">2027 Q1</span>
+<span class="nowrap">3-4 mln</span>
+```
+
+---
+
+## 11. Written Documents (Memos, Reports)
+
+### Structure
+
+```
+Executive Summary (1 page max)
+  Context (2-3 sentences — the SCR situation + complication)
+  Key Recommendation (1 bold sentence — the resolution)
+  Supporting Arguments (3-5 bullets, each a complete finding)
+  Immediate Next Steps (3-4 bullets with owners and dates)
+
+Section 1: [Declarative title stating the finding]
+  Opening paragraph (states the section conclusion)
+  Evidence and analysis (2-4 paragraphs or exhibits)
+  Implications (what this means for the recommendation)
+
+Section 2: [Declarative title]
+  ...
+
+Appendix
+  Detailed methodology
+  Data tables
+  Additional exhibits
+```
+
+### Paragraph Rules
+
+1. **Lead sentence = conclusion** — every paragraph begins with its key point
+2. **Maximum 4-5 sentences per paragraph** — break longer passages
+3. **One idea per paragraph** — if you shift topics, start a new paragraph
+4. **Transition words are minimal** — McKinsey prose is direct. Avoid "Furthermore," "Additionally," "Moreover," "It is worth noting that..."
+5. **Active voice** — "The team identified EUR 9.1 mln in savings" not "EUR 9.1 mln in savings were identified by the team"
+6. **Concrete over abstract** — "Revenue grew 12% to EUR 450 mln" not "Revenue experienced significant growth"
+
+### Heading Rules
+
+1. **All headings are declarative** (same as slide action titles)
+2. **H1**: Document title (one per document)
+3. **H2**: Major sections (the main pillars of the argument)
+4. **H3**: Sub-sections within a pillar
+5. **H4**: Rarely used — consider restructuring if you need H4
+6. **Never skip heading levels** (no H1 then H3)
+
+---
+
+## 12. MECE Principle (Applied to Formatting)
+
+Every grouping, categorization, or decomposition in the document must be MECE:
+
+- **Mutually Exclusive**: Categories don't overlap. If something fits in two categories, your categories are wrong.
+- **Collectively Exhaustive**: Categories cover 100% of the space. Nothing is left out.
+
+This applies to:
+- **Dashboard categories**: "On track" / "Attention needed" / "Off track" must cover every workstream
+- **Recommendation pillars**: 3-4 pillars that together address the full problem
+- **Table rows**: All items accounted for, no "Other" category exceeding 20%
+- **Timeline phases**: Phases must be sequential and gap-free
+- **Budget breakdowns**: Must sum to 100% or the stated total
+
+---
+
+## 13. Callouts, Highlights, and Emphasis
+
+### When to Use Callouts
+
+Use a callout box (bordered card, left-border accent) for:
+- **A specific recommendation or decision required**
+- **A key insight that the reader must not miss**
+- **A proposed next step requiring approval**
+
+Never use callouts for general information or background context.
+
+### Emphasis Hierarchy
+
+1. **Bold text** (`<strong>`) — for the single most important phrase in a paragraph or bullet. Use sparingly — if everything is bold, nothing is bold.
+2. **Accent color text** — for a single key metric (EUR 9.1 mln) on the slide. Maximum one accent-colored element per slide.
+3. **Card with colored top border** — for grouping related findings. The border color signals category (green = positive, amber = caution).
+4. **Background highlight** — rarely used. Only for "call to action" boxes or critical warnings.
+
+### What NOT to Do
+
+- **Never underline text** (except hyperlinks)
+- **Never use ALL CAPS for emphasis** — only for section labels and metric labels at small font sizes
+- **Never use colored text in body paragraphs** — color is reserved for metrics and status indicators
+- **Never use exclamation marks** — McKinsey tone is authoritative, not enthusiastic
+- **Never use italic for emphasis** — italic is reserved for source citations and foreign terms
+
+---
+
+## 14. Document Metadata and Headers/Footers
+
+### Title Slide / Cover Page
+
+```
+[Client logo]                              [McKinsey logo]
+
+Document Title (action title format)
+Subtitle or context line
+
+Date: DD Month YYYY
+Confidential — for internal use only
+```
+
+### Page Footer (for written documents)
+
+```
+[Confidentiality notice]          [Page number]          [Date]
+```
+
+### Slide Footer
+
+```
+Source: [citation]                                    [Slide N of M]
+```
+
+---
+
+## 15. Language and Tone
+
+### McKinsey Writing Voice
+
+| Do | Don't |
+|---|---|
+| "Revenue grew 12%" | "Revenue experienced significant growth" |
+| "We recommend..." | "It might be worth considering..." |
+| "This requires immediate action" | "This is something we should think about" |
+| "3 factors drive this outcome" | "There are several factors that contribute to this" |
+| "EUR 9.1 mln in savings" | "Significant cost savings" |
+| "Implement by Q1 2027" | "Target implementation in the near future" |
+
+### Key Principles
+
+1. **Specific over vague** — always include the number, the date, the name
+2. **Confident over hedging** — "We recommend" not "We suggest considering"
+3. **Short over long** — if a sentence exceeds 25 words, split it
+4. **Active over passive** — name the actor and the action
+5. **Evidence over assertion** — every claim links to data
+6. **"So what" over "what"** — don't describe; conclude
+
+### Forbidden Phrases
+
+These phrases signal weak thinking. Replace them with specific, actionable language:
+
+- "Various" / "several" / "numerous" — state the exact number
+- "Significant" / "substantial" — state the magnitude
+- "Going forward" — state the specific timeframe
+- "In order to" — just use "to"
+- "It should be noted that" — delete, just state the fact
+- "At this point in time" — "now"
+- "Leverage" (as a verb) — "use"
+- "Synergize" — "combine" or "integrate"
+- "Best-in-class" — cite the specific benchmark
+- "Low-hanging fruit" — name the specific quick wins
+
+---
+
+## 16. Checklist for Document Review
+
+Before any document is finalized, verify:
+
+### Structural
+- [ ] Every section/slide has a declarative action title
+- [ ] Reading titles alone tells the complete story (horizontal logic)
+- [ ] Each slide's body supports its title claim (vertical logic)
+- [ ] Document follows the Pyramid Principle (answer first)
+- [ ] All groupings are MECE
+
+### Visual
+- [ ] Maximum 3 accent colors per slide (plus neutrals)
+- [ ] Consistent font sizes across same-level elements
+- [ ] Tables have no vertical borders
+- [ ] Numeric columns are right-aligned
+- [ ] Sufficient whitespace — no slide feels "full"
+- [ ] Status colors used consistently (green/amber/red)
+
+### Content
+- [ ] Every data point has a source
+- [ ] Numbers use consistent formatting (EUR X mln)
+- [ ] No orphan bullets (single sub-bullet under a parent)
+- [ ] Parallel grammatical structure in all lists
+- [ ] No forbidden phrases
+- [ ] Active voice throughout
+- [ ] Specific over vague — every claim has a number or date
+
+### Sources
+- [ ] One consolidated source line per slide
+- [ ] Sources separated by semicolons
+- [ ] "Source:" prefix (singular)
+- [ ] 12px, light gray, italic
+
+---
+
+## Summary: The 10 Commandments of McKinsey Formatting
+
+1. **Lead with the answer** — Pyramid Principle, always
+2. **Action titles are declarative sentences** — never labels or descriptions
+3. **Horizontal logic must work** — titles alone tell the story
+4. **MECE everything** — groups, categories, breakdowns, timelines
+5. **One accent per slide** — don't compete for attention
+6. **Numbers are specific** — EUR 9.1 mln, not "significant savings"
+7. **Tables have no vertical borders** — horizontal rules only
+8. **Sources on every data slide** — consolidated at the bottom
+9. **Whitespace is a feature** — if a slide feels full, split it
+10. **Active voice, short sentences, no hedging** — be authoritative

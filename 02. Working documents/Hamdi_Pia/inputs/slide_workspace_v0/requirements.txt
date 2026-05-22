@@ -1,0 +1,7 @@
+python-pptx>=1.0
+playwright>=1.40
+Pillow>=10.0
+lxml>=4.9
+comtypes>=1.4;sys_platform=="win32"
+pytest>=8.0
+openpyxl

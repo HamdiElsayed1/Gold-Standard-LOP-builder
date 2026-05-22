@@ -1,0 +1,19 @@
+{
+  "document_id": "terminology_bridge_minor",
+  "title": "Linked synonyms",
+  "sections": [
+    {
+      "id": "main",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The transformation, also referred to as a sprint, covers all workstreams."
+        },
+        {
+          "type": "paragraph",
+          "text": "The sprint must finish before board review."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Wrapper that invokes html_to_pptx.py through the project venv,
+# with the bundled template as the default.
+
+set -euo pipefail
+
+PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+SCRIPT="${PROJECT_ROOT}/scripts/html_to_pptx.py"
+DEFAULT_TPL="${PROJECT_ROOT}/pptx-template.pptx"
+
+PYTHON="${PROJECT_ROOT}/.venv/bin/python"
+[ -x "$PYTHON" ] || PYTHON="python"
+
+if [[ ! " $* " =~ " -t " ]] && [[ ! " $* " =~ " --template " ]]; then
+  exec "$PYTHON" "$SCRIPT" "$@" -t "$DEFAULT_TPL"
+else
+  exec "$PYTHON" "$SCRIPT" "$@"
+fi

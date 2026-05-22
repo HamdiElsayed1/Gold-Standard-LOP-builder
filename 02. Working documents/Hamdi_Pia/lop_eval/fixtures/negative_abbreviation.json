@@ -1,0 +1,19 @@
+{
+  "document_id": "negative_abbreviation",
+  "title": "IBM twice",
+  "sections": [
+    {
+      "id": "refs",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "International Business Machines (IBM) is a benchmark."
+        },
+        {
+          "type": "paragraph",
+          "text": "Independent Broker Model (IBM) is unrelated jargon reused."
+        }
+      ]
+    }
+  ]
+}

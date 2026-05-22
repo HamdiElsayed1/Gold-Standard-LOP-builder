@@ -1,0 +1,24 @@
+---
+description: Do not edit other teammates' working folders; keep personal LoP work in Fleur unless asked
+alwaysApply: true
+---
+
+# Peer folders — do not edit without explicit ask
+
+## Scope
+
+Under `02. Working documents/`, each **named subfolder** (e.g. a colleague’s folder) is treated as **their workspace**.
+
+## Rules
+
+1. **Do not** create, edit, rename, or delete files in **another person’s folder** (any sibling of your own under `02. Working documents/`) unless the user **explicitly** requests changes to that path or scope.
+2. **Default** for LoP drafts, exports, notes, and agent outputs tied to you: `02. Working documents/Fleur/` (see `Fleur/README.md` and `Fleur/pursuits/_template-lop-pursuit/README.md`).
+3. **Allowed without asking:** read-only reference (e.g. open a file to read); **copy** a template or example **into** your folder and edit the copy there.
+
+## Shared / project paths
+
+Edits outside personal peer folders (e.g. repo root, `.cursor/rules`, shared templates not inside someone’s named folder) follow the **task** — this rule does not block normal project work there.
+
+## Exception
+
+If the user clearly says to edit a specific file or folder under another teammate’s path, follow that instruction for that task.

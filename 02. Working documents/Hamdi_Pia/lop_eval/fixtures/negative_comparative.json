@@ -1,0 +1,19 @@
+{
+  "document_id": "negative_comparative",
+  "title": "Opposite superlatives",
+  "sections": [
+    {
+      "id": "story",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Our platform is the fastest payments rail in the Nordics market."
+        },
+        {
+          "type": "paragraph",
+          "text": "Competitor offers the slowest payments rail in the Nordics market."
+        }
+      ]
+    }
+  ]
+}

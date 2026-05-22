@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Philips Strategy 2035 — Letter of Proposal (draft)</title>
+    <style>
+      :root {
+        --mck-accent1: #061f79;
+        --mck-accent2: #00a9f4;
+        --mck-accent3: #2251ff;
+        --mck-text: #000000;
+        --mck-gray-70: #4d4d4d;
+        --mck-gray-54: #757575;
+        --mck-gray-10: #e6e6e6;
+        --mck-white: #ffffff;
+        --slide-pad: clamp(16px, 3.8vw, 40px);
+        --font-title: Georgia, "Times New Roman", Times, serif;
+        --font-body: Arial, Helvetica, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #d9d9d9;
+        font-family: var(--font-body);
+        color: var(--mck-text);
+        line-height: 1.35;
+        font-kerning: normal;
+      }
+
+      .page {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 24px 16px 48px;
+      }
+
+      .page > h1 {
+        font-family: var(--font-title);
+        font-weight: 700;
+        font-size: 1.125rem;
+        margin: 0 0 8px;
+        color: var(--mck-gray-70);
+      }
+
+      .page > p.meta {
+        margin: 0 0 24px;
+        font-size: 0.8125rem;
+        color: var(--mck-gray-54);
+        max-width: 75ch;
+      }
+
+      .deck {
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+      }
+
+      .slide {
+        position: relative;
+        aspect-ratio: 16 / 9;
+        width: 100%;
+        background: var(--mck-white);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+        overflow: hidden;
+        container-type: inline-size;
+      }
+
+      .slide-inner {
+        position: relative;
+        height: 100%;
+        padding: var(--slide-pad);
+        padding-bottom: clamp(36px, 5cqw, 52px);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .slide--cover {
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+      }
+
+      .cover-top-strip {
+        flex: 0 0 auto;
+        background: #f2f2f2;
+        border-bottom: 1px solid #d9d9d9;
+        padding: 6px clamp(10px, 2vw, 16px);
+        font-size: clamp(0.45rem, 0.95cqw, 0.55rem);
+        line-height: 1.25;
+        color: var(--mck-gray-70);
+      }
+
+      .cover-grid {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+      }
+
+      .cover-band {
+        background: var(--mck-accent1);
+        color: var(--mck-white);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: var(--slide-pad);
+        min-height: 0;
+      }
+
+      .cover-band h2 {
+        margin: 0 0 0.35em;
+        font-family: var(--font-title);
+        font-weight: 700;
+        font-size: clamp(1.25rem, 4cqw, 2.5rem);
+        line-height: 0.95;
+      }
+
+      .cover-main {
+        padding: var(--slide-pad);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .cover-kicker {
+        font-size: clamp(0.65rem, 1.5cqw, 0.875rem);
+        color: var(--mck-gray-54);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .cover-title {
+        margin: 0;
+        font-family: var(--font-title);
+        font-weight: 700;
+        font-size: clamp(1rem, 2.6cqw, 1.5rem);
+        line-height: 1.12;
+        color: var(--mck-text);
+      }
+
+      .cover-sub {
+        margin: 0;
+        font-size: clamp(0.75rem, 1.65cqw, 0.9375rem);
+        color: var(--mck-gray-70);
+      }
+
+      .cover-date {
+        margin-top: auto;
+        font-size: clamp(0.65rem, 1.5cqw, 0.875rem);
+        color: var(--mck-gray-70);
+      }
+
+      .slide-title {
+        margin: 0 0 0.45em;
+        padding-bottom: 0.28em;
+        border-bottom: 3px solid var(--mck-accent1);
+        font-family: var(--font-title);
+        font-weight: 700;
+        font-size: clamp(1.05rem, 2.5cqw, 1.5625rem);
+        line-height: 0.93;
+        max-width: 98%;
+      }
+
+      .slide-body {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+        display: grid;
+        grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+        gap: clamp(10px, 2.2cqw, 24px);
+        align-content: start;
+      }
+
+      .slide-body--single {
+        grid-template-columns: 1fr;
+      }
+
+      @media (max-width: 720px) {
+        .cover-grid {
+          grid-template-columns: 1fr;
+        }
+        .cover-band {
+          min-height: 26%;
+        }
+        .slide-body {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .bullets {
+        margin: 0;
+        padding-left: 1.1em;
+        font-size: clamp(0.78rem, 1.5cqw, 1rem);
+        line-height: 1.22;
+      }
+
+      .bullets > li {
+        margin-bottom: 0.5em;
+      }
+
+      .bullets ul {
+        margin: 0.35em 0 0;
+        padding-left: 1.15em;
+        list-style-type: disc;
+      }
+
+      .tight {
+        font-size: clamp(0.7rem, 1.35cqw, 0.875rem);
+        line-height: 1.2;
+      }
+
+      .pull-quote {
+        background: var(--mck-gray-10);
+        border-left: 4px solid var(--mck-accent1);
+        padding: 10px 12px 10px 14px;
+        font-size: clamp(0.72rem, 1.3cqw, 0.9rem);
+        color: var(--mck-text);
+        align-self: start;
+      }
+
+      .pull-quote q {
+        display: block;
+        font-style: italic;
+        quotes: "“" "”" "‘" "’";
+        margin-bottom: 0.45em;
+      }
+
+      .pull-quote cite {
+        display: block;
+        font-style: normal;
+        font-size: 0.85em;
+        color: var(--mck-gray-70);
+      }
+
+      .source {
+        margin-top: 8px;
+        font-size: clamp(0.55rem, 1.05cqw, 0.625rem);
+        color: var(--mck-gray-70);
+        line-height: 1.25;
+      }
+
+      .mck-table-wrap {
+        overflow-x: auto;
+        max-height: 100%;
+      }
+
+      .mck-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: clamp(0.62rem, 1.25cqw, 0.8125rem);
+        line-height: 1.2;
+      }
+
+      .mck-table th,
+      .mck-table td {
+        border-bottom: 1px solid #ccc;
+        padding: 0.35em 0.45em;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .mck-table th {
+        background: var(--mck-accent1);
+        color: var(--mck-white);
+        font-weight: 700;
+      }
+
+      .mck-table tr:nth-child(even) td {
+        background: #fafafa;
+      }
+
+      .footer {
+        position: absolute;
+        left: var(--slide-pad);
+        right: var(--slide-pad);
+        bottom: calc(var(--slide-pad) * 0.55);
+        display: flex;
+        align-items: flex-end;
+        gap: 8px;
+        font-size: clamp(0.5rem, 1cqw, 0.5625rem);
+        color: var(--mck-text);
+      }
+
+      .footer-foot {
+        flex: 1 1 auto;
+        min-width: 0;
+        color: var(--mck-gray-70);
+      }
+
+      .footer-brand {
+        flex: 0 0 auto;
+        white-space: nowrap;
+      }
+
+      .footer-page {
+        flex: 0 0 auto;
+        color: var(--mck-gray-70);
+      }
+    </style>
+  
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:_dlc_DocId msdt:dt="string">DE7XN4DZS357-1263605440-18468</mso:_dlc_DocId>
+<mso:_dlc_DocIdItemGuid msdt:dt="string">385a8556-7e45-4831-91f6-2cbba9e8af8e</mso:_dlc_DocIdItemGuid>
+<mso:_dlc_DocIdUrl msdt:dt="string">https://mckinsey.sharepoint.com/sites/spt-int-6jj6kewnj5r70j/_layouts/15/DocIdRedir.aspx?ID=DE7XN4DZS357-1263605440-18468, DE7XN4DZS357-1263605440-18468</mso:_dlc_DocIdUrl>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+  <body>
+    <div class="page">
+      <h1>Philips Strategy 2035 — Letter of Proposal (HTML draft)</h1>
+      <p class="meta">
+        Styling aligned to <code>mckinsey-lop-formatting-spec.md</code> (16:9, Georgia-Bold titles,
+        Arial body, <code>#061F79</code> accent). Top strip: placeholder only — replace with
+        pursuit-approved boilerplate before client use. Source: LoP markdown v0.2 + user RFP (chat).
+      </p>
+
+      <div class="deck">
+        <!-- Slide 1 — Cover -->
+        <article class="slide slide--cover" aria-label="Cover">
+          <div class="cover-top-strip">
+            <strong>Placeholder only.</strong> Replace with approved confidential / proprietary /
+            copyright wording from your pursuit boilerplate or GEM PDF page 1 — do not use this
+            text for a client send.
+          </div>
+          <div class="cover-grid">
+            <div class="cover-band">
+              <h2>Discussion document</h2>
+            </div>
+            <div class="cover-main">
+              <span class="cover-kicker">Letter of proposal</span>
+              <p class="cover-title">
+                Philips Strategy 2035 — scenarios, strategic moves, and value implications
+              </p>
+              <p class="cover-sub">Philips · McKinsey &amp; Company</p>
+              <p class="cover-date">McKinsey &amp; Company · Date: [TBD — month/year]</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 2 -->
+        <article class="slide" aria-label="Context and objectives">
+          <div class="slide-inner">
+            <h2 class="slide-title">1. Context &amp; objectives</h2>
+            <div class="slide-body">
+              <div>
+                <p class="bullets" style="list-style: none; padding-left: 0; margin: 0 0 0.6em">
+                  <strong>Purpose (RFP-aligned)</strong>
+                </p>
+                <ul class="bullets">
+                  <li>
+                    Develop a <strong>2035 strategy</strong> for Philips: market trends, competitive
+                    landscape, <strong>scenarios</strong>, <strong>strategic moves</strong>, and
+                    <strong>three strategy options</strong> with share-price impact framing.
+                  </li>
+                  <li>
+                    Enable leadership to compare pathways on <strong>strategic merit</strong> and
+                    <strong>value</strong> dimensions — with explicit governance on equity outputs.
+                  </li>
+                  <li><strong>Duration:</strong> 8 weeks · <strong>Team:</strong> EM + 2</li>
+                </ul>
+                <p class="source">
+                  Sources: user intake + RFP summary (chat). Full RFP / CST / boilerplate [TBD].
+                </p>
+              </div>
+              <aside class="pull-quote">
+                <q
+                  >Develop a 2035 strategy for Philips, analyzing the main market trends, assess
+                  competitive landscape, build possible future scenario's, design potential strategic
+                  moves, and create 3 possible strategies including shareprice impact for each
+                  scenario.</q
+                >
+                <cite>User-provided RFP scope (verbatim summary)</cite>
+              </aside>
+            </div>
+            <div class="footer">
+              <span class="footer-page">2</span>
+              <span class="footer-foot">Draft v0.2 — not for external distribution without approval</span>
+              <span class="footer-brand">McKinsey &amp; Company</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 3 -->
+        <article class="slide" aria-label="Objectives mapped to RFP">
+          <div class="slide-inner">
+            <h2 class="slide-title">1. Objectives mapped to RFP</h2>
+            <div class="slide-body slide-body--single">
+              <div class="mck-table-wrap">
+                <table class="mck-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>RFP element</th>
+                      <th>Engagement output</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>2035 strategy</td>
+                      <td>
+                        Integrated narrative: where Philips competes through 2035, what must be built
+                        / protected, how choices hang together.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Main market trends</td>
+                      <td>
+                        Prioritized trend scan with segment implications — evidence-backed; data
+                        sources [TBD].
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Competitive landscape</td>
+                      <td>
+                        Competitor / ecosystem view — no unattributed claims; primary sources [TBD].
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>Future scenarios</td>
+                      <td>2–4 [TBD] scenarios to 2035 (axes, narratives, signposts).</td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td>Strategic moves</td>
+                      <td>
+                        Menu of potential moves (portfolio, M&amp;A, partnerships, operating model,
+                        capital allocation) tied to scenarios.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>6</td>
+                      <td>Three strategies + share price</td>
+                      <td>
+                        Three coherent strategy packages; illustrative equity / share-price logic per
+                        agreed methodology — numbers [TBD].
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="footer">
+              <span class="footer-page">3</span>
+              <span class="footer-foot"></span>
+              <span class="footer-brand">McKinsey &amp; Company</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 4 -->
+        <article class="slide" aria-label="Governance">
+          <div class="slide-inner">
+            <h2 class="slide-title">Share price / equity value — governance</h2>
+            <div class="slide-body slide-body--single">
+              <ul class="bullets">
+                <li>
+                  Outputs are <strong>strategic decision support</strong>, not investment advice or
+                  official forecasts.
+                </li>
+                <li>
+                  <strong>Methodology, disclosures,</strong> and any use of market data require
+                  Partner + Risk + Finance alignment and Philips IR / legal norms [TBD].
+                </li>
+                <li>
+                  <strong>No numbers</strong> in this draft — quantification [TBD] until models use
+                  Philips-approved inputs.
+                </li>
+                <li>
+                  Success criteria and workshop gates — <strong>[TBD]</strong> (full RFP scoring,
+                  oral brief, charter).
+                </li>
+              </ul>
+              <p class="source">Align disclaimers with approved boilerplate before issue.</p>
+            </div>
+            <div class="footer">
+              <span class="footer-page">4</span>
+              <span class="footer-foot"></span>
+              <span class="footer-brand">McKinsey &amp; Company</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 5 -->
+        <article class="slide" aria-label="Why McKinsey">
+          <div class="slide-inner">
+            <h2 class="slide-title">2. Why McKinsey</h2>
+            <div class="slide-body slide-body--single">
+              <ul class="bullets">
+                <li>
+                  <strong>Integrated strategy and transformation</strong> — from direction-setting
+                  through implementation planning.
+                </li>
+                <li>
+                  <strong>Industry and functional depth</strong> — [TBD: name approved practices /
+                  assets for health technology, regulated products, enterprise strategy].
+                </li>
+                <li>
+                  <strong>Fact-based and collaborative</strong> — workshops, transparent trade-offs,
+                  decision-ready materials.
+                </li>
+                <li>
+                  <strong>Proof points — [TBD]</strong> — use only approved experience summaries /
+                  vignettes; do not fabricate client names or outcomes.
+                </li>
+              </ul>
+            </div>
+            <div class="footer">
+              <span class="footer-page">5</span>
+              <span class="footer-foot"></span>
+              <span class="footer-brand">McKinsey &amp; Company</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 6 -->
+        <article class="slide" aria-label="Timeline">
+          <div class="slide-inner">
+            <h2 class="slide-title">3. Timeline and team</h2>
+            <div class="slide-body slide-body--single">
+              <p class="tight" style="margin: 0 0 0.5em"><strong>Length:</strong> 8 weeks · <strong>Shape:</strong> EM + 2 · <strong>Milestones:</strong> [TBD]</p>
+              <div class="mck-table-wrap">
+                <table class="mck-table">
+                  <thead>
+                    <tr>
+                      <th>Week</th>
+                      <th>Phase</th>
+                      <th>Focus</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1–2</td>
+                      <td>Frame &amp; fact base</td>
+                      <td>
+                        Interviews, data requests, market trends, competitive framing, scenario axes
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>3–4</td>
+                      <td>Scenarios &amp; moves</td>
+                      <td>Future scenarios (draft), strategic moves longlist, pressure-tests</td>
+                    </tr>
+                    <tr>
+                      <td>5–6</td>
+                      <td>Three strategies</td>
+                      <td>Three strategy packages; moves ↔ scenarios; draft value logic</td>
+                    </tr>
+                    <tr>
+                      <td>7</td>
+                      <td>Value &amp; narrative</td>
+                      <td>Share price / equity illustrations per strategy; QA; sensitivities [TBD]</td>
+                    </tr>
+                    <tr>
+                      <td>8</td>
+                      <td>Close</td>
+                      <td>Executive readout, decision log, next-phase handover [TBD]</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="footer">
+              <span class="footer-page">6</span>
+              <span class="footer-foot"></span>
+              <span class="footer-brand">McKinsey &amp; Company</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 7 -->
+        <article class="slide" aria-label="Team">
+          <div class="slide-inner">
+            <h2 class="slide-title">4. Team</h2>
+            <div class="slide-body slide-body--single">
+              <div class="mck-table-wrap">
+                <table class="mck-table">
+                  <thead>
+                    <tr>
+                      <th>Role</th>
+                      <th>Name</th>
+                      <th>Focus</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Partner / Senior Partner</td>
+                      <td>[TBD]</td>
+                      <td>Relationship, quality, executive alignment</td>
+                    </tr>
+                    <tr>
+                      <td>Engagement Manager</td>
+                      <td>[TBD]</td>
+                      <td>Delivery, workplan, workshops</td>
+                    </tr>
+                    <tr>
+                      <td>Associate / Consultant (×2)</td>
+                      <td>[TBD]</td>
+                      <td>Analysis, research, workshop support, materials</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="tight" style="margin-top: 0.6em">
+                <strong>Expert pull — [TBD]:</strong> default strategy + corporate finance / valuation
+                for scenario equity work; add specialists if scope expands.
+              </p>
+            </div>
+            <div class="footer">
+              <span class="footer-page">7</span>
+              <span class="footer-foot"></span>
+              <span class="footer-brand">McKinsey &amp; Company</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 8 -->
+        <article class="slide" aria-label="Credentials">
+          <div class="slide-inner">
+            <h2 class="slide-title">5. Credentials</h2>
+            <div class="slide-body slide-body--single">
+              <ul class="bullets">
+                <li><strong>Relevant experience — [TBD]</strong> — approved one-pagers / vignettes.</li>
+                <li>Tag each as <em>relationship-led / as experience / competitive</em> per firm guidance.</li>
+                <li>
+                  <strong>Philips-specific or adjacent sector — [TBD]</strong> — only if cleared for
+                  this pursuit.
+                </li>
+              </ul>
+            </div>
+            <div class="footer">
+              <span class="footer-page">8</span>
+              <span class="footer-foot"></span>
+              <span class="footer-brand">McKinsey &amp; Company</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 9 -->
+        <article class="slide" aria-label="Market trends">
+          <div class="slide-inner">
+            <h2 class="slide-title">6. Market trends (illustrative dimensions)</h2>
+            <div class="slide-body slide-body--single">
+              <ul class="bullets tight">
+                <li>
+                  <strong>Demand &amp; care delivery</strong> — patient pathways, providers, payers
+                  through 2035.
+                </li>
+                <li>
+                  <strong>Technology &amp; innovation</strong> — modalities for Philips portfolio
+                  [TBD: segments with client].
+                </li>
+                <li><strong>Regulation &amp; policy</strong> — [TBD] jurisdictions and product classes.</li>
+                <li>
+                  <strong>Economics &amp; funding</strong> — pricing, reimbursement, capital markets
+                  appetite for health tech.
+                </li>
+                <li>
+                  <strong>Geopolitical &amp; supply</strong> — resilience, localization, trade [TBD:
+                  footprint].
+                </li>
+              </ul>
+              <p class="source">
+                Substantiate with MGI / practice research / data room / Philips-approved third-party
+                data — cite in final deck [TBD].
+              </p>
+            </div>
+            <div class="footer">
+              <span class="footer-page">9</span>
+              <span class="footer-foot"></span>
+              <span class="footer-brand">McKinsey &amp; Company</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 10 -->
+        <article class="slide" aria-label="Competitive landscape">
+          <div class="slide-inner">
+            <h2 class="slide-title">6. Competitive landscape</h2>
+            <div class="slide-body slide-body--single">
+              <ul class="bullets">
+                <li>
+                  <strong>Peer set</strong> — [TBD] Philips-approved competitor and ecosystem list.
+                </li>
+                <li>
+                  <strong>Battlegrounds</strong> — innovation cadence, installed base,
+                  software/services attach, channel, cost — validate with data.
+                </li>
+                <li>
+                  <strong>Recent moves</strong> — M&amp;A, alliances, portfolio shifts; cite public
+                  sources or Philips briefings only.
+                </li>
+                <li>
+                  <strong>Implications</strong> — white spaces, threats, must-respond dynamics →
+                  scenarios and strategic moves.
+                </li>
+              </ul>
+            </div>
+            <div class="footer">
+              <span class="footer-page">10</span>
+              <span class="footer-foot"></span>
+              <span class="footer-brand">McKinsey &amp; Company</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 11 -->
+        <article class="slide" aria-label="Approach principles">
+          <div class="slide-inner">
+            <h2 class="slide-title">7. Approach — principles &amp; workstreams (1–4)</h2>
+            <div class="slide-body slide-body--single">
+              <ul class="bullets tight">
+                <li>
+                  <strong>Executive-led</strong> — Philips owns decisions; we bring structure, facts,
+                  options, transparent valuation logic.
+                </li>
+                <li><strong>Iterative</strong> — steering cadence [TBD]; workshops on scenarios and strategies.</li>
+                <li><strong>RFP-traceable</strong> — deliverables map to §1 objectives table.</li>
+              </ul>
+              <ol class="bullets tight" style="margin-top: 0.5em; padding-left: 1.4em">
+                <li>Market trends &amp; competitive landscape — integrated fact base.</li>
+                <li>Scenario design — axes [TBD]; 2–4 [TBD] futures; signposts.</li>
+                <li>Strategic moves — longlist → shortlist; link to scenario value.</li>
+                <li>Three strategy packages — where to play / how to win + moves + capabilities.</li>
+              </ol>
+            </div>
+            <div class="footer">
+              <span class="footer-page">11</span>
+              <span class="footer-foot"></span>
+              <span class="footer-brand">McKinsey &amp; Company</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 12 -->
+        <article class="slide" aria-label="Valuation and scope">
+          <div class="slide-inner">
+            <h2 class="slide-title">7. Approach — value, toolkit, inputs, boundaries</h2>
+            <div class="slide-body">
+              <div>
+                <p class="tight" style="margin: 0 0 0.4em"><strong>5. Share price impact (per strategy)</strong></p>
+                <ul class="bullets tight">
+                  <li>DCF / residual income under strategy-specific assumptions [TBD].</li>
+                  <li>Sum-of-the-parts where relevant [TBD].</li>
+                  <li>Relative vs base case (% upside/downside) — numbers [TBD].</li>
+                  <li>Sensitivity bands (growth, margin, WACC, multiple) [TBD].</li>
+                </ul>
+                <p class="tight" style="margin: 0.6em 0 0.3em"><strong>6. Synthesis &amp; handover</strong></p>
+                <ul class="bullets tight">
+                  <li>Board-ready comparison; decision log; next-phase [TBD].</li>
+                </ul>
+                <p class="source">Toolkit [TBD] — Risk-approved IP / data only.</p>
+              </div>
+              <aside class="pull-quote">
+                <q
+                  >Client inputs [TBD]: segment P&amp;L, capex, balance sheet, strategy materials,
+                  trusted competitive intel, IR guidance on forward-looking statements, forecast
+                  permissions.</q
+                >
+                <cite>Out of scope unless added [TBD]: full PMO, binding M&amp;A mandates, fairness
+                  opinions, public earnings guidance — confirm with Legal / IR.</cite>
+              </aside>
+            </div>
+            <div class="footer">
+              <span class="footer-page">12</span>
+              <span class="footer-foot"></span>
+              <span class="footer-brand">McKinsey &amp; Company</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 13 -->
+        <article class="slide" aria-label="Fees">
+          <div class="slide-inner">
+            <h2 class="slide-title">8. Fees</h2>
+            <div class="slide-body slide-body--single">
+              <ul class="bullets">
+                <li><strong>Fees — [TBD]</strong> — approved pricing / rate card / discount governance only.</li>
+                <li>Professional fees: <strong>8 weeks</strong>, <strong>EM + 2</strong> baseline.</li>
+                <li><strong>[TBD]</strong> — expenses, experts, data, pass-throughs.</li>
+                <li><strong>[TBD]</strong> — fee mechanics (fixed, capped, milestone-based).</li>
+              </ul>
+            </div>
+            <div class="footer">
+              <span class="footer-page">13</span>
+              <span class="footer-foot"></span>
+              <span class="footer-brand">McKinsey &amp; Company</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 14 -->
+        <article class="slide" aria-label="Appendix and references">
+          <div class="slide-inner">
+            <h2 class="slide-title">9–11. Appendix, references, team CVs</h2>
+            <div class="slide-body slide-body--single">
+              <div class="mck-table-wrap">
+                <table class="mck-table">
+                  <thead>
+                    <tr>
+                      <th>Ref</th>
+                      <th>Content</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>A–G</td>
+                      <td>
+                        Workplan, interviews, data requests (incl. finance for valuation), workshops,
+                        scenarios, moves long/shortlist, three-strategy one-pagers + value methodology
+                        — all [TBD]
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>§10</td>
+                      <td>Named references — [TBD] — explicit client approval + firm clearance</td>
+                    </tr>
+                    <tr>
+                      <td>§11</td>
+                      <td>CVs — [TBD] — approved CV system, one slide or half-slide per core member</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="footer">
+              <span class="footer-page">14</span>
+              <span class="footer-foot"></span>
+              <span class="footer-brand">McKinsey &amp; Company</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 15 -->
+        <article class="slide" aria-label="LOP coach">
+          <div class="slide-inner">
+            <h2 class="slide-title">LOP coach — pre–Gate A issues</h2>
+            <div class="slide-body slide-body--single">
+              <div class="mck-table-wrap">
+                <table class="mck-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Issue</th>
+                      <th>Owner</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>Engagement name; “Strategy 2035” external wording</td>
+                      <td>Partner</td>
+                      <td>Open</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Full RFP, scoring, submission rules</td>
+                      <td>EM</td>
+                      <td>Open</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Proof, fees, CVs, references</td>
+                      <td>Team</td>
+                      <td>Open</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>Boilerplate (confidentiality, copyright)</td>
+                      <td>BD / Risk</td>
+                      <td>Open</td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td>EM+2 mix; valuation capacity</td>
+                      <td>Partner</td>
+                      <td>Open</td>
+                    </tr>
+                    <tr>
+                      <td>6</td>
+                      <td>Risk / Finance / IR — share price framing &amp; data</td>
+                      <td>Partner + Risk</td>
+                      <td>Open</td>
+                    </tr>
+                    <tr>
+                      <td>7</td>
+                      <td># of scenarios; naming of three strategies</td>
+                      <td>Partner</td>
+                      <td>Open</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="footer">
+              <span class="footer-page">15</span>
+              <span class="footer-foot">HTML draft — pair with PPT master per GEM LoP Guide</span>
+              <span class="footer-brand">McKinsey &amp; Company</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </body>
+</html>

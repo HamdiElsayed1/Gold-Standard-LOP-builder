@@ -1,0 +1,1 @@
+{"sessionId": "9362fc", "id": "log_1777845760359_orch", "timestamp": 1777845760359, "location": "orchestrator.py:before_chat_completions_create", "message": "Resolving model for chat.completions.create", "data": {"agent_name": "slide-author-agent", "model_resolved": "gpt-5.5-2026-04-23"}, "runId": "model_id_fix", "hypothesisId": "H1"}

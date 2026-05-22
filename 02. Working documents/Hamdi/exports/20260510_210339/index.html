@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LoP slide deck</title>
+<style>
+/*
+ * slide.css -- Theme stylesheet for the HTML-PPTX skill harness.
+ *
+ * Encodes the McKinsey template's guide grid, color palette, and font
+ * defaults.  Every HTML slide links to this file.
+ *
+ * DO NOT modify during parallel development -- this is a shared contract.
+ *
+ * Viewport: 1920 x 1080 px  (maps 1:1 to the 12192000 x 6858000 EMU slide)
+ *
+ * Guide-derived layout boundaries (px):
+ *   Title:       0 - 269
+ *   Content:     269 - 978  (left: 86, right: 1832)
+ *   Footnote:    988.8 top, 19.4 tall  (from example.pptx, anchor bottom)
+ *   Source:      1023.9 top, 19.4 tall  (from example.pptx, anchor top)
+ */
+
+/* ------------------------------------------------------------------ */
+/* Custom properties                                                  */
+/* ------------------------------------------------------------------ */
+
+:root {
+  --font-title: Georgia, serif;
+  --font-content: Arial, sans-serif;
+
+  /* Layout boundaries */
+  --margin-left: 86px;
+  --margin-right: 88px;   /* 1920 - 1832 */
+  --title-bottom: 269px;
+  --content-bottom: 978px;
+  --footnote-bottom: 1016px;
+
+  /* ── Theme Colors ──────────────────────────────────────────────────
+     Base colors + 5 tint/shade rows from theme3 "Custom Scheme",
+     matching the PowerPoint color-picker grid (42 colors).
+     Tint:  channel + (255 − channel) × pct
+     Shade: channel × pct
+     ────────────────────────────────────────────────────────────────── */
+
+  --black: #000000;                      /* dk1 */
+  --white: #FFFFFF;                      /* lt1 */
+
+  /* Accent 1 — Navy (#051C2C, also dk2) — 6 colors */
+  --navy:             #051C2C;
+  --navy-lightest:    #CDD2D5;           /* 80% tint */
+  --navy-lighter:     #9BA4AB;           /* 60% tint */
+  --navy-light:       #697780;           /* 40% tint */
+  --navy-dark:        #041521;           /* 25% shade */
+  --navy-darkest:     #020E16;           /* 50% shade */
+
+  /* Accent 2 — Cyan (#00A9F4) — 6 colors */
+  --cyan:             #00A9F4;
+  --cyan-lightest:    #CCEEFD;           /* 80% tint */
+  --cyan-lighter:     #99DDFB;           /* 60% tint */
+  --cyan-light:       #66CBF8;           /* 40% tint */
+  --cyan-dark:        #007FB7;           /* 25% shade */
+  --cyan-darkest:     #00547A;           /* 50% shade */
+
+  /* Accent 3 — Bright Blue (#1F40E6) — 6 colors */
+  --bright-blue:           #1F40E6;
+  --bright-blue-lightest:  #D2D9FA;      /* 80% tint */
+  --bright-blue-lighter:   #A5B3F5;      /* 60% tint */
+  --bright-blue-light:     #798CF0;      /* 40% tint */
+  --bright-blue-dark:      #1730AC;      /* 25% shade */
+  --bright-blue-darkest:   #102073;      /* 50% shade */
+
+  /* Accent 4 — Light Teal (#AAE6F0) — 6 colors */
+  --light-teal:            #AAE6F0;
+  --light-teal-lightest:   #EEFAFC;      /* 80% tint */
+  --light-teal-lighter:    #DDF5F9;      /* 60% tint */
+  --light-teal-light:      #CCF0F6;      /* 40% tint */
+  --light-teal-dark:       #80ACB4;      /* 25% shade */
+  --light-teal-darkest:    #557378;      /* 50% shade */
+
+  /* Accent 5 — Teal (#3C96B4) — 6 colors */
+  --teal:             #3C96B4;
+  --teal-lightest:    #D8EAF0;           /* 80% tint */
+  --teal-lighter:     #B1D5E1;           /* 60% tint */
+  --teal-light:       #8AC0D2;           /* 40% tint */
+  --teal-dark:        #2D7087;           /* 25% shade */
+  --teal-darkest:     #1E4B5A;           /* 50% shade */
+
+  /* Accent 6 — Periwinkle (#AFC3FF) — 6 colors */
+  --periwinkle:            #AFC3FF;
+  --periwinkle-lightest:   #EFF3FF;      /* 80% tint */
+  --periwinkle-lighter:    #DFE7FF;      /* 60% tint */
+  --periwinkle-light:      #CFDBFF;      /* 40% tint */
+  --periwinkle-dark:       #8392BF;      /* 25% shade */
+  --periwinkle-darkest:    #586280;      /* 50% shade */
+
+  /* Grays — unified scale from dk1 tints, lt1 shades, and custom
+     grays.  Number = darkness % (0 = white, 100 = black). 9 colors */
+  --gray-10: #E6E6E6;
+  --gray-20: #CCCCCC;
+  --gray-25: #BFBFBF;
+  --gray-30: #B3B3B3;
+  --gray-40: #999999;
+  --gray-50: #808080;
+  --gray-54: #757575;
+  --gray-60: #666666;
+  --gray-70: #4D4D4D;
+
+  /* ── Custom Color Palette ──────────────────────────────────────────
+     Curated color families from the template's custom color lists
+     (theme1 + theme2 custClrLst).  Numeric scale: 200 = lightest,
+     900 = darkest.  37 colors across 7 families.
+     ────────────────────────────────────────────────────────────────── */
+
+  /* Electric Blue — 6 shades */
+  --electric-blue-200: #99C4FF;
+  --electric-blue-300: #5E9DFF;
+  --electric-blue-500: #2251FF;
+  --electric-blue-700: #1537BA;
+  --electric-blue-800: #0E2B99;
+  --electric-blue-900: #061F79;
+
+  /* Cyan — 5 shades (--cyan-500 = --cyan = #00A9F4) */
+  --cyan-200: #99E6FF;
+  --cyan-300: #6ECBF7;
+  --cyan-500: #00A9F4;
+  --cyan-700: #0679C3;
+  --cyan-900: #084D91;
+
+  /* Deep Blue — 6 shades (--deep-blue-900 = --navy = #051C2C) */
+  --deep-blue-200: #82A6C9;
+  --deep-blue-300: #5380AC;
+  --deep-blue-500: #2B5580;
+  --deep-blue-600: #1B456E;
+  --deep-blue-700: #103559;
+  --deep-blue-900: #051C2C;
+
+  /* Crimson Red — 5 shades */
+  --crimson-red-300: #F17E7E;
+  --crimson-red-500: #E33B3B;
+  --crimson-red-600: #CD3030;
+  --crimson-red-700: #B82525;
+  --crimson-red-900: #8E0B0B;
+
+  /* Marine Green — 5 shades */
+  --marine-green-300: #75F0E7;
+  --marine-green-500: #0BDACB;
+  --marine-green-600: #10CBBC;
+  --marine-green-700: #14B8AB;
+  --marine-green-900: #108980;
+
+  /* Sand Neutral — 1 shade */
+  --sand-neutral-300: #E6D7BC;
+
+  /* Amber Yellow — 1 shade */
+  --amber-yellow-500: #FFA800;
+}
+
+/* ------------------------------------------------------------------ */
+/* Reset                                                              */
+/* ------------------------------------------------------------------ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Slide container                                                    */
+/* ------------------------------------------------------------------ */
+
+.slide {
+  width: 1920px;
+  height: 1080px;
+  position: relative;
+  overflow: hidden;
+  font-family: var(--font-content);
+  font-size: 36px;
+  line-height: 1.2;
+  color: var(--black);
+  background: var(--white);
+}
+
+/* ------------------------------------------------------------------ */
+/* Layout containers                                                  */
+/* ------------------------------------------------------------------ */
+
+.title {
+  position: absolute;
+  top: 0;
+  left: var(--margin-left);
+  right: var(--margin-right);
+  height: var(--title-bottom);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 8px;
+  font-family: var(--font-title);
+  font-weight: bold;
+  color: var(--black);
+}
+
+/* Bottom-align title copy inside the title placeholder box. Inline
+   flex alignment from PPTX import overrides justify-content when needed. */
+.title [data-pptx="placeholder"] {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.content {
+  position: absolute;
+  top: var(--title-bottom);
+  left: var(--margin-left);
+  right: var(--margin-right);
+  bottom: calc(1080px - var(--content-bottom));  /* 102px from bottom */
+}
+
+.footnote {
+  position: absolute;
+  top: 988.8px;
+  left: 87.2px;
+  width: 1146.2px;
+  height: 19.4px;
+  display: flex;
+  align-items: flex-end;
+  font-size: 16px;
+  line-height: 1.0;
+  color: var(--black);
+}
+
+.source {
+  position: absolute;
+  top: 1023.9px;
+  left: 87.4px;
+  width: 1146.1px;
+  height: 19.4px;
+  display: flex;
+  align-items: flex-start;
+  font-size: 16px;
+  line-height: 1.0;
+  color: var(--black);
+}
+
+/* ------------------------------------------------------------------ */
+/* Chrome (template elements -- rendered for reference, not compiled) */
+/* ------------------------------------------------------------------ */
+
+.chrome {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.chrome .slide-number {
+  position: absolute;
+  right: var(--margin-right);
+  bottom: 40px;
+  font-size: 10px;
+  color: var(--black);
+}
+
+.chrome .logo {
+  position: absolute;
+  right: var(--margin-right);
+  bottom: 20px;
+  font-size: 10px;
+  color: var(--black);
+}
+
+/* ------------------------------------------------------------------ */
+/* Bullet lists                                                       */
+/* ------------------------------------------------------------------ */
+
+ul[data-bullet-char] {
+  list-style: none;
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+ul[data-bullet-char] > li {
+  position: relative;
+  padding-left: 0;
+}
+
+ul[data-bullet-char] > li::before {
+  content: attr(data-marker) " ";
+  position: absolute;
+  left: -1.2em;
+}
+
+/* Fallback: use the bullet char from the <ul> when li has no data-marker */
+ul[data-bullet-char="•"] > li:not([data-marker])::before { content: "• "; }
+
+/* ------------------------------------------------------------------ */
+/* Placeholder title defaults (for Claude-authored HTML)              */
+/* ------------------------------------------------------------------ */
+
+[data-pptx="placeholder"][data-ph-idx="0"] {
+  font-family: var(--font-title);
+  font-size: 50px;
+  font-weight: bold;
+  line-height: 1.15;
+}
+
+/* ------------------------------------------------------------------ */
+/* Layout: Title (cover slide, index 0)                               */
+/*                                                                    */
+/* Full-bleed blue background from template images.  Only the title   */
+/* placeholder is authored; all other elements (logo, subtitle, date, */
+/* client logo, disclaimer) are template chrome.                      */
+/* ------------------------------------------------------------------ */
+
+.slide[data-layout="Title"] {
+  color: var(--white);
+}
+
+.slide[data-layout="Title"] .title {
+  top: 0;
+  left: var(--margin-left);
+  right: calc(1920px - 1034px);   /* title stops at ~1034px */
+  height: 625px;                  /* title bottom = top(323) + height(303) */
+  justify-content: flex-end;
+  padding-bottom: 0;
+  color: var(--white);
+}
+
+.slide[data-layout="Title"] [data-pptx="placeholder"][data-ph-idx="0"] {
+  font-size: 66px;
+  line-height: 1.15;
+  color: var(--white);
+}
+
+.slide[data-layout="Title"] .content,
+.slide[data-layout="Title"] .footnote,
+.slide[data-layout="Title"] .source {
+  display: none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Layout: 2/3 (index 9)                                             */
+/*                                                                    */
+/* Left 2/3 is white (content area).  Right 1/3 is gray #E6E6E6.    */
+/* Title and content sit on the left; the gray panel is chrome.       */
+/* ------------------------------------------------------------------ */
+
+.slide[data-layout="2/3"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 1233px;
+  width: 687px;
+  height: 1080px;
+  background: var(--gray-10);
+  z-index: 0;
+}
+
+.slide[data-layout="2/3"] .title {
+  right: calc(1920px - 1185px);   /* 87 + 1097 ≈ 1185 */
+}
+
+.slide[data-layout="2/3"] .content {
+  right: calc(1920px - 1185px);
+}
+
+.slide[data-layout="2/3"] .source {
+  width: 1097.3px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Guide overlay (toggle with .slide.show-guides)                     */
+/* ------------------------------------------------------------------ */
+
+.slide.show-guides::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 200;
+  background:
+    linear-gradient(to bottom, transparent 268px, #5ACBF044 268px, #5ACBF044 270px, transparent 270px),
+    linear-gradient(to bottom, transparent 977px, #5ACBF044 977px, #5ACBF044 979px, transparent 979px),
+    linear-gradient(to bottom, transparent 1015px, #F26B4344 1015px, #F26B4344 1017px, transparent 1017px),
+    linear-gradient(to right, transparent 85px, #F26B4344 85px, #F26B4344 87px, transparent 87px),
+    linear-gradient(to right, transparent 1831px, #F26B4344 1831px, #F26B4344 1833px, transparent 1833px);
+}
+
+
+
+/* Single-HTML deck wrapper — no iframes; pixel-perfect 1920x1080 sections
+   scaled to the viewport using CSS transform. */
+:root { color-scheme: light; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: #1a1a1a;
+  padding: 0 0 64px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #ddd;
+}
+
+.deck-nav {
+  position: sticky;
+  top: 0;
+  background: #0a0a0a;
+  color: #fff;
+  padding: 10px 24px;
+  z-index: 1000;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+.deck-nav .deck-title {
+  font-weight: 700;
+  margin-right: 16px;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  color: #fff;
+}
+.deck-nav a {
+  color: #cfcfcf;
+  text-decoration: none;
+  font-size: 12px;
+  padding: 4px 10px;
+  border: 1px solid #2a2a2a;
+}
+.deck-nav a:hover { background: #1f1f1f; color: #fff; }
+
+.deck-main { padding: 32px 0 0; }
+.slide-card { margin: 0 auto 32px; }
+.slide-label {
+  color: #bbb;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0 auto 8px;
+  max-width: 1280px;
+  padding: 0 16px;
+}
+
+.slide-shell {
+  width: min(calc(100vw - 64px), 1280px);
+  aspect-ratio: 16 / 9;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+  margin: 0 auto;
+  background: #ffffff;
+}
+.slide-shell > .slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  transform-origin: top left;
+  transform: scale(calc(min(calc(100vw - 64px), 1280px) / 1920));
+}
+
+/* Cover-slide background — no external image needed. */
+.slide[data-layout="Title"] {
+  background: var(--navy);
+  background-image: linear-gradient(135deg, var(--navy) 0%, var(--electric-blue-900) 100%);
+}
+
+/* Partial / placeholder ribbon — replaces the visible "Placeholder…" body
+   paragraph that earlier agent runs leaked onto slides. */
+.slide[data-confidence="partial"]::after,
+.slide[data-confidence="placeholder"]::after {
+  content: "PARTIAL — pending partner confirmation";
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  padding: 4px 10px;
+  background: var(--amber-yellow-500);
+  color: var(--black);
+  font-family: var(--font-content);
+  font-weight: 700;
+  z-index: 200;
+}
+.slide[data-confidence="placeholder"]::after {
+  content: "PLACEHOLDER — not yet drafted";
+}
+
+@media print {
+  body { background: #fff; padding: 0; }
+  .deck-nav, .slide-label { display: none !important; }
+  .slide-card { margin: 0; page-break-after: always; }
+  .slide-shell {
+    width: 100vw;
+    max-width: none;
+    aspect-ratio: 16 / 9;
+    box-shadow: none;
+  }
+  .slide-shell > .slide {
+    transform: scale(calc(100vw / 1920));
+  }
+}
+
+</style>
+
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:_dlc_DocId msdt:dt="string">DE7XN4DZS357-1263605440-26208</mso:_dlc_DocId>
+<mso:_dlc_DocIdItemGuid msdt:dt="string">3af2a56a-35ea-4897-9ee6-855af16e90fe</mso:_dlc_DocIdItemGuid>
+<mso:_dlc_DocIdUrl msdt:dt="string">https://mckinsey.sharepoint.com/sites/spt-int-6jj6kewnj5r70j/_layouts/15/DocIdRedir.aspx?ID=DE7XN4DZS357-1263605440-26208, DE7XN4DZS357-1263605440-26208</mso:_dlc_DocIdUrl>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+<body>
+<nav class="deck-nav">
+  <span class="deck-title">LOP DECK</span>
+  <a href="#slide-1">1. Cover</a>
+  <a href="#slide-2">2. Context and Objectives</a>
+  <a href="#slide-3">3. Why McKinsey</a>
+  <a href="#slide-4">4. Timeline and Team</a>
+  <a href="#slide-5">5. Team</a>
+  <a href="#slide-6">6. Credentials</a>
+  <a href="#slide-7">7. Market Trends</a>
+  <a href="#slide-8">8. Approach</a>
+  <a href="#slide-9">9. Fees</a>
+  <a href="#slide-10">10. Appendix</a>
+</nav>
+<main class="deck-main">
+<section class="slide-card" id="slide-1">
+  <div class="slide-label">Slide 1 — Cover</div>
+  <div class="slide-shell">
+    <section class="slide" data-layout="Title">
+  <div class="title">
+    <div data-pptx="placeholder" data-ph-idx="0"
+         style="position:absolute; left:0px; top:322.8px; width:947.5px; height:302.6px">
+      <p>Belastingdienst needs to accelerate responsible AI and digital transformation fast enough to redesign its generic bezwaarproces for scale, legality, and service quality, without creating compliance or delivery risk; a winning response builds the AI foundation and a future-proof bezwaar process that is scalable, AI-enabled, and legally robust.</p>
+    </div>
+  </div>
+</section>
+  </div>
+</section>
+<section class="slide-card" id="slide-2">
+  <div class="slide-label">Slide 2 — Context and Objectives</div>
+  <div class="slide-shell">
+    <section class="slide" data-layout="Default">
+  <div data-pptx="chrome" class="chrome">
+    <span class="slide-number">2</span>
+    <span class="logo">McKinsey &amp; Company</span>
+  </div>
+  <div class="title">
+    <div data-pptx="placeholder" data-ph-idx="0" style="position:absolute; left:1.2px; top:28.7px; width:1745.3px; height:115.2px">
+      <p>Belastingdienst must turn AI ambition into controlled delivery while modernizing bezwaar under staffing, compliance, and service pressures</p>
+    </div>
+  </div>
+  <div class="content" style="position:absolute; left:60px; top:170px; width:1800px; height:820px; display:grid; grid-template-columns:1fr 1fr; gap:48px;">
+    <div>
+      <p style="margin:0 0 14px 0;"><strong>The situation</strong></p>
+      <div style="width:64px; height:4px; background:var(--electric-blue-900); margin-bottom:18px;"></div>
+      <ul data-bullet-char="•" style="margin:0; padding-left:22px;">
+        <li style="margin-bottom:14px;">RFP IUC26-011 seeks a strategic full-service partner to accelerate responsible AI and digital transformation, with EUR 5.0 mln ceiling over 12 months.</li>
+        <li style="margin-bottom:14px;">Six prioritized AI use cases are in scope alongside building the AI foundation; generative AI today is still largely experimental on sensitive taxpayer data.</li>
+        <li style="margin-bottom:14px;">The first sub-assignment is redesign of the generic bezwaarproces, which must respect Awb deadlines and hearing rights while scaling under peak load.</li>
+        <li style="margin-bottom:14px;">Delivery context is constrained by labour scarcity, an ageing workforce, ICT modernization, and rising citizen expectations on service quality.</li>
+      </ul>
+    </div>
+    <div>
+      <div style="display:inline-block; background:var(--cyan-lightest); color:#000000; padding:6px 14px; margin-bottom:18px;"><strong>Our day-one answer</strong></div>
+      <p style="margin:0 0 18px 0;">Run one disciplined programme that builds the responsible AI foundation and redesigns bezwaar in parallel, so the process becomes scalable, AI-enabled, and legally robust under Awb, AI Act, and AVG, without adding compliance or delivery risk.</p>
+      <div style="width:64px; height:4px; background:var(--electric-blue-900); margin:6px 0 16px 0;"></div>
+      <p style="margin:0 0 12px 0;"><strong>If we do not deliver this</strong></p>
+      <p style="margin:0;">The Belastingdienst stays constrained by labour shortages, bezwaar bottlenecks, and fragmented AI experimentation, putting statutory deadlines and citizen service quality at risk.</p>
+    </div>
+  </div>
+  <div class="source"><p>Source: RFP IUC26-011 and Vision on AI 2025-2030; ContextDoc web search (Jaarplan Belastingdienst 2026); team analysis</p></div>
+</section>
+  </div>
+</section>
+<section class="slide-card" id="slide-3">
+  <div class="slide-label">Slide 3 — Why McKinsey</div>
+  <div class="slide-shell">
+    <section class="slide" data-layout="Default" data-confidence="partial">
+  <div data-pptx="chrome" class="chrome">
+    <span class="slide-number">3</span>
+    <span class="logo">McKinsey &amp; Company</span>
+  </div>
+  <div class="title">
+    <div data-pptx="placeholder" data-ph-idx="0" style="position:absolute; left:1.2px; top:28.7px; width:1745.3px; height:115.2px">
+      <p>McKinsey links process redesign, responsible AI, and change delivery into one public-sector transformation engine</p>
+    </div>
+  </div>
+  <div class="content">
+    <div style="display:grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap:32px; padding:24px 40px;">
+      <div style="display:flex; gap:20px; align-items:flex-start;">
+        <div style="width:64px; height:64px; border-radius:50%; background:var(--electric-blue-900); color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:700; flex-shrink:0;">1</div>
+        <div>
+          <p style="font-size:22px; font-weight:700; margin:0 0 8px 0;">One integrated programme from strategy through implementation</p>
+          <p style="font-size:18px; margin:0;">We combine strategy, technology, change management, primary-process expertise, and benefits management in a single disciplined delivery — the full-service partner the tender calls for.</p>
+        </div>
+      </div>
+      <div style="display:flex; gap:20px; align-items:flex-start;">
+        <div style="width:64px; height:64px; border-radius:50%; background:var(--electric-blue-900); color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:700; flex-shrink:0;">2</div>
+        <div>
+          <p style="font-size:22px; font-weight:700; margin:0 0 8px 0;">Statutory process redesign in regulated public-sector environments</p>
+          <p style="font-size:18px; margin:0;">We bring hands-on credibility redesigning processes under Awb deadlines, AI Act, AVG, and archiving constraints — moving from legal burden to scalable service quality.</p>
+        </div>
+      </div>
+      <div style="display:flex; gap:20px; align-items:flex-start;">
+        <div style="width:64px; height:64px; border-radius:50%; background:var(--electric-blue-900); color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:700; flex-shrink:0;">3</div>
+        <div>
+          <p style="font-size:22px; font-weight:700; margin:0 0 8px 0;">Responsible-AI operating model built for the six prioritised use cases</p>
+          <p style="font-size:18px; margin:0;">We turn AI governance intent into an executable foundation across the six themes — bezwaar, GenAI in IV, digital coaches, mass service, collection, and fiscal expert support.</p>
+        </div>
+      </div>
+      <div style="display:flex; gap:20px; align-items:flex-start;">
+        <div style="width:64px; height:64px; border-radius:50%; background:var(--electric-blue-900); color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:700; flex-shrink:0;">4</div>
+        <div>
+          <p style="font-size:22px; font-weight:700; margin:0 0 8px 0;">Delivery discipline from concept through measurable outcomes</p>
+          <p style="font-size:18px; margin:0;">We move clients from AI experimentation to controlled production, navigating control, compliance, and delivery together rather than as separate workstreams.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="source"><p>Source: RFP IUC26-011 and Vision on AI 2025-2030; ContextDoc web search 2026; team analysis</p></div>
+</section>
+  </div>
+</section>
+<section class="slide-card" id="slide-4">
+  <div class="slide-label">Slide 4 — Timeline and Team</div>
+  <div class="slide-shell">
+    <section class="slide" data-layout="Default">
+  <div data-pptx="chrome" class="chrome">
+    <span class="slide-number">4</span>
+    <span class="logo">McKinsey &amp; Company</span>
+  </div>
+  <div class="title">
+    <div data-pptx="placeholder" data-ph-idx="0" style="position:absolute; left:1.2px; top:28.7px; width:1745.3px; height:115.2px">
+      <p>The procurement timetable is compressed, and the interview requires a three-person core team actually assigned to delivery</p>
+    </div>
+  </div>
+  <div class="content">
+    <div style="display:flex; flex-direction:column; height:100%; gap:24px;">
+      <div style="flex:0 0 68%; position:relative; padding:24px 16px 16px 16px; background:#FFFFFF;">
+        <div style="position:absolute; left:8%; right:8%; top:52px; height:2px; background:var(--electric-blue-900);"></div>
+        <div style="position:relative; display:flex; gap:24px; justify-content:space-between; align-items:flex-start;">
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; text-align:center; padding:0 8px;">
+            <div style="width:56px; height:56px; border-radius:50%; background:var(--electric-blue-900); color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:700;">1</div>
+            <p style="font-size:22px; font-weight:700; margin-top:16px;">RFP issued</p>
+            <p style="font-size:18px; margin-top:8px;">Procedure sent and digital information meeting held</p>
+            <p style="font-size:16px; margin-top:8px;">10-11 February 2026</p>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; text-align:center; padding:0 8px;">
+            <div style="width:56px; height:56px; border-radius:50%; background:var(--electric-blue-900); color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:700;">2</div>
+            <p style="font-size:22px; font-weight:700; margin-top:16px;">Submission</p>
+            <p style="font-size:18px; margin-top:8px;">Plan of approach, team, and price submitted by email</p>
+            <p style="font-size:16px; margin-top:8px;">25 February 2026, 10.00</p>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; text-align:center; padding:0 8px;">
+            <div style="width:56px; height:56px; border-radius:50%; background:var(--electric-blue-900); color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:700;">3</div>
+            <p style="font-size:22px; font-weight:700; margin-top:16px;">Presentation/interview</p>
+            <p style="font-size:18px; margin-top:8px;">60-minute interview at Rijkskantoor De Knoop, Utrecht</p>
+            <p style="font-size:16px; margin-top:8px;">2 March 2026</p>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; text-align:center; padding:0 8px;">
+            <div style="width:56px; height:56px; border-radius:50%; background:var(--electric-blue-900); color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:700;">4</div>
+            <p style="font-size:22px; font-weight:700; margin-top:16px;">Award decision</p>
+            <p style="font-size:18px; margin-top:8px;">Direct award to selected winner, no standstill period</p>
+            <p style="font-size:16px; margin-top:8px;">3 March 2026</p>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; text-align:center; padding:0 8px;">
+            <div style="width:56px; height:56px; border-radius:50%; background:var(--electric-blue-900); color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:700;">5</div>
+            <p style="font-size:22px; font-weight:700; margin-top:16px;">Signing and start</p>
+            <p style="font-size:18px; margin-top:8px;">Contract signed and 12-month engagement begins</p>
+            <p style="font-size:16px; margin-top:8px;">10 March 2026</p>
+          </div>
+        </div>
+      </div>
+      <div style="flex:1; background:var(--cyan-lightest); padding:20px 24px;">
+        <p style="font-size:18px; font-weight:700;">Core team for the 2 March interview — maximum three people, each actually assigned to delivery</p>
+        <div style="display:flex; gap:24px; margin-top:14px;">
+          <div style="flex:1; padding:12px 16px; background:#FFFFFF;">
+            <p style="font-size:22px; font-weight:700;">[Core team member 1 — pending partner confirmation]</p>
+            <p style="font-size:18px; margin-top:6px;">Lead partner and primary strategic partner to Belastingdienst</p>
+            <p style="font-size:16px; margin-top:6px;">Public-sector AI and digital transformation</p>
+          </div>
+          <div style="flex:1; padding:12px 16px; background:#FFFFFF;">
+            <p style="font-size:22px; font-weight:700;">[Core team member 2 — pending partner confirmation]</p>
+            <p style="font-size:18px; margin-top:6px;">Engagement lead on bezwaarproces redesign</p>
+            <p style="font-size:16px; margin-top:6px;">Regulated process redesign and Awb-bound delivery</p>
+          </div>
+          <div style="flex:1; padding:12px 16px; background:#FFFFFF;">
+            <p style="font-size:22px; font-weight:700;">[Core team member 3 — pending partner confirmation]</p>
+            <p style="font-size:18px; margin-top:6px;">Responsible AI and AI foundation lead</p>
+            <p style="font-size:16px; margin-top:6px;">GenAI governance aligned to AI Act article 3.1</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="source"><p>Source: RFP IUC26-011 (10 February 2026); partner answers pending</p></div>
+</section>
+  </div>
+</section>
+<section class="slide-card" id="slide-5">
+  <div class="slide-label">Slide 5 — Team</div>
+  <div class="slide-shell">
+    <section class="slide" data-layout="Default">
+  <div data-pptx="chrome" class="chrome">
+    <span class="slide-number">5</span>
+    <span class="logo">McKinsey &amp; Company</span>
+  </div>
+  <div class="title">
+    <div data-pptx="placeholder" data-ph-idx="0" style="position:absolute; left:1.2px; top:28.7px; width:1745.3px; height:115.2px">
+      <p>A senior partner-led core team combines public-sector process redesign, AI build, and behavioural change in one table</p>
+    </div>
+  </div>
+  <div class="content">
+    <div style="display:grid; grid-template-rows:auto auto auto; row-gap:28px; padding:24px 48px 0 48px;">
+
+      <div>
+        <div style="background:var(--electric-blue-900); display:inline-block; padding:6px 14px; margin-bottom:14px;"><p style="color:#FFFFFF; font-size:14px; letter-spacing:0.15em; margin:0;">PARTNER-GROUP LEADS</p></div>
+        <div style="display:grid; grid-template-columns:repeat(2, 1fr); column-gap:32px;">
+          <div style="background:var(--cyan-lightest); padding:18px 20px;">
+            <p style="font-size:22px; font-weight:700; margin:0;">[Senior Partner &mdash; pending partner confirmation]</p>
+            <p style="font-size:18px; margin:6px 0 0 0;">Engagement Partner, Public Sector</p>
+            <p style="font-size:16px; margin:6px 0 0 0;">Accountable for Belastingdienst relationship and full-programme delivery across the six AI themes</p>
+          </div>
+          <div style="background:var(--cyan-lightest); padding:18px 20px;">
+            <p style="font-size:22px; font-weight:700; margin:0;">[Senior Partner &mdash; pending partner confirmation]</p>
+            <p style="font-size:18px; margin:6px 0 0 0;">AI &amp; Digital Transformation Partner</p>
+            <p style="font-size:16px; margin:6px 0 0 0;">Co-leads responsible AI foundation and connects QuantumBlack build capability into the bezwaar redesign</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="background:var(--electric-blue-900); display:inline-block; padding:6px 14px; margin-bottom:14px;"><p style="color:#FFFFFF; font-size:14px; letter-spacing:0.15em; margin:0;">CORE TEAM ON THE GROUND</p></div>
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); column-gap:24px;">
+          <div style="background:#FFFFFF; padding:16px 18px; outline:1px solid var(--cyan-lightest);">
+            <p style="font-size:22px; font-weight:700; margin:0;">Lisa Summers</p>
+            <p style="font-size:18px; margin:6px 0 0 0;">Project &amp; Programme Lead</p>
+            <p style="font-size:16px; margin:6px 0 0 0;">Leads day-to-day delivery of the bezwaar redesign workstream and PMO across the 12-month programme</p>
+          </div>
+          <div style="background:#FFFFFF; padding:16px 18px; outline:1px solid var(--cyan-lightest);">
+            <p style="font-size:22px; font-weight:700; margin:0;">Sarah Novak</p>
+            <p style="font-size:18px; margin:6px 0 0 0;">Senior Process Design Advisor</p>
+            <p style="font-size:16px; margin:6px 0 0 0;">Leads governmental process transformation and Awb-compliant redesign of the generic objection process</p>
+          </div>
+          <div style="background:#FFFFFF; padding:16px 18px; outline:1px solid var(--cyan-lightest);">
+            <p style="font-size:22px; font-weight:700; margin:0;">John Patel</p>
+            <p style="font-size:18px; margin:6px 0 0 0;">Senior AI Governance Advisor</p>
+            <p style="font-size:16px; margin:6px 0 0 0;">Anchors responsible-AI operating model aligned to AI Act article 3.1 and the six-pillar strategy</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="background:var(--electric-blue-900); display:inline-block; padding:6px 14px; margin-bottom:14px;"><p style="color:#FFFFFF; font-size:14px; letter-spacing:0.15em; margin:0;">NAMED EXPERTS &mdash; QUANTUMBLACK, ABERKYN, AND McKINSEY</p></div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); column-gap:20px; row-gap:14px;">
+          <div style="background:#FFFFFF; padding:14px 16px; outline:1px solid var(--cyan-lightest);">
+            <p style="font-size:14px; letter-spacing:0.15em; background:var(--cyan-lightest); color:#000000; padding:4px 10px; display:inline-block; margin:0 0 8px 0;">QUANTUMBLACK</p>
+            <p style="font-size:22px; font-weight:700; margin:0;">Alex Li</p>
+            <p style="font-size:18px; margin:6px 0 0 0;">Data &amp; AI Lead</p>
+            <p style="font-size:16px; margin:6px 0 0 0;">Leads data and AI build for the bezwaar AI agents and the foundation behind the six prioritised use cases</p>
+          </div>
+          <div style="background:#FFFFFF; padding:14px 16px; outline:1px solid var(--cyan-lightest);">
+            <p style="font-size:14px; letter-spacing:0.15em; background:var(--cyan-lightest); color:#000000; padding:4px 10px; display:inline-block; margin:0 0 8px 0;">ABERKYN</p>
+            <p style="font-size:22px; font-weight:700; margin:0;">Emma Rivera</p>
+            <p style="font-size:18px; margin:6px 0 0 0;">Behavioural Change Lead</p>
+            <p style="font-size:16px; margin:6px 0 0 0;">Drives knowledge and culture pillar, embedding responsible-AI ways of working with Belastingdienst teams</p>
+          </div>
+          <div style="background:#FFFFFF; padding:14px 16px; outline:1px solid var(--cyan-lightest);">
+            <p style="font-size:14px; letter-spacing:0.15em; background:var(--cyan-lightest); color:#000000; padding:4px 10px; display:inline-block; margin:0 0 8px 0;">McKINSEY EXPERT</p>
+            <p style="font-size:22px; font-weight:700; margin:0;">[Awb &amp; fiscal-chain legal expert &mdash; pending partner confirmation]</p>
+            <p style="font-size:18px; margin:6px 0 0 0;">Senior Legal Advisor</p>
+            <p style="font-size:16px; margin:6px 0 0 0;">Safeguards Awb deadlines, AVG, and archiving constraints in the redesigned objection process</p>
+          </div>
+          <div style="background:#FFFFFF; padding:14px 16px; outline:1px solid var(--cyan-lightest);">
+            <p style="font-size:14px; letter-spacing:0.15em; background:var(--cyan-lightest); color:#000000; padding:4px 10px; display:inline-block; margin:0 0 8px 0;">McKINSEY EXPERT</p>
+            <p style="font-size:22px; font-weight:700; margin:0;">[Senior IV &amp; solution architect &mdash; pending partner confirmation]</p>
+            <p style="font-size:18px; margin:6px 0 0 0;">Senior IV Advisor</p>
+            <p style="font-size:16px; margin:6px 0 0 0;">Covers IV architecture and solution architecture for GenAI integration into mass-service delivery</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="source"><p>Source: BA pack CV one-pagers; partner answers</p></div>
+  </div>
+</section>
+  </div>
+</section>
+<section class="slide-card" id="slide-6">
+  <div class="slide-label">Slide 6 — Credentials</div>
+  <div class="slide-shell">
+    <section class="slide" data-layout="Default" data-confidence="placeholder">
+  <div data-pptx="chrome" class="chrome">
+    <span class="slide-number">6</span>
+    <span class="logo">McKinsey &amp; Company</span>
+  </div>
+  <div class="title">
+    <div data-pptx="placeholder" data-ph-idx="0" style="position:absolute; left:1.2px; top:28.7px; width:1745.3px; height:115.2px">
+      <p>Belastingdienst will trust only executed AI-enabled process redesign cases from comparable regulated public-sector settings</p>
+    </div>
+  </div>
+  <div class="content">
+    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:28px; padding:24px 40px 16px 40px;">
+      <div style="padding:20px; background:#FFFFFF;">
+        <div style="height:3px; background:var(--electric-blue-900); margin-bottom:16px;"></div>
+        <p style="font-size:22px; font-weight:700; margin:0 0 12px 0;">UK Government AI integration across multiple departments</p>
+        <p style="font-size:18px; margin:0 0 12px 0;">[Outcome pending case one-pager]</p>
+        <p style="font-size:16px; margin:0;">Client: [pending partner confirmation]</p>
+      </div>
+      <div style="padding:20px; background:#FFFFFF;">
+        <div style="height:3px; background:var(--electric-blue-900); margin-bottom:16px;"></div>
+        <p style="font-size:22px; font-weight:700; margin:0 0 12px 0;">Singapore Ministry of Finance digital overhaul</p>
+        <p style="font-size:18px; margin:0 0 12px 0;">[Outcome pending case one-pager]</p>
+        <p style="font-size:16px; margin:0;">Client: [pending partner confirmation]</p>
+      </div>
+      <div style="padding:20px; background:var(--cyan-lightest);">
+        <div style="height:3px; background:var(--electric-blue-900); margin-bottom:16px;"></div>
+        <p style="font-size:22px; font-weight:700; margin:0 0 12px 0;">[Third reference case pending partner confirmation]</p>
+        <p style="font-size:18px; margin:0 0 12px 0;">RFP requires two executed reference cases that show AI-enabled redesign of a business process; partner to nominate a comparable public-sector or regulated-process credential.</p>
+        <p style="font-size:16px; margin:0;">Client: [pending partner confirmation]</p>
+      </div>
+    </div>
+  </div>
+  <div class="source"><p>Source: BA pack case one-pagers (to pull); partner answers</p></div>
+</section>
+  </div>
+</section>
+<section class="slide-card" id="slide-7">
+  <div class="slide-label">Slide 7 — Market Trends</div>
+  <div class="slide-shell">
+    <section class="slide" data-layout="2/3">
+  <div data-pptx="chrome" class="chrome">
+    <span class="slide-number">7</span>
+    <span class="logo">McKinsey &amp; Company</span>
+  </div>
+  <div class="title">
+    <div data-pptx="placeholder" data-ph-idx="0" style="position:absolute; left:1.0px; top:28.7px; width:1097.3px; height:115.2px">
+      <p>Tightening AI governance and labour scarcity make bezwaar redesign a compliance and capacity imperative, not just an efficiency play</p>
+    </div>
+  </div>
+  <div class="content">
+    <div style="display:grid; grid-template-columns: 2fr 1fr; gap: 48px;">
+      <div>
+        <div>
+          <p style="font-size:14px; font-weight:700; letter-spacing:0.15em; background:var(--cyan-lightest); color:#000000; padding:4px 10px; display:inline-block; margin:0 0 8px 0;">2026 Q1 &middot; IN FORCE</p>
+          <p style="font-size:22px; font-weight:700; color:#000000; margin:0 0 6px 0;">Renewed CIO-stelsel raises the bar on rijksbrede AI governance</p>
+          <p style="font-size:18px; color:#000000; margin:0;">As of 1 January 2026 the CIO-stelsel covers cloud policy and responsible GenAI use across central government, tightening standards and decision rights.</p>
+        </div>
+        <div style="height:1px; background:#E8E4DF; margin:12px 0;"></div>
+        <div>
+          <p style="font-size:14px; font-weight:700; letter-spacing:0.15em; background:var(--cyan-lightest); color:#000000; padding:4px 10px; display:inline-block; margin:0 0 8px 0;">2026 AUG</p>
+          <p style="font-size:22px; font-weight:700; color:#000000; margin:0 0 6px 0;">EU AI Act high-risk obligations become operational</p>
+          <p style="font-size:18px; color:#000000; margin:0;">Transparency and high-risk requirements take effect in August 2026; Dutch guidance confirms government GenAI use must comply with the AI Act and GDPR.</p>
+        </div>
+        <div style="height:1px; background:#E8E4DF; margin:12px 0;"></div>
+        <div>
+          <p style="font-size:14px; font-weight:700; letter-spacing:0.15em; background:var(--cyan-lightest); color:#000000; padding:4px 10px; display:inline-block; margin:0 0 8px 0;">2026 FEB</p>
+          <p style="font-size:22px; font-weight:700; color:#000000; margin:0 0 6px 0;">Bezwaarproces redesign is already a live internal programme</p>
+          <p style="font-size:18px; color:#000000; margin:0;">A public Belastingdienst vacancy for a programmamanager herontwerp bezwaarproces names AI as a central lever, signalling an organised redesign track.</p>
+        </div>
+        <div style="height:1px; background:#E8E4DF; margin:12px 0;"></div>
+        <div>
+          <p style="font-size:14px; font-weight:700; letter-spacing:0.15em; background:var(--cyan-lightest); color:#000000; padding:4px 10px; display:inline-block; margin:0 0 8px 0;">2026 JAN</p>
+          <p style="font-size:22px; font-weight:700; color:#000000; margin:0 0 6px 0;">Autoriteit Persoonsgegevens scrutiny on Belastingdienst applications</p>
+          <p style="font-size:18px; color:#000000; margin:0;">January 2026 government publication records AP correspondence on locally developed applications, underlining supervisory attention to the application landscape.</p>
+        </div>
+      </div>
+      <div style="background:var(--cyan-lightest); padding:24px;">
+        <p style="font-size:14px; font-weight:700; letter-spacing:0.15em; color:#000000; margin:0 0 16px 0;">WHAT THIS MEANS FOR BELASTINGDIENST</p>
+        <p style="font-size:18px; color:#000000; margin:0 0 12px 0;">Treat the AI foundation and bezwaar redesign as one governance problem, not two separate tracks.</p>
+        <p style="font-size:18px; color:#000000; margin:0 0 12px 0;">Design every AI use case with human oversight, logging and transparency controls from day one.</p>
+        <p style="font-size:18px; color:#000000; margin:0 0 12px 0;">Align the architecture with rijksbrede cloud, data and open-source standards to avoid bespoke lock-in.</p>
+        <p style="font-size:18px; color:#000000; margin:0;">Build for peak bezwaar volumes under labour scarcity, safeguarding Awb deadlines and service quality.</p>
+      </div>
+    </div>
+    <div class="source"><p>Source: ContextDoc web search 2026; team analysis</p></div>
+  </div>
+</section>
+  </div>
+</section>
+<section class="slide-card" id="slide-8">
+  <div class="slide-label">Slide 8 — Approach</div>
+  <div class="slide-shell">
+    <section class="slide" data-layout="Default">
+  <div data-pptx="chrome" class="chrome">
+    <span class="slide-number">8</span>
+    <span class="logo">McKinsey &amp; Company</span>
+  </div>
+  <div class="title">
+    <div data-pptx="placeholder" data-ph-idx="0" style="position:absolute; left:1.2px; top:28.7px; width:1745.3px; height:115.2px">
+      <p>A four-phase approach delivers diagnostics, future-state design, AI-enabled business cases, and implementation-ready handover across the six-month bezwaar redesign</p>
+    </div>
+  </div>
+  <div class="content" style="position:absolute; left:60px; top:170px; right:60px; bottom:110px; display:flex; flex-direction:column;">
+    <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:24px; flex:1;">
+
+      <div style="background:var(--cyan-lightest); padding:22px; display:flex; flex-direction:column;">
+        <div style="width:56px; height:56px; border-radius:50%; background:var(--electric-blue-900); color:#FFFFFF; font-size:26px; font-weight:700; display:flex; align-items:center; justify-content:center; margin-bottom:14px;">1</div>
+        <p style="font-size:22px; font-weight:700; margin:0 0 12px 0;">Diagnose</p>
+        <ul data-bullet-char="•" style="font-size:16px; margin:0 0 14px 0; padding-left:18px;">
+          <li style="margin-bottom:6px;">Map end-to-end bezwaar journey with frontline teams</li>
+          <li style="margin-bottom:6px;">Pressure-test Awb deadlines, hearing rights, and peak-load bottlenecks</li>
+          <li>Baseline volumes, cycle times, and service-quality pain points</li>
+        </ul>
+        <p style="font-size:14px; letter-spacing:0.15em; margin:auto 0 6px 0;"><strong>DELIVERABLE</strong></p>
+        <p style="font-size:16px; margin:0;">Bezwaar diagnostic and Awb-compliance fact base</p>
+      </div>
+
+      <div style="background:var(--cyan-lightest); padding:22px; display:flex; flex-direction:column;">
+        <div style="width:56px; height:56px; border-radius:50%; background:var(--electric-blue-900); color:#FFFFFF; font-size:26px; font-weight:700; display:flex; align-items:center; justify-content:center; margin-bottom:14px;">2</div>
+        <p style="font-size:22px; font-weight:700; margin:0 0 12px 0;">Design</p>
+        <ul data-bullet-char="•" style="font-size:16px; margin:0 0 14px 0; padding-left:18px;">
+          <li style="margin-bottom:6px;">Co-design uniform future-state process with primary-process experts</li>
+          <li style="margin-bottom:6px;">Define solution architecture and AI guardrails for sensitive data</li>
+          <li>Validate against AI Act, AVG, and archiving constraints</li>
+        </ul>
+        <p style="font-size:14px; letter-spacing:0.15em; margin:auto 0 6px 0;"><strong>DELIVERABLE</strong></p>
+        <p style="font-size:16px; margin:0;">Future-state process and solution architecture blueprint</p>
+      </div>
+
+      <div style="background:var(--cyan-lightest); padding:22px; display:flex; flex-direction:column;">
+        <div style="width:56px; height:56px; border-radius:50%; background:var(--electric-blue-900); color:#FFFFFF; font-size:26px; font-weight:700; display:flex; align-items:center; justify-content:center; margin-bottom:14px;">3</div>
+        <p style="font-size:22px; font-weight:700; margin:0 0 12px 0;">Business case</p>
+        <ul data-bullet-char="•" style="font-size:16px; margin:0 0 14px 0; padding-left:18px;">
+          <li style="margin-bottom:6px;">Prioritize AI applications across the bezwaar value chain</li>
+          <li style="margin-bottom:6px;">Build quantified business cases with human-oversight boundaries</li>
+          <li>Develop implementation scenarios with phased decision points</li>
+        </ul>
+        <p style="font-size:14px; letter-spacing:0.15em; margin:auto 0 6px 0;"><strong>DELIVERABLE</strong></p>
+        <p style="font-size:16px; margin:0;">AI use-case portfolio and business case pack</p>
+      </div>
+
+      <div style="background:var(--cyan-lightest); padding:22px; display:flex; flex-direction:column;">
+        <div style="width:56px; height:56px; border-radius:50%; background:var(--electric-blue-900); color:#FFFFFF; font-size:26px; font-weight:700; display:flex; align-items:center; justify-content:center; margin-bottom:14px;">4</div>
+        <p style="font-size:22px; font-weight:700; margin:0 0 12px 0;">Handover</p>
+        <ul data-bullet-char="•" style="font-size:16px; margin:0 0 14px 0; padding-left:18px;">
+          <li style="margin-bottom:6px;">Package artefacts so internal teams can execute without us</li>
+          <li style="margin-bottom:6px;">Define implementation roadmap, owners, and decision gates</li>
+          <li>Transfer knowledge to bezwaar programme and AI governance team</li>
+        </ul>
+        <p style="font-size:14px; letter-spacing:0.15em; margin:auto 0 6px 0;"><strong>DELIVERABLE</strong></p>
+        <p style="font-size:16px; margin:0;">Implementation-ready handover pack and roadmap</p>
+      </div>
+
+    </div>
+
+    <div style="display:flex; gap:32px; margin-top:28px; align-items:center;">
+      <div style="display:flex; align-items:center; gap:10px;"><div style="width:8px; height:8px; background:var(--electric-blue-900);"></div><p style="font-size:16px; margin:0;">Monthly joint concretization and evaluation across the six-month assignment</p></div>
+      <div style="display:flex; align-items:center; gap:10px;"><div style="width:8px; height:8px; background:var(--electric-blue-900);"></div><p style="font-size:16px; margin:0;">Compliance-by-design across Awb, AI Act, and AVG</p></div>
+      <div style="display:flex; align-items:center; gap:10px;"><div style="width:8px; height:8px; background:var(--electric-blue-900);"></div><p style="font-size:16px; margin:0;">Modular, testable delivery with interim decision points</p></div>
+    </div>
+  </div>
+  <div class="source"><p>Source: RFP and partner answers; team analysis</p></div>
+</section>
+  </div>
+</section>
+<section class="slide-card" id="slide-9">
+  <div class="slide-label">Slide 9 — Fees</div>
+  <div class="slide-shell">
+    <section class="slide" data-layout="Default" data-confidence="placeholder">
+  <div data-pptx="chrome" class="chrome">
+    <span class="slide-number">9</span>
+    <span class="logo">McKinsey &amp; Company</span>
+  </div>
+  <div class="title">
+    <div data-pptx="placeholder" data-ph-idx="0" style="position:absolute; left:1.2px; top:28.7px; width:1745.3px; height:115.2px">
+      <p>Fees fit inside the EUR 5 mln ceiling under a monthly fixed-price mechanism, with the final structure pending partner confirmation</p>
+    </div>
+  </div>
+  <div class="content" style="position:absolute; left:60px; top:170px; width:1800px; height:790px; display:flex; flex-direction:column; gap:24px;">
+    <div style="flex:0 0 auto; height:170px;">
+      <p style="font-size:18px; line-height:1.45; margin:0;">The 12-month assignment is capped at EUR 5 mln including VAT, with a fixed total price set monthly and inclusive of travel and other costs. Hourly-rate ranges are submitted separately on one A4, with price scored on the average of the lowest and highest rate. The phase-by-phase envelope below is indicative and pending the partner-supplied fee model.</p>
+    </div>
+    <div style="flex:1 1 auto; display:grid; grid-template-columns: 1.1fr 2.4fr 1.1fr; grid-auto-rows: min-content; column-gap:24px; row-gap:0;">
+      <div style="padding:14px 12px;"><p style="font-size:14px; letter-spacing:0.15em; margin:0; font-weight:600;">PHASE</p></div>
+      <div style="padding:14px 12px;"><p style="font-size:14px; letter-spacing:0.15em; margin:0; font-weight:600;">SCOPE</p></div>
+      <div style="padding:14px 12px; text-align:right;"><p style="font-size:14px; letter-spacing:0.15em; margin:0; font-weight:600;">INDICATIVE ENVELOPE</p></div>
+      <div style="grid-column: 1 / -1; height:2px; background:#000000;"></div>
+
+      <div style="padding:18px 12px;"><p style="font-size:22px; font-weight:700; margin:0;">Phase 1</p></div>
+      <div style="padding:18px 12px;"><p style="font-size:18px; margin:0;">Build the responsible AI foundation: governance, operating model, and prioritised portfolio across the six use cases.</p></div>
+      <div style="padding:18px 12px; text-align:right;"><p style="font-size:16px; margin:0;">[fee model pending — partner to confirm]</p></div>
+      <div style="grid-column: 1 / -1; height:1px; background:#CCCCCC;"></div>
+
+      <div style="padding:18px 12px;"><p style="font-size:22px; font-weight:700; margin:0;">Phase 2</p></div>
+      <div style="padding:18px 12px;"><p style="font-size:18px; margin:0;">Redesign the generic bezwaarproces for scale, Awb-compliant deadlines, and improved service quality with AI agents.</p></div>
+      <div style="padding:18px 12px; text-align:right;"><p style="font-size:16px; margin:0;">[fee model pending — partner to confirm]</p></div>
+      <div style="grid-column: 1 / -1; height:1px; background:#CCCCCC;"></div>
+
+      <div style="padding:18px 12px;"><p style="font-size:22px; font-weight:700; margin:0;">Phase 3</p></div>
+      <div style="padding:18px 12px;"><p style="font-size:18px; margin:0;">Implementation support and benefits tracking across the prioritised AI use cases through end of the 12-month engagement.</p></div>
+      <div style="padding:18px 12px; text-align:right;"><p style="font-size:16px; margin:0;">[fee model pending — partner to confirm]</p></div>
+      <div style="grid-column: 1 / -1; height:2px; background:#000000;"></div>
+
+      <div style="padding:18px 12px;"><p style="font-size:22px; font-weight:700; margin:0;">Ceiling</p></div>
+      <div style="padding:18px 12px;"><p style="font-size:18px; margin:0;">RFP-stated budget cap for the full 12-month assignment, including VAT, travel, and other costs.</p></div>
+      <div style="padding:18px 12px; text-align:right;"><p style="font-size:22px; font-weight:700; margin:0;">EUR 5.0 mln</p></div>
+    </div>
+  </div>
+  <div class="source"><p>Source: BA pack fee model (pending); RFP budget ceiling</p></div>
+</section>
+  </div>
+</section>
+<section class="slide-card" id="slide-10">
+  <div class="slide-label">Slide 10 — Appendix</div>
+  <div class="slide-shell">
+    <section class="slide" data-layout="Default" data-confidence="partial">
+  <div data-pptx="chrome" class="chrome">
+    <span class="slide-number">10</span>
+    <span class="logo">McKinsey &amp; Company</span>
+  </div>
+  <div class="title">
+    <div data-pptx="placeholder" data-ph-idx="0"
+         style="position:absolute; left:1.2px; top:28.7px; width:1745.3px; height:115.2px">
+      <p>Targeted methodology notes, executed references, team bios, and fee detail are available on request</p>
+    </div>
+  </div>
+  <div class="content">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:48px;">
+      <div>
+        <p style="font-size:14px; letter-spacing:0.15em; background:var(--cyan-lightest); color:#000000; padding:4px 10px; display:inline-block; margin:0;">METHODOLOGY</p>
+        <p style="font-size:20px; font-weight:bold; color:#000000; margin:8px 0 4px 0;">Transformation framework annex</p>
+        <p style="font-size:16px; color:#000000; margin:0;">McKinsey methodology notes and targeted transformation framework annex tailored to Belastingdienst.</p>
+        <div style="height:1px; background:#E8E4DF; margin:10px 0;"></div>
+        <p style="font-size:14px; letter-spacing:0.15em; background:var(--cyan-lightest); color:#000000; padding:4px 10px; display:inline-block; margin:0;">REFERENCE</p>
+        <p style="font-size:20px; font-weight:bold; color:#000000; margin:8px 0 4px 0;">PwC differentiation note</p>
+        <p style="font-size:16px; color:#000000; margin:0;">Client-tailored differentiation points against PwC for the Belastingdienst AI and bezwaar procurement.</p>
+        <div style="height:1px; background:#E8E4DF; margin:10px 0;"></div>
+        <p style="font-size:14px; letter-spacing:0.15em; background:var(--cyan-lightest); color:#000000; padding:4px 10px; display:inline-block; margin:0;">ADDITIONAL CREDENTIALS</p>
+        <p style="font-size:20px; font-weight:bold; color:#000000; margin:8px 0 4px 0;">UK Government AI integration</p>
+        <p style="font-size:16px; color:#000000; margin:0;">Executed reference case: AI integration across multiple UK government departments.</p>
+        <div style="height:1px; background:#E8E4DF; margin:10px 0;"></div>
+        <p style="font-size:14px; letter-spacing:0.15em; background:var(--cyan-lightest); color:#000000; padding:4px 10px; display:inline-block; margin:0;">ADDITIONAL CREDENTIALS</p>
+        <p style="font-size:20px; font-weight:bold; color:#000000; margin:8px 0 4px 0;">Singapore Ministry of Finance</p>
+        <p style="font-size:16px; color:#000000; margin:0;">Executed reference case: Singapore Ministry of Finance digital overhaul.</p>
+      </div>
+      <div>
+        <p style="font-size:14px; letter-spacing:0.15em; background:var(--cyan-lightest); color:#000000; padding:4px 10px; display:inline-block; margin:0;">CLIENT ARTEFACT</p>
+        <p style="font-size:20px; font-weight:bold; color:#000000; margin:8px 0 4px 0;">Lisa Summers — project lead</p>
+        <p style="font-size:16px; color:#000000; margin:0;">Project lead bio and portrait for the Belastingdienst core team.</p>
+        <div style="height:1px; background:#E8E4DF; margin:10px 0;"></div>
+        <p style="font-size:14px; letter-spacing:0.15em; background:var(--cyan-lightest); color:#000000; padding:4px 10px; display:inline-block; margin:0;">CLIENT ARTEFACT</p>
+        <p style="font-size:20px; font-weight:bold; color:#000000; margin:8px 0 4px 0;">Alex Li — QuantumBlack analytics lead</p>
+        <p style="font-size:16px; color:#000000; margin:0;">QuantumBlack data analytics lead bio and portrait for the core team.</p>
+        <div style="height:1px; background:#E8E4DF; margin:10px 0;"></div>
+        <p style="font-size:14px; letter-spacing:0.15em; background:var(--cyan-lightest); color:#000000; padding:4px 10px; display:inline-block; margin:0;">CLIENT ARTEFACT</p>
+        <p style="font-size:20px; font-weight:bold; color:#000000; margin:8px 0 4px 0;">Emma Rivera — Aberkyn behavioural change</p>
+        <p style="font-size:16px; color:#000000; margin:0;">Aberkyn behavioural change lead bio and portrait for the core team.</p>
+        <div style="height:1px; background:#E8E4DF; margin:10px 0;"></div>
+        <p style="font-size:14px; letter-spacing:0.15em; background:var(--cyan-lightest); color:#000000; padding:4px 10px; display:inline-block; margin:0;">REFERENCE</p>
+        <p style="font-size:20px; font-weight:bold; color:#000000; margin:8px 0 4px 0;">12-month fee model</p>
+        <p style="font-size:16px; color:#000000; margin:0;">Latest Belastingdienst fee model and rate card for the 12-month AI and bezwaar engagement.</p>
+      </div>
+    </div>
+  </div>
+</section>
+  </div>
+</section>
+</main>
+</body>
+</html>

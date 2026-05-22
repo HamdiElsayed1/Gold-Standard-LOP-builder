@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LoP builder — step-by-step</title>
+  <style>
+    :root {
+      --bg: #eef1f6;
+      --surface: #ffffff;
+      --text: #12161c;
+      --muted: #5c6570;
+      --border: #c9d1dc;
+      --accent: #0b5cab;
+      --accent-hover: #094a8f;
+      --accent-soft: #e3ecf8;
+      --warn-bg: #fff8e6;
+      --warn-border: #e6c24a;
+      --radius: 10px;
+      --font: "Segoe UI", system-ui, -apple-system, sans-serif;
+      --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1117;
+        --surface: #161b22;
+        --text: #e8edf3;
+        --muted: #8b949e;
+        --border: #30363d;
+        --accent: #58a6ff;
+        --accent-hover: #79b8ff;
+        --accent-soft: #21262d;
+        --warn-bg: #2d2a1e;
+        --warn-border: #9a6700;
+        --shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 15px;
+      min-height: 100vh;
+    }
+    .app {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 1rem 1rem 4rem;
+    }
+    header {
+      margin-bottom: 1rem;
+    }
+    header h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin: 0 0 0.35rem;
+      letter-spacing: -0.02em;
+    }
+    header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .warn {
+      background: var(--warn-bg);
+      border: 1px solid var(--warn-border);
+      border-radius: var(--radius);
+      padding: 0.65rem 0.85rem;
+      font-size: 0.86rem;
+      margin-bottom: 1rem;
+    }
+    .progress {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .progress button.dot {
+      border: 2px solid var(--border);
+      background: var(--surface);
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 50%;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--muted);
+      padding: 0;
+    }
+    .progress button.dot.done,
+    .progress button.dot.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+    .progress button.dot.active {
+      box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--accent);
+    }
+    .progress .label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      width: 100%;
+      margin-top: -0.15rem;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.15rem 1.25rem;
+      box-shadow: var(--shadow);
+    }
+    .card h2 {
+      font-size: 1.05rem;
+      margin: 0 0 0.75rem;
+      font-weight: 600;
+    }
+    .card .sub {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: -0.35rem 0 1rem;
+    }
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin: 0.75rem 0 0.3rem;
+      color: var(--muted);
+    }
+    label:first-of-type { margin-top: 0; }
+    input[type="text"], textarea, select {
+      width: 100%;
+      padding: 0.5rem 0.6rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      background: var(--surface);
+      color: var(--text);
+    }
+    textarea { min-height: 100px; resize: vertical; }
+    textarea.tall { min-height: 160px; }
+    .row2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    @media (max-width: 560px) { .row2 { grid-template-columns: 1fr; } }
+    table.grid {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      margin-top: 0.5rem;
+    }
+    table.grid th, table.grid td {
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.45rem;
+    }
+    table.grid th { background: var(--bg); font-size: 0.76rem; text-align: left; }
+    table.grid input { width: 100%; border: none; background: transparent; font: inherit; color: inherit; padding: 0.2rem; }
+    table.grid select { width: 100%; border: none; background: transparent; font: inherit; }
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+    button {
+      font-family: inherit;
+      font-size: 0.92rem;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+    }
+    button.primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+    button.primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+    button.ghost { background: transparent; }
+    button.small { padding: 0.35rem 0.65rem; font-size: 0.82rem; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    details.ch {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      padding: 0 0.65rem;
+      background: var(--bg);
+    }
+    details.ch summary {
+      cursor: pointer;
+      padding: 0.65rem 0;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    details.ch .hint {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin: -0.2rem 0 0.5rem;
+      font-weight: normal;
+    }
+    details.ch textarea { margin-bottom: 0.65rem; }
+    .check-list label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-weight: normal;
+      cursor: pointer;
+      margin: 0.45rem 0;
+    }
+    .check-list input { width: auto; margin-top: 0.25rem; }
+    #preview {
+      white-space: pre-wrap;
+      font-size: 0.8rem;
+      max-height: 320px;
+      overflow: auto;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      margin-top: 0.5rem;
+    }
+    #status {
+      font-size: 0.8rem;
+      color: var(--muted);
+      min-height: 1.2rem;
+    }
+    #status.ok { color: var(--accent); }
+  </style>
+
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:_dlc_DocId msdt:dt="string">DE7XN4DZS357-1263605440-18488</mso:_dlc_DocId>
+<mso:_dlc_DocIdItemGuid msdt:dt="string">5bb78497-808e-4114-9dd9-4dcf36b47b9b</mso:_dlc_DocIdItemGuid>
+<mso:_dlc_DocIdUrl msdt:dt="string">https://mckinsey.sharepoint.com/sites/spt-int-6jj6kewnj5r70j/_layouts/15/DocIdRedir.aspx?ID=DE7XN4DZS357-1263605440-18488, DE7XN4DZS357-1263605440-18488</mso:_dlc_DocIdUrl>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>Build your Letter of Proposal</h1>
+      <p>Step through intake, sources, each chapter, fees, and export. Your draft stays in this browser until you download it.</p>
+    </header>
+
+    <div class="warn">
+      Use only approved sources for client facts, fees, and legal language. Step 0 is your source manifest — no invented evidence.
+    </div>
+
+    <div class="progress" id="progress" aria-label="Steps"></div>
+
+    <!-- Step 0 -->
+    <section class="card panel active" data-step="0">
+      <h2>Step 1 — Source manifest (Step 0)</h2>
+      <p class="sub">List every document, deck, RFP, or call summary you will cite. Add rows as needed.</p>
+      <label for="projectName">Project / pursuit name</label>
+      <input type="text" id="projectName" placeholder="e.g. Digital transformation LoP" autocomplete="off" />
+      <div class="row2">
+        <div>
+          <label for="clientName">Client name</label>
+          <input type="text" id="clientName" placeholder="Legal name" />
+        </div>
+        <div>
+          <label for="lopCategory">LoP category</label>
+          <select id="lopCategory">
+            <option value="non_competitive">Non-competitive</option>
+            <option value="competitive">Competitive</option>
+            <option value="exploratory">Exploratory</option>
+            <option value="relationship_building">Relationship-building</option>
+          </select>
+        </div>
+      </div>
+      <label for="deadline">Due date (optional)</label>
+      <input type="text" id="deadline" placeholder="YYYY-MM-DD or narrative" />
+      <label>Sources</label>
+      <table class="grid">
+        <thead>
+          <tr><th>#</th><th>Label</th><th>Path / link / location</th><th>Use</th><th></th></tr>
+        </thead>
+        <tbody id="manifestBody"></tbody>
+      </table>
+      <button type="button" class="ghost small" id="addManifest">+ Add source row</button>
+    </section>
+
+    <!-- Step 1 -->
+    <section class="card panel" data-step="1">
+      <h2>Step 2 — Voice intake &amp; problem statement</h2>
+      <p class="sub">Synthesize workshops and calls into one page before long prose. Win themes only from your sources.</p>
+      <label for="voiceNotes">Voice / workshop / email notes</label>
+      <textarea id="voiceNotes" class="tall" placeholder="Paste raw notes, objectives, constraints…"></textarea>
+      <label for="problemStatement">Problem statement (one page)</label>
+      <textarea id="problemStatement" class="tall" placeholder="Situation, what the client is buying, win themes, risks…"></textarea>
+      <label for="assumptions">Assumptions (tag supported vs needs confirmation)</label>
+      <textarea id="assumptions" placeholder="- …"></textarea>
+      <label for="openQuestions">Clarifying questions</label>
+      <textarea id="openQuestions" placeholder="Numbered questions for CST / partner…"></textarea>
+    </section>
+
+    <!-- Step 2 -->
+    <section class="card panel" data-step="2">
+      <h2>Step 3 — Human gates (direction)</h2>
+      <p class="sub">Track approvals before heavy drafting (Gate A) and after ToC alignment (Gate B).</p>
+      <div class="row2">
+        <div>
+          <label for="gateA">Gate A — intake / manifest</label>
+          <select id="gateA">
+            <option value="">Not recorded</option>
+            <option value="approved">Approved</option>
+            <option value="pending">Pending</option>
+          </select>
+        </div>
+        <div>
+          <label for="gateB">Gate B — post–table of contents</label>
+          <select id="gateB">
+            <option value="">Not recorded</option>
+            <option value="approved">Approved</option>
+            <option value="pending">Pending</option>
+          </select>
+        </div>
+      </div>
+      <label for="gateNotes">Decisions, scope changes, or feedback</label>
+      <textarea id="gateNotes" placeholder="What was agreed before drafting chapters…"></textarea>
+    </section>
+
+    <!-- Step 3 -->
+    <section class="card panel" data-step="3">
+      <h2>Step 4 — Draft chapters (1–6)</h2>
+      <p class="sub">Expand each section. Mark unknowns as TBD; cite manifest rows where proof lives.</p>
+      <div id="chaptersA"></div>
+    </section>
+
+    <!-- Step 4 -->
+    <section class="card panel" data-step="4">
+      <h2>Step 5 — Draft chapters (7–11) &amp; fees</h2>
+      <p class="sub">Finish the spine, then structure fees. Commercial numbers only if authorized.</p>
+      <div id="chaptersB"></div>
+      <label style="margin-top:1rem;">Fee lines</label>
+      <table class="grid">
+        <thead>
+          <tr><th>Line item</th><th>Unit</th><th>Amount</th><th>Notes / owner</th><th></th></tr>
+        </thead>
+        <tbody id="feesBody"></tbody>
+      </table>
+      <button type="button" class="ghost small" id="addFee">+ Add fee row</button>
+      <label for="feeAssumptions">Commercial assumptions</label>
+      <textarea id="feeAssumptions" placeholder="Currency, tax, pass-throughs, what is still TBD…"></textarea>
+    </section>
+
+    <!-- Step 5 -->
+    <section class="card panel" data-step="5">
+      <h2>Step 6 — Pre-send checklist</h2>
+      <p class="sub">Confirm internal bar before you share externally.</p>
+      <div class="check-list" id="coachChecks"></div>
+      <label for="stakeholders">Stakeholder inputs (optional)</label>
+      <textarea id="stakeholders" placeholder="Partner / CST / BD / expert — who contributed what; flag conflicts…"></textarea>
+    </section>
+
+    <!-- Step 6 -->
+    <section class="card panel" data-step="6">
+      <h2>Step 7 — Compile &amp; export</h2>
+      <p class="sub">Generate Markdown for editing or HTML for viewing. JSON saves your full form state.</p>
+      <div class="btn-row" style="border-top:none;padding-top:0;margin-top:0;">
+        <button type="button" class="primary" id="btnCompile">Generate preview</button>
+        <button type="button" id="btnMd">Download .md</button>
+        <button type="button" id="btnHtml">Download .html</button>
+        <button type="button" id="btnJson">Download .json</button>
+        <button type="button" class="ghost" id="btnReset">Clear saved draft</button>
+      </div>
+      <label>Preview</label>
+      <div id="preview">Click “Generate preview” to compile your LoP.</div>
+    </section>
+
+    <div class="btn-row">
+      <button type="button" class="ghost" id="btnPrev" disabled>← Back</button>
+      <span id="status"></span>
+      <button type="button" class="primary" id="btnNext">Next →</button>
+    </div>
+  </div>
+
+  <script>
+(function () {
+  var STORAGE = "lop-builder-dashboard-v2";
+
+  var STEPS = [
+    "Manifest & intake",
+    "Problem statement",
+    "Gates",
+    "Chapters 1–6",
+    "Chapters 7–11 & fees",
+    "Checklist",
+    "Export",
+  ];
+
+  var SPINE_A = [
+    { id: "context_objectives", title: "1. Context & objectives", hint: "Mirror sourced RFP language; objectives and scope.", open: true },
+    { id: "why_mckinsey", title: "2. Why McKinsey", hint: "Proof from manifest only." },
+    { id: "timeline_team", title: "3. Timeline and team", hint: "Neutral staffing labels; no unexplained codes." },
+    { id: "team", title: "4. Team", hint: "Named people only from approved CVs." },
+    { id: "credentials", title: "5. Credentials", hint: "Relevant experience with citations to sources." },
+    { id: "market_trends", title: "6. Market trends", hint: "Separate public trends from confidential client facts." },
+  ];
+
+  var SPINE_B = [
+    { id: "approach", title: "7. Approach", hint: "Workstreams, governance; scope per partner direction." },
+    { id: "fees_chapter", title: "8. Fees (narrative)", hint: "Align with fee table; TBD where unauthorized." },
+    { id: "appendix", title: "9. Appendix", hint: "Supporting detail; disclaimers from approved boilerplate only." },
+    { id: "references", title: "10. References", hint: "Only if manifest allows." },
+    { id: "team_cvs", title: "11. Team CVs", hint: "Matches named team slide." },
+  ];
+
+  var COACH = [
+    "Step 0 manifest complete and sources confirmed for this pursuit",
+    "RFP / tender requirements mapped to sections",
+    "No unsourced client facts",
+    "Fees and assumptions explicit (numbers only if authorized)",
+    "CVs and references match named team",
+    "One clear story / red thread",
+    "Disclaimers only from approved boilerplate",
+  ];
+
+  var step = 0;
+  var state = load();
+
+  function $(id) { return document.getElementById(id); }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORAGE);
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return {
+      manifestRows: [],
+      sections: {},
+      feeRows: [],
+      coach: {},
+    };
+  }
+
+  function save() {
+    try {
+      collect();
+      localStorage.setItem(STORAGE, JSON.stringify(state));
+      var s = $("status");
+      s.textContent = "Draft saved in this browser.";
+      s.className = "ok";
+      setTimeout(function () { s.textContent = ""; s.className = ""; }, 1200);
+    } catch (e) {
+      $("status").textContent = "Could not save.";
+    }
+  }
+
+  function collect() {
+    state.projectName = $("projectName").value;
+    state.clientName = $("clientName").value;
+    state.lopCategory = $("lopCategory").value;
+    state.deadline = $("deadline").value;
+    state.voiceNotes = $("voiceNotes").value;
+    state.problemStatement = $("problemStatement").value;
+    state.assumptions = $("assumptions").value;
+    state.openQuestions = $("openQuestions").value;
+    state.gateA = $("gateA").value;
+    state.gateB = $("gateB").value;
+    state.gateNotes = $("gateNotes").value;
+    state.feeAssumptions = $("feeAssumptions").value;
+    state.stakeholders = $("stakeholders").value;
+
+    syncManifest();
+    SPINE_A.concat(SPINE_B).forEach(function (sec) {
+      var el = $("sec_" + sec.id);
+      if (el) state.sections[sec.id] = el.value;
+    });
+
+    state.feeRows = [];
+    $("feesBody").querySelectorAll("tr").forEach(function (tr) {
+      state.feeRows.push({
+        line: tr.querySelector("[data-k=line]").value,
+        unit: tr.querySelector("[data-k=unit]").value,
+        amount: tr.querySelector("[data-k=amount]").value,
+        notes: tr.querySelector("[data-k=notes]").value,
+      });
+    });
+
+    COACH.forEach(function (_, i) {
+      var id = "cc_" + i;
+      var cb = $(id);
+      if (cb) state.coach[id] = cb.checked;
+    });
+  }
+
+  function syncManifest() {
+    state.manifestRows = [];
+    $("manifestBody").querySelectorAll("tr").forEach(function (tr) {
+      state.manifestRows.push({
+        label: tr.querySelector("[data-k=label]").value.trim(),
+        path: tr.querySelector("[data-k=path]").value.trim(),
+        use: tr.querySelector("[data-k=use]").value,
+      });
+    });
+  }
+
+  function apply() {
+    $("projectName").value = state.projectName || "";
+    $("clientName").value = state.clientName || "";
+    $("lopCategory").value = state.lopCategory || "non_competitive";
+    $("deadline").value = state.deadline || "";
+    $("voiceNotes").value = state.voiceNotes || "";
+    $("problemStatement").value = state.problemStatement || "";
+    $("assumptions").value = state.assumptions || "";
+    $("openQuestions").value = state.openQuestions || "";
+    $("gateA").value = state.gateA || "";
+    $("gateB").value = state.gateB || "";
+    $("gateNotes").value = state.gateNotes || "";
+    $("feeAssumptions").value = state.feeAssumptions || "";
+    $("stakeholders").value = state.stakeholders || "";
+
+    buildManifest();
+    buildChapters();
+    buildFees();
+    buildCoach();
+  }
+
+  function buildManifest() {
+    var tbody = $("manifestBody");
+    tbody.innerHTML = "";
+    var rows = state.manifestRows && state.manifestRows.length
+      ? state.manifestRows
+      : [{ label: "", path: "", use: "Y" }];
+    rows.forEach(function (row, i) {
+      var tr = document.createElement("tr");
+      tr.innerHTML =
+        "<td>" + (i + 1) + "</td>" +
+        "<td><input data-k=\"label\" type=\"text\" /></td>" +
+        "<td><input data-k=\"path\" type=\"text\" /></td>" +
+        "<td><select data-k=\"use\"><option>Y</option><option>N</option></select></td>" +
+        "<td><button type=\"button\" class=\"ghost small rm-m\">Remove</button></td>";
+      tr.querySelector("[data-k=label]").value = row.label;
+      tr.querySelector("[data-k=path]").value = row.path;
+      tr.querySelector("[data-k=use]").value = row.use === "N" ? "N" : "Y";
+      tr.querySelector(".rm-m").onclick = function () {
+        tr.remove();
+        saveSoon();
+      };
+      tr.querySelectorAll("input,select").forEach(function (n) {
+        n.addEventListener("input", saveSoon);
+        n.addEventListener("change", saveSoon);
+      });
+      tbody.appendChild(tr);
+    });
+  }
+
+  function sectionDetails(sec) {
+    var id = "sec_" + sec.id;
+    return (
+      "<details class=\"ch\"" + (sec.open ? " open" : "") + ">" +
+      "<summary>" + esc(sec.title) + "</summary>" +
+      "<p class=\"hint\">" + esc(sec.hint) + "</p>" +
+      "<textarea id=\"" + id + "\" placeholder=\"Draft copy…\"></textarea>" +
+      "</details>"
+    );
+  }
+
+  function buildChapters() {
+    $("chaptersA").innerHTML = SPINE_A.map(sectionDetails).join("");
+    $("chaptersB").innerHTML = SPINE_B.map(sectionDetails).join("");
+    SPINE_A.concat(SPINE_B).forEach(function (sec) {
+      var ta = $("sec_" + sec.id);
+      if (ta) {
+        ta.value = state.sections && state.sections[sec.id] ? state.sections[sec.id] : "";
+        ta.addEventListener("input", saveSoon);
+      }
+    });
+  }
+
+  function buildFees() {
+    var tbody = $("feesBody");
+    tbody.innerHTML = "";
+    var rows = state.feeRows && state.feeRows.length
+      ? state.feeRows
+      : [
+          { line: "Program / PM", unit: "month", amount: "TBD", notes: "" },
+          { line: "Workstreams", unit: "month", amount: "TBD", notes: "" },
+        ];
+    rows.forEach(addFeeRow);
+  }
+
+  function addFeeRow(row) {
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      "<td><input data-k=\"line\" type=\"text\" /></td>" +
+      "<td><input data-k=\"unit\" type=\"text\" /></td>" +
+      "<td><input data-k=\"amount\" type=\"text\" /></td>" +
+      "<td><input data-k=\"notes\" type=\"text\" /></td>" +
+      "<td><button type=\"button\" class=\"ghost small rm-f\">×</button></td>";
+    tr.querySelector("[data-k=line]").value = row.line || "";
+    tr.querySelector("[data-k=unit]").value = row.unit || "";
+    tr.querySelector("[data-k=amount]").value = row.amount || "";
+    tr.querySelector("[data-k=notes]").value = row.notes || "";
+    tr.querySelector(".rm-f").onclick = function () {
+      tr.remove();
+      saveSoon();
+    };
+    tr.querySelectorAll("input").forEach(function (n) {
+      n.addEventListener("input", saveSoon);
+    });
+    $("feesBody").appendChild(tr);
+  }
+
+  function buildCoach() {
+    var host = $("coachChecks");
+    host.innerHTML = "";
+    COACH.forEach(function (text, i) {
+      var id = "cc_" + i;
+      var checked = state.coach && state.coach[id];
+      var lab = document.createElement("label");
+      lab.innerHTML = "<input type=\"checkbox\" id=\"" + id + "\" /> <span></span>";
+      lab.querySelector("span").textContent = text;
+      lab.querySelector("input").checked = !!checked;
+      lab.querySelector("input").addEventListener("change", saveSoon);
+      host.appendChild(lab);
+    });
+  }
+
+  function esc(s) {
+    var d = document.createElement("div");
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  var saveT;
+  function saveSoon() {
+    clearTimeout(saveT);
+    saveT = setTimeout(save, 400);
+  }
+
+  function renderProgress() {
+    var nav = $("progress");
+    nav.innerHTML = "";
+    STEPS.forEach(function (label, i) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "dot" + (i === step ? " active" : i < step ? " done" : "");
+      b.textContent = i + 1;
+      b.title = label;
+      b.setAttribute("aria-label", "Go to " + label);
+      b.onclick = function () {
+        step = i;
+        showStep();
+      };
+      nav.appendChild(b);
+    });
+    var lab = document.createElement("span");
+    lab.className = "label";
+    lab.textContent = "Step " + (step + 1) + " of " + STEPS.length + ": " + STEPS[step];
+    nav.appendChild(lab);
+  }
+
+  function showStep() {
+    document.querySelectorAll(".panel").forEach(function (p, i) {
+      p.classList.toggle("active", i === step);
+    });
+    $("btnPrev").disabled = step === 0;
+    $("btnNext").textContent = step === STEPS.length - 1 ? "Done" : "Next →";
+    renderProgress();
+  }
+
+  function compileMd() {
+    collect();
+    function cell(x) {
+      return String(x ?? "").replace(/\|/g, "\\|").replace(/\n/g, " ");
+    }
+    function block(x) {
+      var t = x && String(x).trim();
+      return t ? String(x).trim() : "_TBD_";
+    }
+
+    var md = "# Letter of Proposal\n\n";
+    md += "**Project:** " + block(state.projectName) + "\n\n";
+    md += "**Client:** " + block(state.clientName) + "\n\n";
+    md += "**Category:** " + (state.lopCategory || "non_competitive") + "\n\n";
+    if (state.deadline) md += "**Due:** " + state.deadline + "\n\n";
+    md += "---\n\n## Step 0 — Source manifest\n\n";
+    md += "| # | Label | Location | Use |\n|---|-------|----------|-----|\n";
+    var man = state.manifestRows && state.manifestRows.filter(function (r) {
+      return r.label || r.path;
+    });
+    (man && man.length ? man : [{ label: "(none)", path: "-", use: "-" }]).forEach(function (r, i) {
+      md += "| " + (i + 1) + " | " + cell(r.label) + " | " + cell(r.path) + " | " + cell(r.use) + " |\n";
+    });
+    md += "\n## Voice / intake\n\n" + block(state.voiceNotes) + "\n\n";
+    md += "## Problem statement\n\n" + block(state.problemStatement) + "\n\n";
+    md += "### Assumptions\n\n" + block(state.assumptions) + "\n\n";
+    md += "### Clarifying questions\n\n" + block(state.openQuestions) + "\n\n";
+    md += "**Gate A:** " + (state.gateA || "—") + " · **Gate B:** " + (state.gateB || "—") + "\n\n";
+    md += "### Gate notes\n\n" + block(state.gateNotes) + "\n\n---\n\n";
+
+    SPINE_A.concat(SPINE_B).forEach(function (sec) {
+      md += "## " + sec.title.replace(/^\d+\.\s*/, "") + "\n\n";
+      md += block(state.sections[sec.id]) + "\n\n";
+    });
+
+    md += "---\n\n## Fee schedule\n\n";
+    md += "| Line | Unit | Amount | Notes |\n|------|------|--------|-------|\n";
+    (state.feeRows || []).forEach(function (r) {
+      md += "| " + cell(r.line) + " | " + cell(r.unit) + " | " + cell(r.amount) + " | " + cell(r.notes) + " |\n";
+    });
+    md += "\n### Commercial assumptions\n\n" + block(state.feeAssumptions) + "\n\n";
+
+    md += "---\n\n## Pre-send checklist\n\n";
+    COACH.forEach(function (t, i) {
+      var id = "cc_" + i;
+      md += "- " + (state.coach[id] ? "[x]" : "[ ]") + " " + t + "\n";
+    });
+    md += "\n## Stakeholder notes\n\n" + block(state.stakeholders) + "\n\n";
+    md += "\n*Compiled locally in browser — LoP builder dashboard.*\n";
+    return md;
+  }
+
+  function compileHtml() {
+    var md = compileMd();
+    var title = state.projectName || "Letter of Proposal";
+    var body = md.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    return "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\"/>\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/>\n<title>" +
+      esc(title).replace(/"/g, "&quot;") + "</title>\n<style>body{font-family:system-ui,sans-serif;max-width:42rem;margin:2rem auto;line-height:1.55;padding:0 1rem;}pre{white-space:pre-wrap;font:inherit;font-size:0.92rem;}</style>\n</head>\n<body>\n<h1>" +
+      esc(title) + "</h1>\n<pre>" + body + "</pre>\n</body>\n</html>";
+  }
+
+  function download(text, name, mime) {
+    var blob = new Blob([text], { type: mime || "text/plain;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  function slug() {
+    var n = (state.projectName || "LoP").replace(/[^\w\-]+/g, "_").slice(0, 56);
+    return n || "LoP";
+  }
+
+  $("btnNext").onclick = function () {
+    if (step < STEPS.length - 1) {
+      step++;
+      showStep();
+      save();
+    }
+  };
+  $("btnPrev").onclick = function () {
+    if (step > 0) {
+      step--;
+      showStep();
+    }
+  };
+
+  $("addManifest").onclick = function () {
+    syncManifest();
+    state.manifestRows.push({ label: "", path: "", use: "Y" });
+    buildManifest();
+    saveSoon();
+  };
+
+  $("addFee").onclick = function () {
+    collect();
+    addFeeRow({ line: "", unit: "", amount: "TBD", notes: "" });
+    saveSoon();
+  };
+
+  $("btnCompile").onclick = function () {
+    $("preview").textContent = compileMd();
+    save();
+  };
+
+  $("btnMd").onclick = function () {
+    download(compileMd(), slug() + "_LoP.md", "text/markdown;charset=utf-8");
+  };
+
+  $("btnHtml").onclick = function () {
+    download(compileHtml(), slug() + "_LoP.html", "text/html;charset=utf-8");
+  };
+
+  $("btnJson").onclick = function () {
+    collect();
+    download(JSON.stringify(state, null, 2), slug() + "_LoP-state.json", "application/json");
+  };
+
+  $("btnReset").onclick = function () {
+    if (!confirm("Erase all fields and browser draft for this page?")) return;
+    localStorage.removeItem(STORAGE);
+    state = { manifestRows: [], sections: {}, feeRows: [], coach: {} };
+    apply();
+    $("preview").textContent = "Click “Generate preview” to compile your LoP.";
+  };
+
+  [
+    "projectName", "clientName", "lopCategory", "deadline", "voiceNotes",
+    "problemStatement", "assumptions", "openQuestions", "gateA", "gateB",
+    "gateNotes", "feeAssumptions", "stakeholders",
+  ].forEach(function (id) {
+    $(id).addEventListener("input", saveSoon);
+    $(id).addEventListener("change", saveSoon);
+  });
+
+  apply();
+  showStep();
+})();
+  </script>
+</body>
+</html>

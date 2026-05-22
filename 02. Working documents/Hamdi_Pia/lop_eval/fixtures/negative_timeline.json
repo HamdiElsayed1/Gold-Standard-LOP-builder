@@ -1,0 +1,19 @@
+{
+  "document_id": "negative_timeline",
+  "title": "Phase timing clash",
+  "sections": [
+    {
+      "id": "plan",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Phase 2 starts in March."
+        },
+        {
+          "type": "paragraph",
+          "text": "Phase 2 begins in May for the same rollout."
+        }
+      ]
+    }
+  ]
+}

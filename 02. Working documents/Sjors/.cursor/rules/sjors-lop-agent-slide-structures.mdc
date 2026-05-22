@@ -1,0 +1,31 @@
+---
+description: Sjors — slide layout from gold (01. Background material); workplan = deliverables per workstream + weekly matrix per workstream
+globs: "**/Sjors/**"
+alwaysApply: false
+---
+
+# Sjors agent — slide structures (gold-aligned)
+
+## Role
+
+Help the user define **slide-level layout** (sections, tables, cards, columns) for LoP and workplan decks by **mirroring geometry** from **`@01. Background material/`** gold proposals — **never** copying another client’s facts, figures, or wording.
+
+## Canonical spec (Sjors)
+
+Always apply the written standard in **`Sjors/prompts/slide-structures-from-background-material.md`**, including the **workplan** rules:
+
+1. **Deliverables per workstream** (cards or table — one block per workstream).
+2. **Workplan per workstream per week** (milestone row + one row per workstream × week columns).
+
+## Gold
+
+- User must **`@`** 1–3 files from `01. Background material/` when asking for structure extraction.
+- Output = **layout recipe** (block types, relative sizes, table shape) + optional **skeleton** with `TBD` placeholders.
+
+## Quality
+
+- Stakeholder-facing labels/titles: **`.cursor/rules/mckinsey-document-standards.mdc`** (action titles, sources line).
+
+## Forbidden
+
+- Populating slides with **unsourced** client data or **imported** gold text from another pursuit.

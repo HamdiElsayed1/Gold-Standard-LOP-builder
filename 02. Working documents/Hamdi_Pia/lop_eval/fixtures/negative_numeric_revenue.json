@@ -1,0 +1,19 @@
+{
+  "document_id": "negative_numeric_revenue",
+  "title": "Conflicting revenue",
+  "sections": [
+    {
+      "id": "body",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Revenue was EUR 100 mln."
+        },
+        {
+          "type": "paragraph",
+          "text": "We expect revenue of EUR 120 mln the same year."
+        }
+      ]
+    }
+  ]
+}

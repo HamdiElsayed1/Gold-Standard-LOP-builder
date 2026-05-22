@@ -1,0 +1,47 @@
+---
+description: Apps and dashboards — apply Laws of UX (lawsofux.com); not for slide decks
+globs:
+  - "**/*intake*.html"
+  - "**/*dashboard*.html"
+  - "**/lop-agents-ui/**"
+  - "**/lop-builder-dashboard.html"
+alwaysApply: false
+---
+
+# Laws of UX — apps and dashboards only
+
+## Scope
+
+**Apply** when creating or editing **internal applications and dashboards**: multi-step forms, wizards, agent UIs, workplan builders, intake flows, admin panels, and their HTML/CSS/JS.
+
+**Do not apply** to:
+
+- Client-facing **slide decks** (HTML slides, PPTX, `slide_workspace_v0`, compile/screenshot slide skills)
+- **Slide preview rails** (e.g. `.page` / horizontal slide chrome inside deck exports)
+- LoP **chapter prose**, memos, or outline Markdown unless the user is explicitly building app UI
+
+For all deck and client-slide work, use [`mckinsey-document-standards.mdc`](mckinsey-document-standards.mdc) and slide-authoring skills — not this rule.
+
+## Source of truth
+
+Use principles from **[Laws of UX](https://lawsofux.com/)** (Jon Yablonski). Name laws from that collection; do not invent alternate "UX laws."
+
+For detail and a pre-flight checklist, read **[`.cursor/skills/laws-of-ux/SKILL.md`](../skills/laws-of-ux/SKILL.md)** before proposing UI changes.
+
+## Workflow
+
+1. Identify the user task (navigation, form, feedback, density, onboarding).
+2. Map 2-4 relevant laws from [lawsofux.com](https://lawsofux.com/) to concrete UI choices.
+3. Implement; briefly state which laws informed the change (one sentence each is enough).
+
+Use WebFetch on a specific law page when you need the full definition.
+
+## Priority
+
+On **apps and dashboards**, Laws of UX are **primary** for layout, interaction, feedback, information architecture, and accessibility of flows.
+
+McKinsey slide typography/palette/pyramid rules do **not** govern app chrome unless the user asks to align a screen with firm slide styling.
+
+## Files this rule typically covers
+
+Examples: `intake.html`, `*dashboard*.html`, `lop-agents-ui/`, `lop-builder-dashboard.html`. A path may contain both app UI and embedded slide previews — apply Laws of UX only to the **application** surfaces (forms, steps, side panels, tables), not to slide deck markup inside the same file.

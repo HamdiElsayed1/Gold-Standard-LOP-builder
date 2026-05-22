@@ -1,0 +1,14 @@
+---
+description: Use 01. Background material for LOP context and best practices before inventing guidance
+alwaysApply: true
+---
+
+# Background material (`01. Background material`)
+
+When the user asks for **context**, **best practices**, **standards**, **examples**, or **program background** for LOP / proposal / agent work:
+
+1. **Search or read** in the workspace folder **01. Background material** first (semantic search, grep, or open relevant files). Prefer what is **actually on disk** over generic advice.
+2. **Summarize or cite** from those files when they contain the answer. If nothing relevant exists, say so and use **TBD** or minimal generic structure—do **not** fabricate firm-specific “best practices.”
+3. **Do not** copy sensitive or client-identifying material into other folders unless the user explicitly asks. Reading and quoting in-chat for the user’s own workspace is fine when appropriate.
+
+If the user `@`-mentions a specific background file, treat that file as authoritative for the turn.

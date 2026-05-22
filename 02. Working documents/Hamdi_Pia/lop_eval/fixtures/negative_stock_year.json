@@ -1,0 +1,19 @@
+{
+  "document_id": "negative_stock_year",
+  "title": "Stock as-of mismatch",
+  "sections": [
+    {
+      "id": "fin",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The target stock price was EUR 50 as of FY2023."
+        },
+        {
+          "type": "paragraph",
+          "text": "We valued the same target stock price at EUR 50 in FY2024."
+        }
+      ]
+    }
+  ]
+}

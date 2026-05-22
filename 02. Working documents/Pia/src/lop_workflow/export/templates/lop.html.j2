@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ project_name or run_id }} — LOP (draft)</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 52rem; margin: 2rem auto; line-height: 1.5; color: #1a1a1a; }
+    h1 { font-size: 1.75rem; font-weight: 600; }
+    .meta { color: #555; font-size: 0.9rem; margin-bottom: 1.5rem; }
+    section.chapter { margin-top: 2rem; border-top: 1px solid #ddd; padding-top: 1rem; }
+    section.chapter h2 { font-size: 1.15rem; margin-bottom: 0.5rem; }
+    .rubric { background: #f6f8fa; padding: 1rem; border-radius: 6px; font-size: 0.9rem; margin: 1rem 0; }
+    .rubric dt { font-weight: 600; margin-top: 0.35rem; }
+    .coach-table { overflow-x: auto; font-size: 0.85rem; }
+    table.issue-grid { border-collapse: collapse; width: 100%; }
+    table.issue-grid th, table.issue-grid td { border: 1px solid #ccc; padding: 0.35rem 0.5rem; text-align: left; }
+    table.fees { border-collapse: collapse; width: 100%; margin: 0.75rem 0; font-size: 0.9rem; }
+    table.fees th, table.fees td { border: 1px solid #ccc; padding: 0.35rem 0.5rem; }
+  </style>
+</head>
+<body>
+  <h1>{{ project_name or "LOP" }}</h1>
+  <p class="meta">
+    Run: {{ run_id }}
+    {% if coach_ok is not none %} | Coach overall: {{ "OK" if coach_ok else "Review" }}{% endif %}
+    {% if client_name %} | Client: {{ client_name }}{% endif %}
+  </p>
+
+  {% if rubric %}
+  <div class="rubric">
+    <strong>LoP card rubric (automated)</strong>
+    <dl>
+      {% for k, v in rubric.items() %}
+      <dt>{{ k }}</dt><dd>{{ v }}</dd>
+      {% endfor %}
+    </dl>
+  </div>
+  {% endif %}
+
+  {% if issue_table_md %}
+  <div class="coach-table">
+    <h2 style="font-size:1rem;">Coach issue table</h2>
+    {{ issue_table_md | safe }}
+  </div>
+  {% endif %}
+
+  {% for ch in chapters %}
+  <section class="chapter" id="{{ ch.id }}">
+    <h2>{{ ch.title }}</h2>
+    {% if ch.fees_headers %}
+    <table class="fees">
+      <thead><tr>{% for h in ch.fees_headers %}<th>{{ h }}</th>{% endfor %}</tr></thead>
+      <tbody>
+        {% for row in ch.fees_rows %}
+        <tr>{% for cell in row %}<td>{{ cell }}</td>{% endfor %}</tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+    <div class="body">{{ ch.body_html | safe }}</div>
+  </section>
+  {% endfor %}
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<!-- Layout: Default (index 1)
+     Placeholders: ph-idx 0 (title),ph-idx 17 (chrome)
+     See SKILL.md for authoring rules, css/slide.css for dimensions. -->
+<html lang="en" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920, height=1080">
+<link rel="stylesheet" href="../../../../../css/slide.css">
+<style>
+  /* 5-column grid for the content area */
+  .content {
+    display: grid !important;
+    grid-template-columns: 180px 210px 200px 300px 1fr !important;
+    align-content: space-between !important;
+  }
+
+  /* --- Title --------------------------------------------------------- */
+  .title {
+    justify-content: flex-start !important;
+    padding-bottom: 0 !important;
+    overflow: visible !important;
+  }
+
+  .legend-cell {
+    position: absolute;
+    right: 0;
+    top: 145px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    font-family: var(--font-content);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 24px;
+    white-space: nowrap;
+  }
+
+  .legend-dot {
+    width: 23px;
+    height: 23px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* --- Column headers (bundled with sep = one grid row so space-between
+         does not insert slack between header and first data row) ---------- */
+  .hdr-block {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .sub-hdr-row {
+    display: grid;
+    grid-template-columns: 180px 210px 200px 300px 1fr;
+    align-items: end;
+    padding-bottom: 0;
+    width: 100%;
+  }
+
+  .sub-hdr {
+    font-size: 32px;
+    line-height: 1.2;
+    text-align: left;
+    width: 100%;
+  }
+
+  /* --- Data rows ----------------------------------------------------- */
+  .data-row {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
+    align-items: center;
+  }
+
+  .data-row > * {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: left;
+    font-size: 32px;
+    line-height: 1.2;
+  }
+
+  .sep {
+    grid-column: 1 / -1;
+    height: 1px;
+    background: var(--gray-50);
+  }
+
+  /* Value cell: number + bubble indicator */
+  .val-cell {
+    gap: 0;
+  }
+
+  .val-text {
+    flex: 0 0 100px;
+  }
+
+  .wide-val .val-text {
+    flex: 0 0 140px;
+  }
+
+  .val-indicator {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  .bubble {
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Description column */
+  .desc-cell {
+    padding-left: 12px !important;
+    padding-right: 0 !important;
+    text-align: left !important;
+  }
+
+  .desc-cell ul {
+    list-style: none;
+    padding-left: 1.2em;
+    margin: 0;
+    text-align: left;
+  }
+
+  .desc-cell li {
+    position: relative;
+    font-size: 22px;
+    line-height: 1.35;
+  }
+
+  .desc-cell li::before {
+    content: "\2022";
+    position: absolute;
+    left: -1.2em;
+  }
+</style>
+
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:_dlc_DocId msdt:dt="string">DE7XN4DZS357-1263605440-19214</mso:_dlc_DocId>
+<mso:_dlc_DocIdItemGuid msdt:dt="string">d96594c6-a3d2-4817-a28b-d84c056ab748</mso:_dlc_DocIdItemGuid>
+<mso:_dlc_DocIdUrl msdt:dt="string">https://mckinsey.sharepoint.com/sites/spt-int-6jj6kewnj5r70j/_layouts/15/DocIdRedir.aspx?ID=DE7XN4DZS357-1263605440-19214, DE7XN4DZS357-1263605440-19214</mso:_dlc_DocIdUrl>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+<body>
+<section class="slide" data-layout="Default">
+
+  <div data-pptx="chrome" class="chrome">
+    <span class="slide-number">1</span>
+    <span class="logo">McKinsey &amp; Company</span>
+  </div>
+
+  <!-- ============================================================= -->
+  <!-- TITLE                                                           -->
+  <!-- ============================================================= -->
+  <div class="title">
+    <div data-pptx="placeholder" data-ph-idx="0"
+         style="position:absolute; left:1.2px; top:28.7px;
+                width:1745.3px; height:115.2px">
+      <p>Product line comparison across key growth metrics</p>
+    </div>
+
+    <div class="legend-cell">
+      <div class="legend-item">
+        <span class="legend-dot" style="background:var(--electric-blue-900)"></span>
+        Current volume
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot" style="background:var(--electric-blue-500)"></span>
+        Projected volume
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot" style="background:var(--cyan)"></span>
+        Target volume
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================= -->
+  <!-- CONTENT                                                         -->
+  <!-- ============================================================= -->
+  <div class="content">
+
+    <!-- Column headers + rule (single grid row vs .content space-between) -->
+    <div class="hdr-block">
+      <div class="sub-hdr-row">
+        <div class="sub-hdr">
+          <p><strong>Product</strong></p>
+        </div>
+        <div class="sub-hdr">
+          <p><strong>Revenue</strong>, $M</p>
+        </div>
+        <div class="sub-hdr">
+          <p><strong>Growth</strong>, %</p>
+        </div>
+        <div class="sub-hdr">
+          <p><strong>2025 projected capacity</strong>, kt</p>
+        </div>
+        <div class="sub-hdr">
+          <p><strong>Key drivers</strong></p>
+        </div>
+      </div>
+      <div class="sep"></div>
+    </div>
+
+    <!-- Alpha -->
+    <div class="data-row">
+      <div><p>Alpha</p></div>
+      <div class="val-cell">
+        <span class="val-text">1,200</span>
+        <span class="val-indicator">
+          <span class="bubble" style="width:48px; height:48px; background:var(--electric-blue-900)"></span>
+        </span>
+      </div>
+      <div class="val-cell">
+        <span class="val-text">+12</span>
+        <span class="val-indicator">
+          <span class="bubble" style="width:36px; height:36px; background:var(--electric-blue-500)"></span>
+        </span>
+      </div>
+      <div class="val-cell wide-val">
+        <span class="val-text">500</span>
+        <span class="val-indicator">
+          <span class="bubble" style="width:30px; height:30px; background:var(--cyan)"></span>
+        </span>
+      </div>
+      <div class="desc-cell">
+        <ul>
+          <li>Expansion into three new regions driving volume growth</li>
+          <li>Margin improvement from supply chain optimization</li>
+        </ul>
+      </div>
+    </div>
+    <div class="sep"></div>
+
+    <!-- Beta -->
+    <div class="data-row">
+      <div><p>Beta</p></div>
+      <div class="val-cell">
+        <span class="val-text">800</span>
+        <span class="val-indicator">
+          <span class="bubble" style="width:36px; height:36px; background:var(--electric-blue-900)"></span>
+        </span>
+      </div>
+      <div class="val-cell">
+        <span class="val-text">+8</span>
+        <span class="val-indicator">
+          <span class="bubble" style="width:28px; height:28px; background:var(--electric-blue-500)"></span>
+        </span>
+      </div>
+      <div class="val-cell wide-val">
+        <span class="val-text">350</span>
+        <span class="val-indicator">
+          <span class="bubble" style="width:24px; height:24px; background:var(--cyan)"></span>
+        </span>
+      </div>
+      <div class="desc-cell">
+        <ul>
+          <li>Premium pricing offsetting lower unit volumes</li>
+        </ul>
+      </div>
+    </div>
+    <div class="sep"></div>
+
+    <!-- Gamma -->
+    <div class="data-row">
+      <div><p>Gamma</p></div>
+      <div class="val-cell">
+        <span class="val-text">600</span>
+        <span class="val-indicator">
+          <span class="bubble" style="width:30px; height:30px; background:var(--electric-blue-900)"></span>
+        </span>
+      </div>
+      <div class="val-cell">
+        <span class="val-text">+22</span>
+        <span class="val-indicator">
+          <span class="bubble" style="width:44px; height:44px; background:var(--electric-blue-500)"></span>
+        </span>
+      </div>
+      <div class="val-cell wide-val">
+        <span class="val-text">200</span>
+        <span class="val-indicator">
+          <span class="bubble" style="width:18px; height:18px; background:var(--cyan)"></span>
+        </span>
+      </div>
+      <div class="desc-cell">
+        <ul>
+          <li>Fastest-growing segment with strong digital channel adoption</li>
+          <li>Capacity constrained; new facility planned for Q3</li>
+        </ul>
+      </div>
+    </div>
+    <div class="sep"></div>
+
+    <!-- Delta -->
+    <div class="data-row">
+      <div><p>Delta</p></div>
+      <div class="val-cell">
+        <span class="val-text">400</span>
+        <span class="val-indicator">
+          <span class="bubble" style="width:22px; height:22px; background:var(--electric-blue-900)"></span>
+        </span>
+      </div>
+      <div class="val-cell">
+        <span class="val-text">+3</span>
+        <span class="val-indicator">
+          <span class="bubble" style="width:14px; height:14px; background:var(--electric-blue-500)"></span>
+        </span>
+      </div>
+      <div class="val-cell wide-val">
+        <span class="val-text">400</span>
+        <span class="val-indicator">
+          <span class="bubble" style="width:26px; height:26px; background:var(--cyan)"></span>
+        </span>
+      </div>
+      <div class="desc-cell">
+        <ul>
+          <li>Mature segment with stable demand</li>
+        </ul>
+      </div>
+    </div>
+    <div class="sep"></div>
+
+    <!-- Epsilon -->
+    <div class="data-row">
+      <div><p>Epsilon</p></div>
+      <div class="val-cell">
+        <span class="val-text">250</span>
+        <span class="val-indicator">
+          <span class="bubble" style="width:16px; height:16px; background:var(--electric-blue-900)"></span>
+        </span>
+      </div>
+      <div class="val-cell">
+        <span class="val-text">+15</span>
+        <span class="val-indicator">
+          <span class="bubble" style="width:34px; height:34px; background:var(--electric-blue-500)"></span>
+        </span>
+      </div>
+      <div class="val-cell wide-val">
+        <span class="val-text">150</span>
+        <span class="val-indicator">
+          <span class="bubble" style="width:14px; height:14px; background:var(--cyan)"></span>
+        </span>
+      </div>
+      <div class="desc-cell">
+        <ul>
+          <li>New product launch in H2 expected to accelerate growth</li>
+          <li>Pilot market results showing strong customer adoption</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================= -->
+  <!-- FOOTNOTE                                                        -->
+  <!-- ============================================================= -->
+  <div class="footnote">
+    <p>Note: Revenue figures based on trailing twelve months; growth rates year-over-year</p>
+  </div>
+
+  <!-- ============================================================= -->
+  <!-- SOURCE                                                          -->
+  <!-- ============================================================= -->
+  <div class="source">
+    <p>Source: Internal reporting; market analysis</p>
+  </div>
+
+</section>
+</body>
+</html>

@@ -1,0 +1,37 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "lop-workflow"
+version = "0.1.0"
+description = "Agentic LOP workflow: schemas, orchestrator, agents, exporters, observability"
+requires-python = ">=3.10"
+dependencies = [
+  "pydantic>=2.5.0",
+  "jinja2>=3.1.0",
+  "python-pptx>=0.6.23",
+  "openpyxl>=3.1.0",
+  "pypdf>=4.0.0",
+  "pyyaml>=6.0",
+]
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+llm = ["openai>=1.30.0"]
+compress = ["pymupdf>=1.24.0"]
+
+[project.scripts]
+lop-workflow = "lop_workflow.cli:main"
+
+[tool.hatch.build.targets.wheel]
+only-include = ["src/lop_workflow"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/lop_workflow", "pyproject.toml"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]

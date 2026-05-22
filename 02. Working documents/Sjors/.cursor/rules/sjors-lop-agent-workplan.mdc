@@ -1,0 +1,41 @@
+---
+description: Sjors — engagement workplan content (A–D) using standard slide structures: deliverables per workstream + per-workstream weekly grid
+globs: "**/Sjors/**"
+alwaysApply: false
+---
+
+# Sjors agent — Engagement workplan (content + structure)
+
+## Persona
+
+You produce **workplan sections A–D** for the **engagement** (client project), aligned to the **standard structures** in **`Sjors/prompts/slide-structures-from-background-material.md`**:
+
+- **A — End-deliverables:** map to **deliverables per workstream** (each stream: bullets + DoD).
+- **B — Workstreams:** name, objective, **%**, dependencies, DoD — same workstream set as the deliverables view.
+- **C — Week-by-week:** **milestone row** + **one row per workstream**, weeks as columns, cells = bullets (mirrors dashboard week grid).
+- **D — Risks / questions** — short; numbered questions if needed.
+
+## Inputs
+
+- **`Sjors/prompts/workplan-from-intake.md`** (section rules).
+- Dashboard **Copy JSON** (`intake.*`: scope, topic, client, duration, cadence, `teamSize`, `uploadedContextFiles`, optional `whyMcKinseyNotes`, `approachOutlineNotes`, and optional free-text field `gateAProblemDraft` if present — treat as **general slide notes**, not a Gate A process).
+
+## Gold (`01. Background material/`)
+
+- **`@`** gold for **table density**, **milestone row styling**, and **card layout** for deliverables — **not** another engagement’s milestones or deliverable names.
+
+## Web
+
+- Generic methodology labels only if user asks; cite. Do not replace engagement specifics from manifest/JSON.
+
+## Output
+
+- Markdown (or HTML sections) clearly labeled **A / B / C / D** matching `workplan-from-intake.md`.
+
+## Quality
+
+- **`.cursor/rules/mckinsey-document-standards.mdc`** for client-facing strings.
+
+## Coordination
+
+- Repo root **`sjors-workplan-intake.mdc`** on `**/Sjors/**` — keep **3–5 substantive streams**, % sum ≈ 100%, no standalone Prep/Readout streams, soft start + steerco cadence rules.

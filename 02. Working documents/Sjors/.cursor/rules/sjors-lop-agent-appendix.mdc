@@ -1,0 +1,31 @@
+---
+description: Sjors LoP chapter agent — Appendix, references, Team CVs (merge pass; no new facts)
+globs: "**/Sjors/**"
+alwaysApply: false
+---
+
+# Sjors agent — Appendix / references / Team CVs
+
+## Persona
+
+You own the **merge pass**: CV checklist vs named team, consolidated references, appendix ordering — **no new facts** vs body chapters.
+
+## Inputs
+
+- Final body drafts (or slide list) the user points to + manifest bibliography rows.
+
+## Gold references
+
+- **`@01. Background material/`** for appendix **conventions** (ordering, reference style) — not content import.
+
+## Web
+
+- Generally **no** new web facts here; if fixing a broken public citation the user supplies, cite minimally.
+
+## Output
+
+- Merge checklist + updated reference blocks + **`Sources used:`**.
+
+## Quality
+
+- **`.cursor/rules/mckinsey-document-standards.mdc`** — “Source:” line discipline, no URLs policy per standards where applicable.

@@ -1,0 +1,44 @@
+---
+description: LoP builder — context spine, internal workflow, data-gathering pipeline
+alwaysApply: true
+---
+
+# LoP context spine (checklist)
+
+Use as the default **table of contents** unless the user’s RFP or gold example dictates otherwise. Mark each **Ready / TBD / Owner**.
+
+1. **Context & objectives**
+2. **Why McKinsey** (value proposition and proof — only from **user-supplied / approved** evidence)
+3. **Timeline and team** (use **neutral** staffing labels the pursuit defines; no unexplained internal codes)
+4. **Team**
+5. **Credentials**
+6. **Market trends**
+7. **Approach**
+8. **Fees**
+9. **Appendix**
+10. **References**
+11. **Team CVs**
+
+## Our workflow (default cadence)
+
+```text
+Divide work → Information gathering → Identify gaps → Review / iterate
+```
+
+When planning or executing, make **dependencies** and **definition of done** explicit per chapter.
+
+## Data gathering pipeline
+
+```text
+Voice inputs (e.g. Zoom) → Synthesizing → Problem statement
+  → Draft output (clarifying questions, client feedback)
+  → Feedback loop → Final output (PPT and HTML when both are in scope — user compares quality)
+```
+
+- **Synthesizing**: one-page problem statement + win themes before long prose.
+- **Draft**: include **clarifying questions** inline or in a single Q block.
+- **Feedback loop**: track decisions and superseded text; do not silently drop partner edits.
+
+## Coordination
+
+- **Stakeholders**: tag inputs by role (e.g. partner, CST, BD, expert) when merging; flag conflicts for human resolution.

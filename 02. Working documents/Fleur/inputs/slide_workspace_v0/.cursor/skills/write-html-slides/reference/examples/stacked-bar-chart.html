@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920, height=1080">
+<link rel="stylesheet" href="../../css/slide.css">
+<script src="../../js/chart-renderer.js" defer></script>
+<style>
+  .separator {
+    position:absolute; left:0; right:0; top:10%; height:1px; background:var(--gray-20);
+  }
+</style>
+
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:_dlc_DocId msdt:dt="string">DE7XN4DZS357-1263605440-19213</mso:_dlc_DocId>
+<mso:_dlc_DocIdItemGuid msdt:dt="string">56b1317d-28e9-4acb-9ea8-42fd4794daec</mso:_dlc_DocIdItemGuid>
+<mso:_dlc_DocIdUrl msdt:dt="string">https://mckinsey.sharepoint.com/sites/spt-int-6jj6kewnj5r70j/_layouts/15/DocIdRedir.aspx?ID=DE7XN4DZS357-1263605440-19213, DE7XN4DZS357-1263605440-19213</mso:_dlc_DocIdUrl>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+<body>
+<section class="slide" data-layout="Default">
+
+  <div data-pptx="chrome" class="chrome">
+    <span class="slide-number">3</span>
+    <span class="logo">McKinsey &amp; Company</span>
+  </div>
+
+  <div class="title">
+    <div data-pptx="placeholder" data-ph-idx="0"
+         style="position:absolute; left:1.2px; top:28.7px; width:1745.3px; height:115.2px">
+      Portfolio Companies Show Varied Performance Across Key Metrics
+    </div>
+  </div>
+
+  <div class="content" style="display:flex; flex-direction:column">
+
+    <!-- Column headers -->
+    <div style="display:grid; grid-template-columns:160px 1fr 1fr 1fr; column-gap:20px; align-items:end; padding-bottom:8px; font-size:24px">
+      <p><strong>Company</strong></p>
+      <p><strong>Revenue growth</strong>, %</p>
+      <p><strong>EBITDA margin</strong>, %</p>
+      <p><strong>Market share</strong>, %</p>
+    </div>
+    <div style="height:2px; background:var(--gray-50); flex-shrink:0"></div>
+
+    <!-- Chart grid: shared labels + 3 native bar charts -->
+    <div style="display:grid; flex:1; min-height:0; column-gap:20px;
+                grid-template-columns:minmax(0,160px) minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);
+                position:relative; margin-top:2px">
+
+      <div data-chart-labels style="min-width:0; font-size:22px">
+        <div>Acme Corp</div>
+        <div>Bolt Industries</div>
+        <div>Crane Tech</div>
+        <div>Delta Solutions</div>
+        <div>Echo Systems</div>
+        <div>Forge Analytics</div>
+        <div>Grid Power</div>
+        <div>Helix Bio</div>
+        <div>Ion Networks</div>
+        <div>Jet Logistics</div>
+      </div>
+
+      <!-- Chart 1: Revenue growth -->
+      <div data-pptx="chart" style="min-width:0; min-height:0">
+        <script type="application/json">
+        {
+          "type": "bar_stacked",
+          "categories": ["Acme Corp","Bolt Industries","Crane Tech","Delta Solutions","Echo Systems","Forge Analytics","Grid Power","Helix Bio","Ion Networks","Jet Logistics"],
+          "series": [
+            { "name": "Revenue growth", "values": [41, 35, 29, 23, 18, 50, 12, 32, 27, 20], "color": "#061F79" }
+          ],
+          "dataLabels": { "show": true, "fontColor": "#FFFFFF", "numberFormat": "0", "fontSize": 18 },
+          "gapWidth": 60
+        }
+        </script>
+      </div>
+
+      <!-- Chart 2: EBITDA margin -->
+      <div data-pptx="chart" style="min-width:0; min-height:0">
+        <script type="application/json">
+        {
+          "type": "bar_stacked",
+          "categories": ["Acme Corp","Bolt Industries","Crane Tech","Delta Solutions","Echo Systems","Forge Analytics","Grid Power","Helix Bio","Ion Networks","Jet Logistics"],
+          "series": [
+            { "name": "EBITDA margin", "values": [28, 23, 32, 38, 21, 15, 42, 26, 19, 35], "color": "#061F79" }
+          ],
+          "dataLabels": { "show": true, "fontColor": "#FFFFFF", "numberFormat": "0", "fontSize": 18 },
+          "gapWidth": 60
+        }
+        </script>
+      </div>
+
+      <!-- Chart 3: Market share -->
+      <div data-pptx="chart" style="min-width:0; min-height:0">
+        <script type="application/json">
+        {
+          "type": "bar_stacked",
+          "categories": ["Acme Corp","Bolt Industries","Crane Tech","Delta Solutions","Echo Systems","Forge Analytics","Grid Power","Helix Bio","Ion Networks","Jet Logistics"],
+          "series": [
+            { "name": "Market share", "values": [18, 15, 11, 24, 32, 8, 28, 20, 36, 22], "color": "#061F79" }
+          ],
+          "dataLabels": { "show": true, "fontColor": "#FFFFFF", "numberFormat": "0", "fontSize": 18 },
+          "gapWidth": 60
+        }
+        </script>
+      </div>
+
+      <!-- Row separators — at (ci+1)/10 boundaries between bars -->
+      <div class="separator" style="top:10%"></div>
+      <div class="separator" style="top:20%"></div>
+      <div class="separator" style="top:30%"></div>
+      <div class="separator" style="top:40%"></div>
+      <div class="separator" style="top:50%"></div>
+      <div class="separator" style="top:60%"></div>
+      <div class="separator" style="top:70%"></div>
+      <div class="separator" style="top:80%"></div>
+      <div class="separator" style="top:90%"></div>
+    </div>
+
+  </div>
+
+  <div class="source">
+    <p>Source: Portfolio company reporting, Q1 2026; McKinsey analysis</p>
+  </div>
+
+</section>
+</body>
+</html>

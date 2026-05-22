@@ -1,0 +1,34 @@
+---
+description: LoP builder — tools, data sources, evaluation metrics
+alwaysApply: true
+---
+
+# Tools (use when available; otherwise TBD)
+
+| Tool / channel | Use for LoP work |
+|----------------|------------------|
+| **LoP card** | Quality gate — section completeness, win logic, consistency with spine |
+| **PPT / Excel / HTML** | Structure, fees tables, timelines, narrative export |
+| **Know / MVI** (if connected) | Retrieve approved assets, credentials, boilerplate — only from user-attached or confirmed exports; **never invent** disclaimers |
+| **Web** | Market trends, public context — cite; do not treat as client-private fact |
+| **Voice → text** | Raw notes → structured bullets + owner actions |
+| **Email connector** | Stakeholder snippets — preserve attribution and date |
+
+Do **not** claim a connector exists unless the user has configured it.
+
+# Data sources (priority order — user confirms)
+
+1. **Best-practice LoPs** (gold set): note **competitive vs non-competitive**, **as experience**, **relationship-led** angles when relevant.
+2. **Tenders / RFP** — mandatory alignment pass.
+3. **CST / contact persona** work — tone, relationship, constraints.
+4. **Partner input** — strategy, win themes, risk posture.
+5. **Market input** — trends slide support; separate from confidential client data.
+
+# Evaluation (track qualitatively unless user supplies baselines)
+
+- **Win rate**
+- **Time saved** (vs prior comparable LoPs)
+- **Quality of output** (clarity, RFP fit, partner-ready)
+- **Time spent** (by role if known)
+
+When evaluating a draft, score **RFP fit**, **narrative flow**, **fee clarity**, and **appendix completeness** in plain language.

@@ -1,0 +1,22 @@
+# McKinsey-style Streamlit theme.
+#
+# Streamlit looks for this file at $CWD/.streamlit/config.toml when
+# `streamlit run app.py` is invoked. The app docstring instructs running
+# from src/, so this file sits at src/.streamlit/config.toml.
+#
+# The values below cover what Streamlit owns natively (background, primary
+# colour, focus ring, progress bar). Everything else (typography, button
+# radii, expander chrome, sidebar polish, alert restyle) is handled by
+# `inject_theme_css()` in src/_mckinsey_theme.py — both layers must stay
+# consistent.
+
+[theme]
+base = "light"
+primaryColor = "#051C2C"
+backgroundColor = "#F5F3F0"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#1A1A1A"
+font = "sans serif"
+
+[client]
+toolbarMode = "minimal"

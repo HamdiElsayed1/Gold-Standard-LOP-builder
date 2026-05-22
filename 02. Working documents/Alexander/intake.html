@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LoP pursuit intake — Alexander</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f6f7f9;
+      --card: #fff;
+      --text: #1a1d21;
+      --muted: #5c6370;
+      --border: #d8dde4;
+      --accent: #0b5cab;
+      --accent-hover: #084a8f;
+      --err: #b00020;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #121418;
+        --card: #1c1f26;
+        --text: #e8eaef;
+        --muted: #9aa3b2;
+        --border: #343a46;
+        --accent: #4d9fff;
+        --accent-hover: #7ab3ff;
+        --err: #ff6b6b;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: var(--text);
+      background: var(--bg);
+      min-height: 100vh;
+      padding: 1.5rem clamp(1rem, 4vw, 2.5rem);
+    }
+    main {
+      max-width: 44rem;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin: 0 0 0.35rem;
+    }
+    .lede {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin: 0 0 1.5rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.35rem 1.35rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    }
+    fieldset {
+      border: 0;
+      margin: 0;
+      padding: 0;
+    }
+    legend {
+      font-weight: 600;
+      margin-bottom: 1rem;
+      padding: 0;
+    }
+    label {
+      display: block;
+      font-weight: 500;
+      font-size: 0.875rem;
+      margin-bottom: 0.35rem;
+    }
+    .hint {
+      font-weight: 400;
+      color: var(--muted);
+      font-size: 0.8125rem;
+    }
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 0.55rem 0.65rem;
+      margin-bottom: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font: inherit;
+      color: inherit;
+      background: var(--card);
+    }
+    input:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+    .row {
+      display: grid;
+      gap: 1rem;
+      margin-bottom: 0;
+    }
+    @media (min-width: 30em) {
+      .row-2 { grid-template-columns: 1fr 1fr; }
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-top: 0.25rem;
+    }
+    button {
+      font: inherit;
+      cursor: pointer;
+      border-radius: 6px;
+      padding: 0.55rem 1rem;
+      border: 1px solid transparent;
+    }
+    button[type="submit"] {
+      background: var(--accent);
+      color: #fff;
+    }
+    button[type="submit"]:hover {
+      background: var(--accent-hover);
+    }
+    button.secondary {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--border);
+    }
+    button.secondary:hover {
+      border-color: var(--muted);
+    }
+    .error {
+      color: var(--err);
+      font-size: 0.875rem;
+      margin: -0.5rem 0 0.75rem;
+      display: none;
+    }
+    .error.visible { display: block; }
+    output {
+      display: block;
+      margin-top: 1.5rem;
+    }
+    .out-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+    }
+    .out-card h2 {
+      font-size: 0.95rem;
+      margin: 0 0 0.65rem;
+    }
+    pre {
+      margin: 0;
+      padding: 0.85rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.8125rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .foot {
+      margin-top: 1.25rem;
+      font-size: 0.8125rem;
+      color: var(--muted);
+    }
+    .foot a {
+      color: var(--accent);
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      border: 0;
+    }
+  </style>
+
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:_dlc_DocId msdt:dt="string">DE7XN4DZS357-1263605440-17349</mso:_dlc_DocId>
+<mso:_dlc_DocIdItemGuid msdt:dt="string">628cf002-044f-4ee3-961f-abeee15e5401</mso:_dlc_DocIdItemGuid>
+<mso:_dlc_DocIdUrl msdt:dt="string">https://mckinsey.sharepoint.com/sites/spt-int-6jj6kewnj5r70j/_layouts/15/DocIdRedir.aspx?ID=DE7XN4DZS357-1263605440-17349, DE7XN4DZS357-1263605440-17349</mso:_dlc_DocIdUrl>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+<body>
+  <main>
+    <h1>LoP pursuit intake</h1>
+    <p class="lede">
+      Capture the basics before Step 0. This page runs only in your browser — nothing is uploaded.
+      Then use the <strong>Cursor kickoff</strong> block in Cursor with <code>@</code> files from
+      <code>01. Background material</code> (see <code>LoP Solution V1/02-operating-playbook/flow-intake-to-lop.md</code>).
+    </p>
+
+    <form class="card" id="intake-form" novalidate>
+      <fieldset>
+        <legend>Pursuit details</legend>
+
+        <label for="client">Client name <span class="hint">(required)</span></label>
+        <input type="text" id="client" name="client" autocomplete="organization" required maxlength="200" />
+        <p class="error" id="err-client" role="alert">Enter a client name.</p>
+
+        <label for="topic">Topic / opportunity <span class="hint">(required)</span></label>
+        <input type="text" id="topic" name="topic" autocomplete="off" required maxlength="300" />
+        <p class="hint" style="margin-top:-0.5rem;margin-bottom:1rem">Short label for the folder or deck, e.g. “Supply chain diagnostic”.</p>
+        <p class="error" id="err-topic" role="alert">Enter a topic.</p>
+
+        <div class="row row-2">
+          <div>
+            <label for="duration">Project duration <span class="hint">(optional)</span></label>
+            <input type="text" id="duration" name="duration" placeholder="e.g. 12 weeks" maxlength="120" />
+          </div>
+          <div>
+            <label for="teamsize">Team size <span class="hint">(optional)</span></label>
+            <input type="text" id="teamsize" name="teamsize" placeholder="e.g. 4–6 FTE" maxlength="120" />
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="actions">
+        <button type="submit">Generate summary</button>
+        <button type="button" class="secondary" id="btn-clear">Clear</button>
+      </div>
+    </form>
+
+    <output id="out" for="intake-form" aria-live="polite"></output>
+
+    <p class="foot">
+      Aligns with the Alexander playbook: information gathering and tracker setup before manifest confirmation and Gate A.
+      Full steps: <a href="LoP%20Solution%20V1/02-operating-playbook/flow-intake-to-lop.md">LoP Solution V1/02-operating-playbook/flow-intake-to-lop.md</a> (open in Cursor).
+      Optional: <code>python3 "02. Working documents/Alexander/scripts/kickoff_from_intake.py" --help</code> (from repo root) — list Background Material paths and print the same kickoff as here.
+    </p>
+  </main>
+
+  <script>
+    (function () {
+      var form = document.getElementById("intake-form");
+      var out = document.getElementById("out");
+      var errClient = document.getElementById("err-client");
+      var errTopic = document.getElementById("err-topic");
+
+      function esc(s) {
+        return String(s || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+
+      function trim(s) {
+        return String(s || "").trim();
+      }
+
+      function buildMarkdown(client, topic, duration, teamsize) {
+        var lines = [
+          "## Pursuit intake (paste into tracker or chat)",
+          "",
+          "- **Client:** " + client,
+          "- **Topic:** " + topic,
+        ];
+        if (duration) lines.push("- **Project duration:** " + duration);
+        if (teamsize) lines.push("- **Team size:** " + teamsize);
+        lines.push("");
+        lines.push("Suggested pursuit folder name: `" + client.replace(/[`\\/]/g, "") + "-" + topic.replace(/[`\\/]/g, "").slice(0, 60).replace(/\s+/g, "-") + "` *(edit for your naming convention)*");
+        lines.push("");
+        lines.push("Next: `@` relevant files from `01. Background material`, paste the **Cursor kickoff** from intake.html, then confirm manifest **Y** rows per `Jasper/lop-cursor-runbook.md`.");
+        return lines.join("\n");
+      }
+
+      function buildKickoff(client, topic, duration, teamsize) {
+        var intakeLines = [
+          "- **Client:** " + client,
+          "- **Topic / opportunity:** " + topic,
+        ];
+        if (duration) intakeLines.push("- **Project duration:** " + duration);
+        if (teamsize) intakeLines.push("- **Team size:** " + teamsize);
+
+        return [
+          "You are the LoP builder assistant for this workspace. Obey `.cursor/rules/lop-builder-*.mdc` and `02. Working documents/Jasper/lop-cursor-runbook.md`. Do not invent client facts, fees, credentials, or legal / practice disclaimers — use only attached sources for substantive claims; label inferences clearly; use **TBD** + owner when evidence is missing.",
+          "",
+          "## Pursuit intake (user-provided)",
+          "",
+          intakeLines.join("\n"),
+          "",
+          "## Attached sources (Step 0)",
+          "",
+          "I have attached files with `@` from `01. Background material` and/or my pursuit folder. **Only** those attachments may be treated as sources of fact for this run.",
+          "",
+          "Your first outputs (in order):",
+          "",
+          "1. **Step 0 — Source manifest** — Markdown table: `# | Source label | Path / filename | In use for this run? (Y/N) | Notes`. List **every** file I attached (and this intake). Do not add files I did not attach. Wait for my confirmation of **Y** rows before drafting narrative.",
+          "",
+          "2. **Problem statement (one page)** — Client situation, what they are buying, win themes, risks/constraints — only from **Y**-confirmed sources; explicit **assumptions** where thin.",
+          "",
+          "3. **Clarifying questions** — One numbered block; flag blocking vs non-blocking.",
+          "",
+          "4. **LoP spine** — Section titles only (mirror runbook: Context & objectives; Why McKinsey; Timeline and team; Team; Credentials; Market trends; Approach; Fees; Appendix; References; Team CVs). No long **Approach** prose yet — **Gate A** first per runbook.",
+          "",
+          "When I reply **Gate A OK**, proceed with chapter drafting per `Jasper/prompts/`, one section at a time, stating **Sources used:** manifest row numbers after each. Fees: **TBD** or attached numbers only. End with **LOP coach** issue list and **assembler** PPT + HTML packs per runbook.",
+        ].join("\n");
+      }
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        errClient.classList.remove("visible");
+        errTopic.classList.remove("visible");
+
+        var client = trim(document.getElementById("client").value);
+        var topic = trim(document.getElementById("topic").value);
+        var duration = trim(document.getElementById("duration").value);
+        var teamsize = trim(document.getElementById("teamsize").value);
+
+        var ok = true;
+        if (!client) {
+          errClient.classList.add("visible");
+          ok = false;
+        }
+        if (!topic) {
+          errTopic.classList.add("visible");
+          ok = false;
+        }
+        if (!ok) {
+          out.innerHTML = "";
+          return;
+        }
+
+        var md = buildMarkdown(client, topic, duration, teamsize);
+        var kick = buildKickoff(client, topic, duration, teamsize);
+        var safeMd = esc(md);
+        var safeKick = esc(kick);
+
+        out.innerHTML =
+          '<div class="stack">' +
+          '<div class="out-card">' +
+          '<h2>1 — Markdown for tracker</h2>' +
+          '<pre id="md-out">' +
+          safeMd +
+          "</pre>" +
+          '<div class="actions" style="margin-top:0.75rem">' +
+          '<button type="button" class="secondary" id="btn-copy">Copy tracker block</button>' +
+          "</div>" +
+          "</div>" +
+          '<div class="out-card">' +
+          "<h2>2 — Cursor kickoff (after you <code>@</code> Background Material files)</h2>" +
+          '<p class="hint" style="margin:0 0 0.65rem">In a new chat: attach each source file from <code>01. Background material</code>, then paste this message below the attachments.</p>' +
+          '<pre id="kick-out">' +
+          safeKick +
+          "</pre>" +
+          '<div class="actions" style="margin-top:0.75rem">' +
+          '<button type="button" class="secondary" id="btn-copy-kick">Copy Cursor kickoff</button>' +
+          "</div>" +
+          "</div>" +
+          "</div>";
+
+        document.getElementById("btn-copy").addEventListener("click", function () {
+          copyText(md, "btn-copy", "Copy tracker block");
+        });
+        document.getElementById("btn-copy-kick").addEventListener("click", function () {
+          copyText(kick, "btn-copy-kick", "Copy Cursor kickoff");
+        });
+      });
+
+      function copyText(text, buttonId, originalLabel) {
+        navigator.clipboard.writeText(text).then(
+          function () {
+            var b = document.getElementById(buttonId);
+            b.textContent = "Copied";
+            setTimeout(function () {
+              b.textContent = originalLabel;
+            }, 2000);
+          },
+          function () {
+            alert("Copy failed — select the text in the box and copy manually.");
+          }
+        );
+      }
+
+      document.getElementById("btn-clear").addEventListener("click", function () {
+        form.reset();
+        out.innerHTML = "";
+        errClient.classList.remove("visible");
+        errTopic.classList.remove("visible");
+      });
+    })();
+  </script>
+</body>
+</html>

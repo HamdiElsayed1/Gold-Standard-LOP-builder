@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LoP + workplan dashboard — intake + McKinsey-style preview</title>
+  <style>
+    :root {
+      --navy: #051c2c;
+      --navy-light: #0a2e45;
+      --electric: #2251ff;
+      --teal: #0bdacb;
+      --bg-warm: #f5f3f0;
+      --border-warm: #e8e4df;
+      --text-secondary: #4a5568;
+      --text-light: #718096;
+      --white: #ffffff;
+      --border-light: #b3b3b3;
+      --highlight: #f0f7ff;
+      --rail-max: 1040px;
+      --slide-mat: 12px;
+      --slide-pad-x: clamp(1.25rem, 4vw, 4rem);
+      --slide-pad-y: clamp(1rem, 2.8vw, 2.5rem);
+      --font-ui: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: var(--font-ui);
+      background: var(--bg-warm);
+      color: var(--navy);
+      line-height: 1.45;
+    }
+    .app {
+      display: grid;
+      grid-template-columns: minmax(280px, 340px) 1fr;
+      grid-template-rows: auto 1fr;
+      min-height: 100vh;
+      gap: 0;
+    }
+    @media (max-width: 900px) {
+      .app { grid-template-columns: 1fr; grid-template-rows: auto auto 1fr; }
+    }
+    .panel-form {
+      grid-column: 1;
+      grid-row: 1 / -1;
+      background: var(--white);
+      border-right: 1px solid var(--border-warm);
+      padding: 1rem 1rem 2rem;
+      overflow-y: auto;
+    }
+    @media (max-width: 900px) {
+      .panel-form { grid-column: 1; grid-row: 1; border-right: none; border-bottom: 1px solid var(--border-warm); }
+    }
+    .main {
+      grid-column: 2;
+      grid-row: 1 / -1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    @media (max-width: 900px) {
+      .main { grid-column: 1; grid-row: 2 / -1; }
+    }
+    .main-header {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-warm);
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .main-header h1 {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--navy);
+      letter-spacing: -0.01em;
+    }
+    .deck-jump {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      align-items: center;
+      font-size: 0.68rem;
+      max-width: 52rem;
+    }
+    .deck-jump a {
+      color: var(--electric);
+      text-decoration: none;
+      padding: 0.15rem 0.35rem;
+      border-radius: 4px;
+    }
+    .deck-jump a:hover { background: var(--highlight); }
+    .rail-wrap {
+      flex: 1;
+      min-height: 0;
+      padding: 0;
+      background: linear-gradient(180deg, #ebe9e4 0%, var(--bg-warm) 55%, #ebe9e4 100%);
+      border-top: 1px solid var(--border-warm);
+    }
+    .rail-hint {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      padding: 0.5rem 1rem 0.4rem;
+      line-height: 1.55;
+      max-width: 72rem;
+    }
+    .rail {
+      display: flex;
+      gap: 1.25rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 1rem 1.25rem 1.5rem;
+      min-height: min(calc(78vh * 9 / 16 + 2.5rem), 620px);
+      align-items: center;
+    }
+    .rail:focus { outline: 2px solid var(--electric); outline-offset: 2px; }
+    .page {
+      flex: 0 0 auto;
+      scroll-snap-align: center;
+      width: min(var(--rail-max), 92vw, calc(78vh * 16 / 9));
+      aspect-ratio: 16 / 9;
+      height: auto;
+      background-color: var(--white);
+      border: var(--slide-mat) solid var(--bg-warm);
+      border-radius: 6px;
+      padding: var(--slide-pad-y) var(--slide-pad-x);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 24px rgba(5, 28, 44, 0.08);
+    }
+    /* Title slide (McKinsey-style navy opener) */
+    .page.page-title {
+      position: relative;
+      background: linear-gradient(152deg, #051c2c 0%, #0a2740 38%, #0d3a55 88%, #0a3050 100%);
+      color: var(--white);
+      border-color: rgba(5, 28, 44, 0.9);
+      box-shadow: 0 10px 40px rgba(5, 28, 44, 0.28);
+      padding: clamp(1.75rem, 4.5vw, 3rem) clamp(1.75rem, 4.5vw, 4rem);
+    }
+    .page.page-title .title-slide-accent {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--electric) 0%, var(--teal) 55%, rgba(11, 218, 203, 0.35) 100%);
+      border-radius: 4px 4px 0 0;
+    }
+    .page.page-title .title-slide-inner {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.35rem;
+      padding-top: 0.5rem;
+    }
+    .page.page-title .title-slide-eyebrow {
+      margin: 0 0 0.35rem;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(11, 218, 203, 0.95);
+    }
+    .page.page-title .title-slide-headline {
+      margin: 0;
+      font-size: clamp(1.65rem, 3.8vw, 2.35rem);
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+      color: var(--white);
+      max-width: 95%;
+    }
+    .page.page-title .title-slide-client {
+      margin: 0.5rem 0 0;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.94);
+    }
+    .page.page-title .title-slide-tagline {
+      margin: 0.35rem 0 0;
+      font-size: 0.88rem;
+      font-weight: 400;
+      line-height: 1.45;
+      color: rgba(255, 255, 255, 0.72);
+      max-width: 36rem;
+    }
+    .page.page-title .title-slide-tagline:empty {
+      display: none;
+    }
+    .page.page-title .title-slide-divider {
+      width: 3.5rem;
+      height: 2px;
+      margin: 1.1rem 0 1rem;
+      background: rgba(34, 81, 255, 0.85);
+      border-radius: 1px;
+    }
+    .page.page-title .title-slide-lead {
+      margin: 0;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      color: rgba(255, 255, 255, 0.82);
+      max-width: 38rem;
+    }
+    .page.page-title .title-slide-lead:empty {
+      display: none;
+    }
+    .page.page-title .title-slide-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.75rem 2.5rem;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .page.page-title .title-slide-meta > div {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .page.page-title .title-slide-meta dt {
+      margin: 0;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.45);
+    }
+    .page.page-title .title-slide-meta dd {
+      margin: 0;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.92);
+    }
+    .page.page-title .title-slide-footer {
+      position: relative;
+      z-index: 1;
+      flex-shrink: 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.75rem 1.5rem;
+      margin-top: auto;
+      padding-top: 1.25rem;
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.55);
+    }
+    .page.page-title .title-slide-conf {
+      font-style: italic;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    .page-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-weight: 600;
+      color: var(--teal);
+      margin: 0 0 0.5rem;
+      line-height: 1.25;
+    }
+    h2.page-title {
+      font-size: clamp(1.25rem, 2.2vw, 2rem);
+      margin: 0 0 0.75rem;
+      color: var(--navy);
+      font-weight: 700;
+      line-height: 1.18;
+      letter-spacing: -0.015em;
+    }
+    .action-title {
+      font-size: clamp(1.25rem, 2.4vw, 2rem);
+      margin: 0 0 1rem;
+      color: var(--navy);
+      font-weight: 700;
+      line-height: 1.16;
+      letter-spacing: -0.015em;
+      max-width: 42rem;
+    }
+    .slide-body {
+      flex: 1 1 auto;
+      min-height: 0;
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: var(--text-secondary);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .slide-body > * { margin: 0; }
+    .slide-body p { line-height: 1.65; }
+    .slide-body ul { margin: 0; padding-left: 1.2rem; }
+    /* Context & objectives — 50/50 from dashboard intake vs project scope */
+    .slide-body.slide-body--context-split {
+      gap: 0.35rem;
+    }
+    .context-obj-wrap {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .context-obj-grid {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 0.85rem;
+      align-content: stretch;
+    }
+    .context-obj-col {
+      min-width: 0;
+      min-height: 0;
+      overflow-y: auto;
+      font-size: 0.76rem;
+      line-height: 1.48;
+      color: var(--text-secondary);
+      padding: 0.1rem 0.2rem 0.15rem 0;
+    }
+    .context-obj-col--right {
+      border-left: 1px solid var(--border-warm);
+      padding-left: 0.85rem;
+      padding-right: 0;
+    }
+    .context-obj-kicker {
+      display: block;
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin: 0 0 0.3rem;
+      line-height: 1.2;
+    }
+    .context-obj-block {
+      margin-bottom: 0.45rem;
+    }
+    .context-obj-block:last-child { margin-bottom: 0; }
+    .context-obj-block-title {
+      margin: 0 0 0.2rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.25;
+    }
+    .context-obj-block-body {
+      margin: 0;
+      color: var(--text-secondary);
+    }
+    .context-obj-block-body.context-obj-tbd {
+      font-style: italic;
+      color: var(--text-light);
+      font-size: 0.72rem;
+    }
+    .context-obj-dl {
+      margin: 0;
+    }
+    .context-obj-dl dt {
+      margin: 0.35rem 0 0.05rem;
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-light);
+    }
+    .context-obj-dl dt:first-child { margin-top: 0; }
+    .context-obj-dl dd {
+      margin: 0;
+      color: var(--text-secondary);
+      word-break: break-word;
+    }
+    .context-obj-file-list {
+      margin: 0.15rem 0 0;
+      padding-left: 1rem;
+    }
+    .context-obj-file-list li { margin-bottom: 0.12rem; }
+    .context-obj-card {
+      background: var(--white);
+      border: 1px solid var(--border-warm);
+      border-top: 3px solid var(--electric);
+      border-radius: 4px;
+      padding: 0.4rem 0.5rem;
+      margin-bottom: 0.35rem;
+    }
+    .context-obj-card:last-child { margin-bottom: 0; }
+    .context-obj-card-title {
+      margin: 0 0 0.2rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.2;
+    }
+    .context-obj-card-body {
+      margin: 0;
+      font-size: 0.72rem;
+      line-height: 1.45;
+      color: var(--text-secondary);
+    }
+    .context-obj-card-extra {
+      margin: 0.25rem 0 0;
+      padding-left: 1rem;
+      font-size: 0.68rem;
+      color: var(--text-secondary);
+    }
+    .context-obj-card-extra li { margin-bottom: 0.1rem; }
+    .context-slide-source {
+      flex-shrink: 0;
+      margin: 0;
+      padding-top: 0.35rem;
+      border-top: 1px solid var(--border-warm);
+      font-size: 0.62rem;
+      font-style: italic;
+      color: var(--text-light);
+      line-height: 1.4;
+    }
+    .form-section-title {
+      margin: 1rem 0 0.35rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--electric);
+    }
+    label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin: 0.65rem 0 0.25rem;
+    }
+    input[type="text"], input[type="number"], textarea, select {
+      width: 100%;
+      padding: 0.45rem 0.5rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-light);
+      background: #fafafa;
+      color: var(--navy);
+      font: inherit;
+    }
+    textarea { min-height: 4.5rem; resize: vertical; }
+    .row2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+    .btn-row {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    button.primary {
+      background: var(--electric);
+      color: var(--white);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button.secondary {
+      background: transparent;
+      color: var(--navy);
+      border: 1px solid var(--border-light);
+      padding: 0.45rem 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button.secondary:hover { border-color: var(--electric); color: var(--electric); }
+    .file-upload-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.35rem;
+    }
+    .file-upload-row input[type="file"] { font-size: 0.78rem; max-width: 100%; }
+    #uploadedFileList {
+      margin: 0.35rem 0 0;
+      padding-left: 1.1rem;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    #uploadedFileList li { margin-bottom: 0.25rem; }
+    .tagline { color: var(--text-secondary); font-size: 0.88rem; margin: 0 0 0.75rem; }
+    ul { margin: 0; padding-left: 1.15rem; }
+    li { margin-bottom: 0.3rem; }
+    .workstream-card {
+      background: var(--white);
+      border: 1px solid var(--border-warm);
+      border-top: 3px solid var(--electric);
+      border-radius: 4px;
+      padding: 0.65rem 0.85rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    .workstream-card strong { color: var(--navy); }
+    .ws-pct { color: var(--text-secondary); font-size: 0.78rem; font-weight: 600; margin-top: 0.25rem; }
+    tr.milestone-row th,
+    tr.milestone-row td {
+      background: var(--highlight);
+      color: var(--navy);
+      font-weight: 600;
+      font-size: 0.68rem;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      overflow-y: hidden;
+      flex: 1 1 auto;
+      min-height: 0;
+      border: 1px solid var(--border-warm);
+      border-radius: 4px;
+      background: var(--white);
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+    th, td {
+      border: none;
+      border-bottom: 1px solid var(--border-warm);
+      padding: 0.45rem 0.4rem;
+      vertical-align: top;
+      text-align: left;
+    }
+    th {
+      background: #f1f5f9;
+      color: var(--navy);
+      font-weight: 700;
+      border-bottom: 2px solid var(--navy);
+    }
+    th:first-child { min-width: 7.5rem; }
+    td ul { padding-left: 0.95rem; margin: 0; }
+    td li { margin-bottom: 0.15rem; }
+    .legend { margin-top: 0.65rem; font-size: 0.78rem; color: var(--text-secondary); }
+    #previewStatus {
+      font-size: 0.78rem;
+      color: var(--electric);
+      white-space: nowrap;
+    }
+    .main-header .hint { font-size: 0.78rem; color: var(--text-secondary); }
+    @keyframes previewPulse {
+      0% { box-shadow: 0 0 0 0 rgba(34, 81, 255, 0.35); }
+      100% { box-shadow: 0 0 0 10px rgba(34, 81, 255, 0); }
+    }
+    .page.preview-updated { animation: previewPulse 0.55s ease-out; }
+    @media print {
+      @page { size: landscape; margin: 12mm; }
+      .panel-form, .main-header .hint, .deck-jump, .btn-row, .rail-hint { display: none !important; }
+      .app { display: block; min-height: auto; }
+      .main { display: block; }
+      .rail-wrap {
+        background: none;
+        border: none;
+        overflow: visible;
+        padding: 0;
+      }
+      .rail {
+        display: block;
+        overflow: visible;
+        padding: 0;
+        min-height: 0;
+      }
+      .page {
+        break-after: page;
+        break-inside: avoid;
+        page-break-after: always;
+        page-break-inside: avoid;
+        width: 100%;
+        max-width: none;
+        max-height: none;
+        aspect-ratio: auto;
+        min-height: 50vh;
+        border: 1px solid var(--border-light);
+        box-shadow: none;
+        margin-bottom: 0;
+      }
+      .page:last-child { break-after: auto; page-break-after: auto; }
+    }
+  </style>
+
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:_dlc_DocId msdt:dt="string">DE7XN4DZS357-1263605440-17345</mso:_dlc_DocId>
+<mso:_dlc_DocIdItemGuid msdt:dt="string">171e9e8f-5ab9-413f-b1cc-cba4e0b244d1</mso:_dlc_DocIdItemGuid>
+<mso:_dlc_DocIdUrl msdt:dt="string">https://mckinsey.sharepoint.com/sites/spt-int-6jj6kewnj5r70j/_layouts/15/DocIdRedir.aspx?ID=DE7XN4DZS357-1263605440-17345, DE7XN4DZS357-1263605440-17345</mso:_dlc_DocIdUrl>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+<body>
+  <div class="app">
+    <aside class="panel-form" aria-label="Engagement and LoP inputs">
+      <h2 style="margin:0 0 0.5rem;font-size:1rem;color:var(--electric)">Inputs</h2>
+      <p style="margin:0 0 0.75rem;font-size:0.8rem;color:var(--text-secondary)">Drives the full horizontal deck (LoP chapters + workplan). Debounced — use Refresh for an immediate sync.</p>
+
+      <label for="clientName">Client name</label>
+      <input type="text" id="clientName" name="clientName" autocomplete="organization" />
+
+      <label for="topic">Topic</label>
+      <input type="text" id="topic" name="topic" />
+
+      <label for="scope">Project scope</label>
+      <textarea id="scope" name="scope" rows="4"></textarea>
+
+      <label>Estimated duration</label>
+      <div class="row2">
+        <div>
+          <label for="durationValue" style="margin-top:0">Amount</label>
+          <input type="number" id="durationValue" name="durationValue" min="1" max="120" value="6" />
+        </div>
+        <div>
+          <label for="durationUnit" style="margin-top:0">Unit</label>
+          <select id="durationUnit" name="durationUnit">
+            <option value="weeks" selected>Weeks</option>
+            <option value="months">Months (→ weeks, approx.)</option>
+          </select>
+        </div>
+      </div>
+
+      <label for="teamSize">Team size (FTE or headcount)</label>
+      <input type="text" id="teamSize" name="teamSize" placeholder="e.g. 4–5" />
+
+      <label>Program cadence (preview + export)</label>
+      <div class="row2">
+        <div>
+          <label for="steercoEveryWeeks" style="margin-top:0">Steerco / workshop every (weeks)</label>
+          <input type="number" id="steercoEveryWeeks" name="steercoEveryWeeks" min="1" max="8" value="2" />
+        </div>
+        <div>
+          <label for="firstSteercoWeek" style="margin-top:0">First steerco in week #</label>
+          <input type="number" id="firstSteercoWeek" name="firstSteercoWeek" min="1" max="12" value="2" />
+        </div>
+      </div>
+      <label style="display:flex;align-items:center;gap:0.5rem;margin-top:0.5rem;cursor:pointer">
+        <input type="checkbox" id="softStartWeek1" name="softStartWeek1" checked />
+        <span>Week 1 = soft start (mobilize, data, interviews)</span>
+      </label>
+
+      <label for="otherNotes">Other info</label>
+      <textarea id="otherNotes" name="otherNotes" rows="3" placeholder="Workshops, constraints, data access…"></textarea>
+
+      <label for="contextFiles">Context documents</label>
+      <div class="file-upload-row">
+        <input type="file" id="contextFiles" name="contextFiles" multiple />
+      </div>
+      <ul id="uploadedFileList" aria-label="Selected files"></ul>
+
+      <label for="relatedContextDocuments">Extra paths (optional)</label>
+      <textarea id="relatedContextDocuments" name="relatedContextDocuments" rows="2" placeholder="One path or note per line (e.g. PDFs you did not add as files above)"></textarea>
+
+      <p class="form-section-title">Optional LoP preview text</p>
+      <label for="gateAProblemDraft">Optional subtitle (title slide, one line)</label>
+      <textarea id="gateAProblemDraft" name="gateAProblemDraft" rows="2" placeholder="Optional second line under the client on the title slide (first line only)."></textarea>
+      <label for="whyMcKinseyNotes">Why McKinsey — win themes (bullets)</label>
+      <textarea id="whyMcKinseyNotes" name="whyMcKinseyNotes" rows="2" placeholder="Evidence-bound only; leave blank for TBD scaffold."></textarea>
+      <label for="approachOutlineNotes">Approach — outline (pre–partner scope)</label>
+      <textarea id="approachOutlineNotes" name="approachOutlineNotes" rows="2" placeholder="v0.1: outline + questions until partner-approved scope."></textarea>
+
+      <div class="btn-row">
+        <button type="button" class="primary" id="btnRefresh">Refresh preview</button>
+        <button type="button" class="secondary" id="btnClearStorage">Clear saved inputs</button>
+        <button type="button" class="secondary" id="btnCopyJson">Copy JSON</button>
+      </div>
+    </aside>
+
+    <section class="main" aria-label="Preview">
+      <div class="main-header">
+        <div>
+          <h1 style="margin:0">Letter of proposal and workplan — preview</h1>
+          <span id="previewStatus" aria-live="polite">Loading preview…</span>
+        </div>
+        <span class="hint">Scroll sideways · Arrow keys when rail focused</span>
+      </div>
+      <nav class="deck-jump" aria-label="Jump to slide">
+        <a href="#page-title">Title</a>
+        <a href="#page-context">Context</a>
+        <a href="#page-why">Why us</a>
+        <a href="#page-timeline">Timeline</a>
+        <a href="#page-team">Team</a>
+        <a href="#page-credentials">Creds</a>
+        <a href="#page-market">Market</a>
+        <a href="#page-approach">Approach</a>
+        <a href="#page-fees">Fees</a>
+        <a href="#page-deliverables">Deliv.</a>
+        <a href="#page-workstreams">WS</a>
+        <a href="#page-weekly">Weeks</a>
+        <a href="#page-appendix">Appendix</a>
+      </nav>
+      <p class="rail-hint">Scroll horizontally to browse slides. Click the slide strip, then use Left / Right arrow keys to move one slide at a time.</p>
+      <div class="rail-wrap">
+        <div class="rail" id="rail" tabindex="0" aria-label="Slide pages">
+          <article class="page page-title" id="page-title" data-page="title">
+            <div class="title-slide-accent" aria-hidden="true"></div>
+            <div class="title-slide-inner">
+              <p class="title-slide-eyebrow">Letter of proposal</p>
+              <h1 class="title-slide-headline" id="titleSlideHeadline">Strategic engagement proposal</h1>
+              <p class="title-slide-client" id="titleSlideClient">Client organization</p>
+              <p class="title-slide-tagline" id="titleSlideTagline"></p>
+              <div class="title-slide-divider" aria-hidden="true"></div>
+              <p class="title-slide-lead" id="titleSlideLead"></p>
+              <dl class="title-slide-meta">
+                <div>
+                  <dt>Duration</dt>
+                  <dd id="titleSlideDuration">—</dd>
+                </div>
+                <div>
+                  <dt>Team</dt>
+                  <dd id="titleSlideTeam">—</dd>
+                </div>
+              </dl>
+            </div>
+            <footer class="title-slide-footer">
+              <span id="titleSlideDate"></span>
+              <span class="title-slide-conf">Confidential — draft for discussion</span>
+            </footer>
+          </article>
+
+          <article class="page" id="page-context" data-page="context-objectives">
+            <div class="page-label">Context &amp; objectives</div>
+            <h2 class="action-title" id="contextActionTitle">Objectives align to agreed scope once finalized</h2>
+            <div class="slide-body slide-body--context-split" id="contextBody"></div>
+          </article>
+
+          <article class="page" id="page-why" data-page="why-mckinsey">
+            <div class="page-label">Why McKinsey</div>
+            <h2 class="action-title" id="whyActionTitle">Distinctive value rests on specific, sourced proof points</h2>
+            <div class="slide-body" id="whyBody"></div>
+          </article>
+
+          <article class="page" id="page-timeline" data-page="timeline-team">
+            <div class="page-label">Timeline and team</div>
+            <h2 class="action-title" id="timelineActionTitle">Cadence and team size reflect current working assumptions</h2>
+            <div class="slide-body" id="timelineBody"></div>
+          </article>
+
+          <article class="page" id="page-team" data-page="team">
+            <div class="page-label">Team</div>
+            <h2 class="action-title" id="teamActionTitle">Named roles follow the agreed CV package</h2>
+            <div class="slide-body" id="teamBody"></div>
+          </article>
+
+          <article class="page" id="page-credentials" data-page="credentials">
+            <div class="page-label">Credentials</div>
+            <h2 class="action-title" id="credActionTitle">Credentials to be selected from approved case list</h2>
+            <div class="slide-body" id="credBody"></div>
+          </article>
+
+          <article class="page" id="page-market" data-page="market-trends">
+            <div class="page-label">Market trends</div>
+            <h2 class="action-title" id="marketActionTitle">Market view will cite approved external and licensed sources</h2>
+            <div class="slide-body" id="marketBody"></div>
+          </article>
+
+          <article class="page" id="page-approach" data-page="approach">
+            <div class="page-label">Approach</div>
+            <h2 class="action-title" id="approachActionTitle">Approach remains outline plus questions until scope is approved</h2>
+            <div class="slide-body" id="approachBody"></div>
+          </article>
+
+          <article class="page" id="page-fees" data-page="fees">
+            <div class="page-label">Fees</div>
+            <h2 class="action-title" id="feesActionTitle">Commercial terms to be confirmed when pricing is agreed</h2>
+            <div class="slide-body" id="feesBody"></div>
+          </article>
+
+          <article class="page" id="page-deliverables" data-page="deliverables">
+            <div class="page-label">Workplan · End-deliverables</div>
+            <h2 class="page-title" id="deliverablesPageTitle">End-deliverables (engagement)</h2>
+            <p class="tagline" id="deliverablesScopeLine">Structured around the agreed scope and program notes.</p>
+            <ul id="deliverablesList"></ul>
+          </article>
+
+          <article class="page" id="page-workstreams" data-page="workstreams">
+            <div class="page-label">Workplan · Workstreams</div>
+            <h2 class="page-title" id="workstreamsPageTitle">Workstreams</h2>
+            <p class="tagline" id="workstreamsSubtitle">Four substantive streams (prep and readout sit inside weeks, not as separate streams).</p>
+            <p class="tagline" style="margin:-0.25rem 0 0.65rem;font-size:0.8rem">Each stream: <strong>name</strong>, <strong>objective</strong>, <strong>share of team time</strong> (illustrative), dependencies, <strong>definition of done</strong>.</p>
+            <div class="workstream-card">
+              <strong>WS1 — Diagnostic &amp; fact base</strong>
+              <div class="ws-pct">~25% core team time</div>
+              <span class="tagline" style="margin:0.35rem 0 0">Objective: issue tree, interviews, internal/external fact base for decisions.</span>
+              Dependencies: data access <strong>TBD</strong>. Definition of done: agreed backlog and v1 fact pack. <em>Kickoff prep sits in week 1.</em>
+            </div>
+            <div class="workstream-card">
+              <strong>WS2 — Solution / initiative design</strong>
+              <div class="ws-pct">~35% core team time</div>
+              <span class="tagline" style="margin:0.35rem 0 0">Objective: where-to-play, options, prioritization criteria, workshop-ready materials.</span>
+              Dependencies: WS1 outputs. Definition of done: shortlist and storyline for steering cadence.
+            </div>
+            <div class="workstream-card">
+              <strong>WS3 — Value &amp; feasibility</strong>
+              <div class="ws-pct">~20% core team time</div>
+              <span class="tagline" style="margin:0.35rem 0 0">Objective: directional economics and feasibility to support trade-offs.</span>
+              Dependencies: finance / market inputs <strong>TBD</strong>. Definition of done: ranges with explicit assumptions.
+            </div>
+            <div class="workstream-card">
+              <strong>WS4 — Integration &amp; client moments</strong>
+              <div class="ws-pct">~20% core team time</div>
+              <span class="tagline" style="margin:0.35rem 0 0">Objective: integrate streams, steerco prep, dry runs, final readout pack &amp; next steps.</span>
+              Dependencies: partner review <strong>TBD</strong>. Definition of done: signed-off storyline and readout. <em>Final readout sits in this stream, not a fifth stream.</em>
+            </div>
+          </article>
+
+          <article class="page" id="page-weekly" data-page="weekly">
+            <div class="page-label">Workplan · Week-by-week</div>
+            <h2 class="page-title" id="weeklyPageTitle">Week-by-week plan</h2>
+            <p class="tagline" id="weeklyTagline">First row: milestones (including soft start and steering cadence). Following rows: workstreams.</p>
+            <div class="table-wrap">
+              <table>
+                <thead id="weeklyThead"></thead>
+                <tbody id="weeklyTbody"></tbody>
+              </table>
+            </div>
+            <p class="legend" id="weeklyLegend"><strong>Legend:</strong> Client workshops, steering moments, data sources, and owners to be confirmed as the plan firms up.</p>
+          </article>
+
+          <article class="page" id="page-appendix" data-page="appendix-references-cvs">
+            <div class="page-label">Appendix · references · team CVs</div>
+            <h2 class="action-title">References and CV checklist finalize with the full proposal</h2>
+            <div class="slide-body" id="appendixBody">
+              <ul>
+                <li>Confirm named team members match the agreed CV package.</li>
+                <li>Align the reference list with citations used in the deck.</li>
+                <li>Close the appendix in the same review pass as the body chapters.</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    (function () {
+      var STORAGE_KEY = "sjors-workplan-dashboard-v1";
+      /** In-memory only (not persisted to localStorage). Each: _id, fileName, mimeType, sizeBytes, textContent?, note? */
+      var uploadedContextFiles = [];
+
+      var WS_ROWS = [
+        { short: "WS1 Diagnostic", label: "WS1 — Diagnostic & fact base" },
+        { short: "WS2 Solution", label: "WS2 — Solution / initiative design" },
+        { short: "WS3 Value", label: "WS3 — Value & feasibility" },
+        { short: "WS4 Integration", label: "WS4 — Integration & client moments" }
+      ];
+
+      /** Illustrative cell bullets when duration is exactly 6 weeks (4 streams × 6 weeks). */
+      var W6_BULLETS = [
+        [
+          ["Soft start: kickoff; data requests; interview plan", "Issue tree v0.2; deepen interviews", "Fact pack build; prep steerco (diag)"],
+          ["Sources plan; baseline TBD", "Deepen fact base", "Peer review", "Refresh for option steerco", "Finalize diagnostic slice", "Appendix / archive"],
+          ["Hypotheses from field", "Screening criteria", "Deep dives on themes", "Align deck to steerco agenda", "Shortlist refresh", "Lock diagnostic view"],
+          ["Quality check data", "Client sense-check prep", "Steerco dry-run support", "Integrate steerco feedback", "Tighten logic tree", "Freeze for readout"],
+          ["Cross-stream consistency", "Exhibit polish", "Partner Q&A prep", "Final numbers check", "Print pack", "Readout backup slides"],
+          ["Close diagnostics", "Handover notes", "Buffer for readout"]
+        ],
+        [
+          ["Soft start: align design questions", "Hypotheses long-list", "Screening + prioritization", "Steerco-ready option set", "Post-steerco refinements", "Lock design choices"],
+          ["Option trees; scenarios", "Workshop materials v0.1", "Client working session prep", "Steerco narrative arc", "Integrate feedback", "Shortlist + hooks to value"],
+          ["Dependencies from WS1", "Build scenarios B/C", "Stress with economics", "Pack for steerco", "Iterate post-steerco", "Storyline for readout"],
+          ["Implications sketch", "Operating model hooks", "Risk / mitigations", "Steerco backup", "Partner review", "Finalize option chapter"],
+          ["Cut scope per decisions", "Update initiative set", "Align to roadmap", "Dry run with EM", "Slide freeze", "Readout section sign-off"],
+          ["Buffer week", "Scope guardrails", "Partner sign-off"]
+        ],
+        [
+          ["Soft start: finance data asks", "Framework; drivers", "Sizing ranges TBD", "Steerco value view", "Post-steerco refresh", "Final economics slides"],
+          ["Model structure", "Build base case", "Cross-check vs options", "Prep steerco exhibits", "Partner review", "Sensitivity pack"],
+          ["Link to WS2 milestones", "Feasibility flags", "Bridge to implications", "Steerco backup pages", "Finalize numbers", "Readout appendix"],
+          ["Stress tests", "Scenario B", "Governance of assumptions", "Steerco Q&A prep", "Lock ranges", "Exhibit polish"],
+          ["Consistency pass", "Footnotes / sources", "Partner sign-off"],
+          ["Print / PDF", "Readout appendix freeze"]
+        ],
+        [
+          ["Soft start: cadence + decision log", "Steerco logistics", "Integrate master shell", "Dry-run steerco", "Partner iterations", "Final readout; next steps"],
+          ["Chapter outline", "Storyline v0.1", "Integrate all streams", "Steerco dry run", "Lock master deck", "Readout rehearsal"],
+          ["PMO: actions tracker", "Workshop notes", "Steerco follow-ups", "Version control", "Final pack", "Close-out checklist"],
+          ["Comms to client", "Steerco calendar", "Room / VC check"],
+          ["Print pack", "Final logistics"],
+          ["Readout day support", "After-action notes"]
+        ]
+      ];
+
+      function $(id) { return document.getElementById(id); }
+
+      function isLikelyTextFile(file) {
+        var n = (file.name || "").toLowerCase();
+        if (/\.(txt|md|markdown|json|csv|html|htm|xml|log|yaml|yml)$/i.test(n)) return true;
+        if (file.type && file.type.indexOf("text/") === 0) return true;
+        return false;
+      }
+
+      function readOneFile(file) {
+        return new Promise(function (resolve) {
+          if (file.size > 800000) {
+            resolve({
+              _id: Math.random().toString(36).slice(2),
+              fileName: file.name,
+              mimeType: file.type || "application/octet-stream",
+              sizeBytes: file.size,
+              note: "Large file — metadata only"
+            });
+            return;
+          }
+          if (!isLikelyTextFile(file)) {
+            resolve({
+              _id: Math.random().toString(36).slice(2),
+              fileName: file.name,
+              mimeType: file.type || "application/octet-stream",
+              sizeBytes: file.size,
+              note: "Binary file — metadata only"
+            });
+            return;
+          }
+          var reader = new FileReader();
+          reader.onload = function () {
+            var t = String(reader.result || "");
+            var truncated = t.length > 60000;
+            if (truncated) t = t.slice(0, 60000) + "\n… [truncated for clipboard size]";
+            resolve({
+              _id: Math.random().toString(36).slice(2),
+              fileName: file.name,
+              mimeType: file.type || "text/plain",
+              sizeBytes: file.size,
+              textContent: t,
+              truncated: truncated
+            });
+          };
+          reader.onerror = function () {
+            resolve({
+              _id: Math.random().toString(36).slice(2),
+              fileName: file.name,
+              mimeType: file.type || "",
+              sizeBytes: file.size,
+              note: "Read error"
+            });
+          };
+          reader.readAsText(file);
+        });
+      }
+
+      function renderUploadedFileList() {
+        var ul = $("uploadedFileList");
+        if (!ul) return;
+        ul.innerHTML = "";
+        uploadedContextFiles.forEach(function (f) {
+          var li = document.createElement("li");
+          var label = f.fileName;
+          if (f.textContent) label += " · text excerpt stored";
+          else if (f.note) label += " · " + f.note;
+          li.appendChild(document.createTextNode(label + " "));
+          var rm = document.createElement("button");
+          rm.type = "button";
+          rm.className = "secondary";
+          rm.style.fontSize = "0.68rem";
+          rm.style.padding = "0.15rem 0.4rem";
+          rm.textContent = "Remove";
+          rm.addEventListener("click", function () {
+            uploadedContextFiles = uploadedContextFiles.filter(function (x) {
+              return x._id !== f._id;
+            });
+            renderUploadedFileList();
+            applyPreview();
+          });
+          li.appendChild(rm);
+          ul.appendChild(li);
+        });
+      }
+
+      function escapeHtml(s) {
+        if (!s) return "";
+        return String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function bulletsToUl(arr) {
+        if (!arr || !arr.length) return "<ul><li>TBD</li></ul>";
+        var lis = arr.map(function (b) { return "<li>" + escapeHtml(b) + "</li>"; }).join("");
+        return "<ul>" + lis + "</ul>";
+      }
+
+      function computeWeeks() {
+        var n = parseInt($("durationValue").value, 10);
+        if (isNaN(n) || n < 1) n = 1;
+        var unit = $("durationUnit").value;
+        var weeks;
+        if (unit === "months") {
+          weeks = Math.round(n * 4.345);
+        } else {
+          weeks = n;
+        }
+        weeks = Math.min(12, Math.max(1, weeks));
+        return weeks;
+      }
+
+      function durationLabel(weeks) {
+        var unit = $("durationUnit").value;
+        var raw = parseInt($("durationValue").value, 10) || 1;
+        if (unit === "months") {
+          return raw + " months (about " + weeks + " weeks)";
+        }
+        return weeks + " weeks";
+      }
+
+      function buildDeliverablesListHtml(client, topic, scope, notes, weeks) {
+        var c = client || "TBD";
+        var t = topic || "TBD";
+        var scopeBlock = scope
+          ? escapeHtml(scope)
+          : "<em>Project scope to be added.</em>";
+        var notesBlock = notes
+          ? escapeHtml(notes)
+          : "<em>No additional program notes yet.</em>";
+        var focus = topic || client || "the engagement";
+        var cad = readCadence(weeks);
+        var cadLine =
+          "<li><strong>Program cadence</strong> " +
+          (cad.soft ? "Week 1 <strong>soft start</strong>. " : "") +
+          "Steering / workshop rhythm about every <strong>" +
+          cad.cadence +
+          "</strong> week(s), first in week <strong>" +
+          cad.firstSteerco +
+          "</strong> — to align with client governance.</li>";
+        var related = $("relatedContextDocuments").value.trim();
+        var upCount = uploadedContextFiles.length;
+        var relLine =
+          related || upCount
+            ? "<li><strong>Context documents</strong><br />" +
+              (related ? escapeHtml(related) + (upCount ? "<br />" : "") : "") +
+              (upCount
+                ? escapeHtml(
+                    uploadedContextFiles
+                      .map(function (f) {
+                        return f.fileName + (f.textContent ? " (excerpt available)" : (f.note ? " (" + f.note + ")" : ""));
+                      })
+                      .join("\n")
+                  )
+                : "")
+            : "<li><strong>Context documents</strong> — <em>To be listed when available.</em></li>";
+        var lines = [
+          "<li><strong>Project scope</strong><br />" + scopeBlock + "</li>",
+          "<li><strong>Program notes</strong><br />" + notesBlock + "</li>",
+          relLine,
+          cadLine,
+          "<li><strong>Aligned view &amp; direction</strong> for " +
+            escapeHtml(c) +
+            " on <strong>" +
+            escapeHtml(focus) +
+            "</strong> — storyline / decisions documented (format TBD).</li>",
+          "<li><strong>Prioritized initiative set</strong> supporting <strong>" +
+            escapeHtml(focus) +
+            "</strong> — workshop-tested shortlist (workshop count TBD).</li>",
+          "<li><strong>Value / feasibility</strong> for the above — directional economics where data exists; else <strong>TBD</strong>.</li>",
+          "<li><strong>Implications</strong> (capabilities, operating model) for delivering on <strong>" +
+            escapeHtml(focus) +
+            "</strong> — depth TBD.</li>",
+          "<li><strong>Roadmap &amp; next steps</strong> after " +
+            escapeHtml(String(weeks)) +
+            " wk cadence — owners &amp; timing <strong>TBD</strong>.</li>",
+          "<li><strong>Workshop outputs and decision log</strong> — dates to be agreed.</li>"
+        ];
+        return lines.join("");
+      }
+
+      var lastFlashAt = 0;
+      function flashPreviewPages(force) {
+        var now = Date.now();
+        if (!force && now - lastFlashAt < 1800) return;
+        lastFlashAt = now;
+        var pages = document.querySelectorAll("#rail .page");
+        pages.forEach(function (p) {
+          p.classList.remove("preview-updated");
+        });
+        void document.body.offsetWidth;
+        pages.forEach(function (p) {
+          p.classList.add("preview-updated");
+        });
+        setTimeout(function () {
+          pages.forEach(function (p) {
+            p.classList.remove("preview-updated");
+          });
+        }, 600);
+      }
+
+      function readCadence(weeks) {
+        var cadence = parseInt($("steercoEveryWeeks").value, 10);
+        if (isNaN(cadence) || cadence < 1) cadence = 2;
+        var first = parseInt($("firstSteercoWeek").value, 10);
+        if (isNaN(first) || first < 1) first = 2;
+        first = Math.min(first, weeks);
+        return {
+          cadence: cadence,
+          firstSteerco: first,
+          soft: $("softStartWeek1").checked
+        };
+      }
+
+      function nl2br(s) {
+        return escapeHtml(s).replace(/\n/g, "<br />");
+      }
+
+      /** Split project scope text into objective lines (newlines → bullets; else ; or sentence splits). */
+      function parseScopeIntoObjectiveParts(scope) {
+        var raw = (scope || "").trim();
+        if (!raw) return [];
+        var lines = raw.split(/\r?\n/).map(function (x) { return x.trim(); }).filter(Boolean);
+        if (lines.length > 1) return lines.slice(0, 12);
+        var semi = raw.split(/\s*;\s*/).map(function (x) { return x.trim(); }).filter(Boolean);
+        if (semi.length > 1) return semi.slice(0, 12);
+        var chunks = raw.split(/\.\s+/).map(function (x) { return x.trim(); }).filter(Boolean);
+        if (chunks.length > 1) {
+          return chunks
+            .map(function (c) {
+              return /[.!?]$/.test(c) ? c : c + ".";
+            })
+            .slice(0, 12);
+        }
+        return [raw];
+      }
+
+      var OBJECTIVE_BUCKET_TITLES = [
+        "Program outcomes & sponsor intent",
+        "Decisions, design, and recommendation depth",
+        "Stakeholders, data, and dependencies",
+        "Success metrics, timing, and governance"
+      ];
+
+      /** Map scope fragments to four MECE-style objective buckets; overflow becomes an extra card. */
+      function buildObjectiveBucketsHtml(scopeParts) {
+        var parts = scopeParts.slice();
+        var nB = OBJECTIVE_BUCKET_TITLES.length;
+        var extras = [];
+        if (parts.length > nB) {
+          extras = parts.slice(nB);
+          parts = parts.slice(0, nB);
+        }
+        while (parts.length < nB) {
+          parts.push("");
+        }
+        var cards = [];
+        var i;
+        var hasAnyScope = scopeParts.length > 0;
+        for (i = 0; i < nB; i++) {
+          var title = OBJECTIVE_BUCKET_TITLES[i];
+          var text = (parts[i] || "").trim();
+          var inner;
+          if (text) {
+            inner = "<p class=\"context-obj-card-body\">" + escapeHtml(text) + "</p>";
+          } else if (hasAnyScope) {
+            inner =
+              "<p class=\"context-obj-card-body context-obj-tbd\">Add a scope line or bullet in the dashboard if this bucket should carry explicit text</p>";
+          } else {
+            inner =
+              "<p class=\"context-obj-card-body context-obj-tbd\">Anchored when project scope is captured in intake</p>";
+          }
+          cards.push(
+            "<div class=\"context-obj-card\"><p class=\"context-obj-card-title\">" +
+              escapeHtml(title) +
+              "</p>" +
+              inner +
+              "</div>"
+          );
+        }
+        var html = cards.join("");
+        if (extras.length) {
+          html +=
+            "<div class=\"context-obj-card\"><p class=\"context-obj-card-title\">Additional scope elements</p><ul class=\"context-obj-card-extra\">" +
+            extras.map(function (x) {
+              return "<li>" + escapeHtml(x) + "</li>";
+            }).join("") +
+            "</ul></div>";
+        }
+        return html;
+      }
+
+      function buildContextColumnDashboardHtml(client, topic, framing, notes, relatedDocs) {
+        var c = client || "—";
+        var t = topic || "—";
+        var fr = (framing || "").trim();
+        var nt = (notes || "").trim();
+        var rd = (relatedDocs || "").trim();
+        var docLines = rd
+          ? rd.split(/\r?\n/).map(function (x) { return x.trim(); }).filter(Boolean)
+          : [];
+        var docHtml = docLines.length
+          ? "<ul class=\"context-obj-file-list\">" +
+            docLines.map(function (line) {
+              return "<li>" + escapeHtml(line) + "</li>";
+            }).join("") +
+            "</ul>"
+          : "";
+        var fileItems = (uploadedContextFiles || []).map(function (f) {
+          var suffix = f.note ? " (" + f.note + ")" : f.textContent ? " (text extracted)" : "";
+          return f.fileName + suffix;
+        });
+        var fileHtml = fileItems.length
+          ? "<ul class=\"context-obj-file-list\">" +
+            fileItems.map(function (line) {
+              return "<li>" + escapeHtml(line) + "</li>";
+            }).join("") +
+            "</ul>"
+          : "";
+        var hasRef = docLines.length || fileItems.length;
+        var chunks = [];
+        chunks.push('<span class="context-obj-kicker">Context</span>');
+        chunks.push('<div class="context-obj-block"><p class="context-obj-block-title">Dashboard intake</p>');
+        chunks.push('<dl class="context-obj-dl">');
+        chunks.push("<dt>Client</dt><dd>" + escapeHtml(c) + "</dd>");
+        chunks.push("<dt>Topic</dt><dd>" + escapeHtml(t) + "</dd>");
+        chunks.push("</dl></div>");
+        if (fr) {
+          chunks.push('<div class="context-obj-block"><p class="context-obj-block-title">Title / framing (optional)</p>');
+          chunks.push('<p class="context-obj-block-body">' + nl2br(fr) + "</p></div>");
+        }
+        if (nt) {
+          chunks.push('<div class="context-obj-block"><p class="context-obj-block-title">Program notes</p>');
+          chunks.push('<p class="context-obj-block-body">' + nl2br(nt) + "</p></div>");
+        }
+        chunks.push('<div class="context-obj-block"><p class="context-obj-block-title">Reference materials</p>');
+        if (!hasRef) {
+          chunks.push(
+            '<p class="context-obj-block-body context-obj-tbd">No paths or uploads yet — add under Extra paths or Context documents</p>'
+          );
+        } else {
+          if (docLines.length) {
+            chunks.push('<p class="context-obj-block-body" style="font-size:0.65rem;margin:0 0 0.2rem">Paths / notes</p>');
+            chunks.push(docHtml);
+          }
+          if (fileItems.length) {
+            chunks.push(
+              '<p class="context-obj-block-body" style="font-size:0.65rem;margin:0.25rem 0 0.2rem">Uploaded files</p>'
+            );
+            chunks.push(fileHtml);
+          }
+        }
+        chunks.push("</div>");
+        return chunks.join("");
+      }
+
+      function buildContextObjectivesSlideHtml(client, topic, scope, notes, relatedDocs, framing) {
+        var scopeParts = parseScopeIntoObjectiveParts(scope);
+        var left = buildContextColumnDashboardHtml(client, topic, framing, notes, relatedDocs);
+        var rightIntro =
+          scopeParts.length === 0
+            ? '<p class="context-obj-block-body context-obj-tbd" style="margin:0 0 0.35rem">Enter <strong>Project scope</strong> in the dashboard to map lines into the objective buckets on the right</p>'
+            : '<p class="context-obj-block-body" style="margin:0 0 0.35rem;font-size:0.72rem">Each scope line or sentence maps in order into the buckets below (overflow rolls to Additional scope elements)</p>';
+        var right =
+          '<span class="context-obj-kicker">Objectives</span>' +
+          '<div class="context-obj-block"><p class="context-obj-block-title">Logical elements from project scope</p>' +
+          rightIntro +
+          buildObjectiveBucketsHtml(scopeParts) +
+          "</div>";
+        return (
+          '<div class="context-obj-wrap"><div class="context-obj-grid">' +
+          '<div class="context-obj-col">' +
+          left +
+          '</div><div class="context-obj-col context-obj-col--right">' +
+          right +
+          '</div></div><p class="context-slide-source">Source: Dashboard intake; Team analysis</p></div>'
+        );
+      }
+
+      function fillLopChapterSlides(client, topic, scope, notes, weeks, team, relatedDocs) {
+        var c = client || "The client";
+        var t = topic || "this engagement";
+        var slideNotes = $("gateAProblemDraft").value.trim();
+        var whyNotes = $("whyMcKinseyNotes").value.trim();
+        var approachNotes = $("approachOutlineNotes").value.trim();
+        var cad = readCadence(weeks);
+
+        $("titleSlideHeadline").textContent = topic || "Strategic engagement proposal";
+        $("titleSlideClient").textContent = client || "Client organization";
+        var tagLines = slideNotes.split(/\r?\n/).filter(function (x) { return x.trim(); });
+        var tagEl = $("titleSlideTagline");
+        if (tagLines.length) {
+          var tg = tagLines[0];
+          tagEl.textContent = tg.length > 160 ? tg.slice(0, 157) + "…" : tg;
+          tagEl.style.display = "";
+        } else {
+          tagEl.textContent = "";
+          tagEl.style.display = "none";
+        }
+        var lead = scope.trim();
+        var leadEl = $("titleSlideLead");
+        if (lead) {
+          leadEl.textContent = lead.length > 220 ? lead.slice(0, 217) + "…" : lead;
+          leadEl.style.display = "";
+        } else {
+          leadEl.textContent = "";
+          leadEl.style.display = "none";
+        }
+        $("titleSlideDuration").textContent = durationLabel(weeks);
+        $("titleSlideTeam").textContent = team || "To be confirmed";
+        $("titleSlideDate").textContent = new Date().toLocaleDateString(undefined, {
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        });
+        var divEl = document.querySelector("#page-title .title-slide-divider");
+        if (divEl) {
+          divEl.style.display = tagLines.length || scope.trim().length ? "" : "none";
+        }
+
+        $("contextActionTitle").textContent = scope
+          ? c + " grounds objectives in dashboard intake and the stated project scope"
+          : "Context and objectives populate once intake fields and project scope are complete";
+        $("contextBody").innerHTML = buildContextObjectivesSlideHtml(
+          client,
+          topic,
+          scope,
+          notes,
+          relatedDocs,
+          slideNotes
+        );
+
+        if (whyNotes) {
+          $("whyActionTitle").textContent = "McKinsey differentiates when proof points are sourced and specific";
+          $("whyBody").innerHTML =
+            "<ul>" +
+            whyNotes
+              .split(/\n/)
+              .filter(function (line) {
+                return line.trim();
+              })
+              .map(function (line) {
+                return "<li>" + escapeHtml(line) + "</li>";
+              })
+              .join("") +
+            "</ul>";
+        } else {
+          $("whyActionTitle").textContent = "Win themes and proof points to be finalized with leadership";
+          $("whyBody").innerHTML =
+            "<p>Evidence-backed win themes will be developed with leadership and kept specific to this client and engagement.</p>";
+        }
+
+        $("timelineActionTitle").textContent = team
+          ? "A " + team + " team shapes a " + weeks + "-week cadence with steering every " + cad.cadence + " week(s)"
+          : weeks + "-week cadence with steering every " + cad.cadence + " week(s) — team size still to be set";
+        $("timelineBody").innerHTML =
+          "<ul><li><strong>Duration:</strong> " +
+          weeks +
+          " weeks shown as columns.</li><li><strong>Soft start week 1:</strong> " +
+          (cad.soft ? "Yes" : "No") +
+          ".</li><li><strong>Steering:</strong> first session in week " +
+          cad.firstSteerco +
+          ", then every " +
+          cad.cadence +
+          " week(s).</li><li><strong>Team scale:</strong> " +
+          escapeHtml(team || "TBD") +
+          ".</li></ul>";
+
+        $("teamActionTitle").textContent = "Named roles follow the agreed CV package";
+        $("teamBody").innerHTML =
+          "<ul><li><strong>Team scale:</strong> " +
+          escapeHtml(team || "TBD") +
+          ".</li><li>Shortlist names and bios from the approved CV list.</li><li>Align workshop roster with program notes.</li></ul>";
+
+        $("credActionTitle").textContent = "Credentials must map to approved case references for " + c;
+        $("credBody").innerHTML =
+          "<p>Select engagements from the approved credentials set. Do not infer case facts from the client name alone.</p>";
+
+        $("marketActionTitle").textContent = "Market view will cite approved external and licensed sources";
+        $("marketBody").innerHTML =
+          "<p>Market insights will carry citations for every statistic, with external context kept separate from confidential client facts.</p>";
+
+        if (approachNotes) {
+          $("approachActionTitle").textContent = "Approach outline reflects current notes pending scope lock";
+          $("approachBody").innerHTML =
+            "<ul>" +
+            approachNotes
+              .split(/\n/)
+              .filter(function (ln) {
+                return ln.trim();
+              })
+              .map(function (ln) {
+                return "<li>" + escapeHtml(ln) + "</li>";
+              })
+              .join("") +
+            "</ul>";
+        } else {
+          $("approachActionTitle").textContent = "Approach stays outline plus questions until scope is approved";
+          $("approachBody").innerHTML =
+            "<ul><li>Steering and workshop rhythm shapes <strong>client moments</strong> in the workplan.</li><li>Hypotheses and workstreams deepen once scope is locked.</li></ul>";
+        }
+
+        $("feesActionTitle").textContent = "Commercial terms to be confirmed when pricing is agreed";
+        $("feesBody").innerHTML =
+          "<p><strong>No rates on this slide.</strong> Commercial numbers appear only when explicitly agreed and sourced.</p>";
+      }
+
+      function milestoneLabelForWeek(weekNum, weeks, opts) {
+        var parts = [];
+        if (opts.soft && weekNum === 1) {
+          parts.push("Soft start (mobilize, data, interviews)");
+        }
+        if (weekNum >= opts.firstSteerco && opts.cadence >= 1) {
+          if ((weekNum - opts.firstSteerco) % opts.cadence === 0) {
+            parts.push("Steering / workshop");
+          }
+        }
+        if (weekNum === weeks) {
+          parts.push("Program close / readout");
+        }
+        return parts.length ? parts.join(" · ") : "—";
+      }
+
+      function renderWeeklyTable(weeks) {
+        var thead = $("weeklyThead");
+        var tbody = $("weeklyTbody");
+        var trh = document.createElement("tr");
+        var th0 = document.createElement("th");
+        th0.setAttribute("scope", "col");
+        th0.textContent = "Workstream / milestone";
+        trh.appendChild(th0);
+        for (var w = 1; w <= weeks; w++) {
+          var th = document.createElement("th");
+          th.setAttribute("scope", "col");
+          th.textContent = "Week " + w;
+          trh.appendChild(th);
+        }
+        thead.innerHTML = "";
+        thead.appendChild(trh);
+
+        var opts = readCadence(weeks);
+        tbody.innerHTML = "";
+
+        var trM = document.createElement("tr");
+        trM.className = "milestone-row";
+        var thM = document.createElement("th");
+        thM.setAttribute("scope", "row");
+        thM.textContent = "Milestones";
+        trM.appendChild(thM);
+        for (var mw = 1; mw <= weeks; mw++) {
+          var tdM = document.createElement("td");
+          tdM.textContent = milestoneLabelForWeek(mw, weeks, opts);
+          trM.appendChild(tdM);
+        }
+        tbody.appendChild(trM);
+
+        var useIllustrative = weeks === 6 && W6_BULLETS.length === WS_ROWS.length;
+        for (var r = 0; r < WS_ROWS.length; r++) {
+          var tr = document.createElement("tr");
+          var thR = document.createElement("th");
+          thR.setAttribute("scope", "row");
+          thR.textContent = WS_ROWS[r].short;
+          tr.appendChild(thR);
+          for (var c = 0; c < weeks; c++) {
+            var td = document.createElement("td");
+            if (useIllustrative && W6_BULLETS[r] && W6_BULLETS[r][c]) {
+              td.innerHTML = bulletsToUl(W6_BULLETS[r][c]);
+            } else {
+              td.innerHTML = "<ul><li>TBD</li></ul>";
+            }
+            tr.appendChild(td);
+          }
+          tbody.appendChild(tr);
+        }
+
+        $("weeklyTagline").textContent =
+          "Milestone row reflects soft start and steering every " +
+          opts.cadence +
+          " week(s) from week " +
+          opts.firstSteerco +
+          " · " +
+          weeks +
+          " week columns" +
+          (useIllustrative ? " · example week content for a six-week program" : "");
+      }
+
+      function applyPreview() {
+        var client = $("clientName").value.trim();
+        var topic = $("topic").value.trim();
+        var scope = $("scope").value.trim();
+        var team = $("teamSize").value.trim();
+        var notes = $("otherNotes").value.trim();
+        var relatedDocs = $("relatedContextDocuments").value.trim();
+        var weeks = computeWeeks();
+
+        $("deliverablesPageTitle").textContent =
+          "End-deliverables — " + (client || "Client TBD");
+        $("workstreamsPageTitle").textContent =
+          "Workstreams — " + (topic || client || "TBD");
+        $("weeklyPageTitle").textContent =
+          "Week-by-week — " + String(weeks) + " week plan";
+
+        $("deliverablesScopeLine").textContent = scope
+          ? "Opening bullets reflect scope and program notes; following bullets align to client, topic, and the " + weeks + "-week cadence."
+          : "Project scope will populate the opening deliverable bullets once provided.";
+
+        $("deliverablesList").innerHTML = buildDeliverablesListHtml(client, topic, scope, notes, weeks);
+        fillLopChapterSlides(client, topic, scope, notes, weeks, team, relatedDocs);
+
+        $("workstreamsSubtitle").textContent =
+          "Four substantive streams (~25/35/20/20% illustrative split); prep and readout sit inside weeks and stream four — names and percentages to confirm with leadership.";
+
+        renderWeeklyTable(weeks);
+
+        var cad2 = readCadence(weeks);
+        $("weeklyLegend").innerHTML =
+          "<strong>Legend:</strong> Milestone row shows soft start and steering every " +
+          cad2.cadence +
+          " week(s) from week " +
+          cad2.firstSteerco +
+          ". Workshops, data sources, and owners to be confirmed as the plan firms up.";
+
+        var now = new Date();
+        $("previewStatus").textContent =
+          "Preview updated " +
+          now.toLocaleTimeString() +
+          " · " +
+          weeks +
+          " week" +
+          (weeks === 1 ? "" : "s");
+
+        flashPreviewPages(false);
+      }
+
+      function saveForm() {
+        try {
+          var data = {
+            clientName: $("clientName").value,
+            topic: $("topic").value,
+            scope: $("scope").value,
+            durationValue: $("durationValue").value,
+            durationUnit: $("durationUnit").value,
+            teamSize: $("teamSize").value,
+            otherNotes: $("otherNotes").value,
+            softStartWeek1: $("softStartWeek1").checked,
+            steercoEveryWeeks: parseInt($("steercoEveryWeeks").value, 10) || 2,
+            firstSteercoWeek: parseInt($("firstSteercoWeek").value, 10) || 2,
+            relatedContextDocuments: $("relatedContextDocuments").value,
+            gateAProblemDraft: $("gateAProblemDraft").value,
+            whyMcKinseyNotes: $("whyMcKinseyNotes").value,
+            approachOutlineNotes: $("approachOutlineNotes").value
+          };
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        } catch (e) { /* ignore */ }
+      }
+
+      function loadForm() {
+        try {
+          var raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return;
+          var data = JSON.parse(raw);
+          if (data.clientName != null) $("clientName").value = data.clientName;
+          if (data.topic != null) $("topic").value = data.topic;
+          if (data.scope != null) $("scope").value = data.scope;
+          if (data.durationValue != null) $("durationValue").value = data.durationValue;
+          if (data.durationUnit != null) $("durationUnit").value = data.durationUnit;
+          if (data.teamSize != null) $("teamSize").value = data.teamSize;
+          if (data.otherNotes != null) $("otherNotes").value = data.otherNotes;
+          if (data.softStartWeek1 != null) $("softStartWeek1").checked = !!data.softStartWeek1;
+          if (data.steercoEveryWeeks != null) $("steercoEveryWeeks").value = String(data.steercoEveryWeeks);
+          if (data.firstSteercoWeek != null) $("firstSteercoWeek").value = String(data.firstSteercoWeek);
+          if (data.relatedContextDocuments != null) $("relatedContextDocuments").value = data.relatedContextDocuments;
+          if (data.gateAProblemDraft != null) $("gateAProblemDraft").value = data.gateAProblemDraft;
+          if (data.whyMcKinseyNotes != null) $("whyMcKinseyNotes").value = data.whyMcKinseyNotes;
+          if (data.approachOutlineNotes != null) $("approachOutlineNotes").value = data.approachOutlineNotes;
+        } catch (e) { /* ignore */ }
+      }
+
+      var debounceTimer;
+      function scheduleApply() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(function () {
+          applyPreview();
+          saveForm();
+        }, 200);
+      }
+
+      function scrollRailPage(delta) {
+        var rail = $("rail");
+        var pages = rail.querySelectorAll(".page");
+        if (!pages.length) return;
+        var step = pages[0].getBoundingClientRect().width + 16;
+        rail.scrollBy({ left: delta * step, behavior: "smooth" });
+      }
+
+      ["clientName", "topic", "scope", "durationValue", "durationUnit", "teamSize", "otherNotes", "relatedContextDocuments", "gateAProblemDraft", "whyMcKinseyNotes", "approachOutlineNotes", "steercoEveryWeeks", "firstSteercoWeek"].forEach(function (id) {
+        var el = $(id);
+        el.addEventListener("input", scheduleApply);
+        el.addEventListener("change", scheduleApply);
+      });
+      $("softStartWeek1").addEventListener("change", scheduleApply);
+
+      $("btnRefresh").addEventListener("click", function () {
+        applyPreview();
+        saveForm();
+        flashPreviewPages(true);
+      });
+
+      $("btnClearStorage").addEventListener("click", function () {
+        try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
+        ["clientName", "topic", "scope", "teamSize", "otherNotes", "relatedContextDocuments", "gateAProblemDraft", "whyMcKinseyNotes", "approachOutlineNotes"].forEach(function (id) { $(id).value = ""; });
+        $("durationValue").value = "6";
+        $("durationUnit").value = "weeks";
+        $("steercoEveryWeeks").value = "2";
+        $("firstSteercoWeek").value = "2";
+        $("softStartWeek1").checked = true;
+        uploadedContextFiles = [];
+        if ($("contextFiles")) $("contextFiles").value = "";
+        renderUploadedFileList();
+        applyPreview();
+      });
+
+      function buildIntakePayload() {
+        var raw = parseInt($("durationValue").value, 10);
+        if (isNaN(raw) || raw < 1) raw = 1;
+        return {
+          schemaVersion: 1,
+          source: "workplan-dashboard",
+          exportedAt: new Date().toISOString(),
+          intake: {
+            clientName: $("clientName").value.trim(),
+            topic: $("topic").value.trim(),
+            scope: $("scope").value.trim(),
+            durationValue: raw,
+            durationUnit: $("durationUnit").value,
+            durationWeeks: computeWeeks(),
+            teamSize: $("teamSize").value.trim(),
+            otherNotes: $("otherNotes").value.trim(),
+            relatedContextDocuments: $("relatedContextDocuments").value.trim(),
+            softStartWeek1: $("softStartWeek1").checked,
+            steercoEveryWeeks: parseInt($("steercoEveryWeeks").value, 10) || 2,
+            firstSteercoWeek: parseInt($("firstSteercoWeek").value, 10) || 2,
+            gateAProblemDraft: $("gateAProblemDraft").value.trim(),
+            whyMcKinseyNotes: $("whyMcKinseyNotes").value.trim(),
+            approachOutlineNotes: $("approachOutlineNotes").value.trim(),
+            uploadedContextFiles: uploadedContextFiles.map(function (f) {
+              return {
+                fileName: f.fileName,
+                mimeType: f.mimeType,
+                sizeBytes: f.sizeBytes,
+                textContent: f.textContent,
+                truncated: f.truncated,
+                note: f.note
+              };
+            })
+          }
+        };
+      }
+
+      $("contextFiles").addEventListener("change", function (ev) {
+        var list = ev.target.files;
+        if (!list || !list.length) return;
+        Promise.all(Array.prototype.map.call(list, readOneFile)).then(function (entries) {
+          uploadedContextFiles = uploadedContextFiles.concat(entries);
+          renderUploadedFileList();
+          applyPreview();
+        });
+        ev.target.value = "";
+      });
+
+      $("btnCopyJson").addEventListener("click", function () {
+        var json = JSON.stringify(buildIntakePayload(), null, 2);
+        function ok() {
+          $("previewStatus").textContent = "JSON copied " + new Date().toLocaleTimeString();
+        }
+        function fail() {
+          window.prompt("Copy JSON (Ctrl+C):", json);
+        }
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+          navigator.clipboard.writeText(json).then(ok).catch(fail);
+        } else {
+          fail();
+        }
+      });
+
+      $("rail").addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight") { e.preventDefault(); scrollRailPage(1); }
+        if (e.key === "ArrowLeft") { e.preventDefault(); scrollRailPage(-1); }
+      });
+
+      loadForm();
+      renderUploadedFileList();
+      applyPreview();
+    })();
+  </script>
+</body>
+</html>

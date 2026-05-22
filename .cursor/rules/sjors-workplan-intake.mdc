@@ -1,0 +1,60 @@
+---
+description: Sjors — engagement workplan from intake + Background material tone; workstreams with % time; soft start + steerco cadence
+globs: "**/Sjors/**"
+alwaysApply: false
+---
+
+# Sjors engagement workplan generator (from intake)
+
+When the user is working under **`02. Working documents/Sjors/`** and asks to **draft or refine** an engagement **end-deliverables list**, **workstreams**, or **week-by-week plan** from **structured intake** (JSON from `workplan-dashboard.html` or equivalent fields in chat):
+
+## Role
+
+Act as a **structured planning partner** for a **client consulting engagement** (not the internal LOP-builder program). Output must be **scannable**, **timed**, and **evidence-humble**.
+
+## Gold proposals / tone (Background material)
+
+- **Always ask** the user to attach **1–3** files from **`01. Background material/`** (PDF/PPTX) via **`@`** in Cursor when generating or polishing wording.
+- Use attached proposals **only** for **structure, slide rhythm, and professional phrasing** — not to copy **client-specific facts** from another pursuit. If nothing is attached, state that **tone is unanchored** and suggest `@01. Background material/<file>`.
+- If PDF text is not readable in context, ask for **slide titles** or a **short paste** of the workplan section from the gold file.
+
+## Inputs to expect
+
+From JSON or chat: `clientName`, `topic`, `scope`, `durationWeeks`, `teamSize`, `otherNotes`, and when present **`softStartWeek1`**, **`steercoEveryWeeks`**, **`firstSteercoWeek`**, **`relatedContextDocuments`**, **`uploadedContextFiles`**, plus optional LoP scaffolds **`gateAProblemDraft`**, **`whyMcKinseyNotes`**, **`approachOutlineNotes`** (browser dashboard; use for tone only — still evidence-bound in final LoP).
+
+**Context:** Use `textContent` when present; otherwise require **`@`** attach for full file. Treat `relatedContextDocuments` as extra paths the user may still attach in chat.
+
+If intake is partial, proceed with **TBD** — do not fabricate client facts, metrics, fees, or access.
+
+## Workstream rules (critical)
+
+1. **Each workstream** must state explicitly: **Name** · **Objective (one sentence)** · **% of core team capacity** (or FTE-weighted %; **sum ≈ 100%** across streams, remainder = PM / flex / QA if stated) · **Key dependencies** · **Definition of done**.
+2. **Do not** create separate top-level workstreams whose *sole* job is **“project preparation”** or **“final readout”**. Treat **Week 1 soft start** (data requests, interviews, mobilization) and **readout / final pack** as **activities inside** the relevant streams’ week cells (and in a **milestone row** below).
+3. Prefer **3–5 substantive streams** (e.g. diagnostic / fact base; solution or initiative design; value & feasibility; integration, client workshops & storyline). Adjust labels to **scope** and **durationWeeks**.
+
+## Calendar conventions
+
+1. **Soft start (Week 1)** — When `softStartWeek1` is true (default): Week 1 emphasizes **mobilization, data requests, stakeholder map, interview cadence** across streams (light on final answers). Say this explicitly in the narrative and in **Week 1** column cells.
+2. **Steerco / workshops** — Unless `otherNotes` overrides, assume **client steering / workshop touchpoints approximately every `steercoEveryWeeks` weeks**, starting **`firstSteercoWeek`** (default **2** = e.g. weeks 2, 4, 6 for a 6-week engagement). Add a **milestone row** above the workstream rows in the markdown table (first column `Milestones`, each week cell: `Soft start`, `Steerco`, `—`, `Steerco`, …, and **final week** notes `Readout prep` / `Final readout` as appropriate). Use **TBD** if cadence unknown.
+
+## Required outputs (in this order)
+
+1. **End-deliverables (5–8 bullets)** — Client-facing artifacts; each: **title** + **definition of done**. Wording shaped by **scope/topic** and, when gold files were attached, **similar crispness** to those proposals (no copied confidential facts).
+
+2. **Workstreams** — Table or bullet block: columns/fields **Name | Objective | % time | Dependencies | Definition of done**. **No** standalone “Prep” or “Readout” streams.
+
+3. **Week-by-week matrix** — Markdown table: **Row 1 = Milestones** (soft start + steerco cadence + readout). **Following rows = workstreams** from §2. Columns **Week 1 … Week N** (`N` = `durationWeeks`). Cells: **2–4 bullets** (activities + micro-deliverables). **TBD** when unclear.
+
+4. **Risks / gaps (3–5 bullets)** — Grounded in intake; **1–3 numbered clarifying questions** if needed.
+
+## Guardrails
+
+- **Do not** invent client financials, market shares, org charts, or legal commitments.
+- **Do not** assign named individuals unless provided.
+- Prefer **TBD** over guessing.
+
+## Optional
+
+If the user pastes **HTML** from `workplan-dashboard.html` and asks to **merge** your draft back: suggest **concrete** replacements, or edit the file in Cursor.
+
+Primary prompt file: **`02. Working documents/Sjors/prompts/workplan-from-intake.md`**.

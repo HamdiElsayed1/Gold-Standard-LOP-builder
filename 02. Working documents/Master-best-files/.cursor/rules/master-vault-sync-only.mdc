@@ -1,0 +1,13 @@
+---
+description: Master-best-files — write or sync here only when explicitly asked
+alwaysApply: true
+---
+
+# Master-best-files vault
+
+The **Master-best-files** folder is for team-approved material (prompts, templates, snippets, etc.).
+
+- **Do not** create, copy, move, or save files into **Master-best-files** unless the user **explicitly** asked to put something there (e.g. “sync this to the master folder,” “add the approved version to Master-best-files,” “copy into the vault”).
+- Drafting, iteration, and experiments stay in **personal or project folders** until a clear promote/sync instruction is given.
+
+If unsure, ask once instead of writing to this folder.

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>McKinsey-style LoP — formatting preview</title>
+    <style>
+      :root {
+        --mck-accent1: #061f79;
+        --mck-accent2: #00a9f4;
+        --mck-accent3: #2251ff;
+        --mck-text: #000000;
+        --mck-gray-70: #4d4d4d;
+        --mck-gray-54: #757575;
+        --mck-gray-10: #e6e6e6;
+        --mck-white: #ffffff;
+        --slide-pad: clamp(16px, 3.8vw, 40px);
+        --font-title: Georgia, "Times New Roman", Times, serif;
+        --font-body: Arial, Helvetica, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #d9d9d9;
+        font-family: var(--font-body);
+        color: var(--mck-text);
+        line-height: 1.35;
+      }
+
+      .page {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 24px 16px 48px;
+      }
+
+      .page > h1 {
+        font-family: var(--font-title);
+        font-weight: 700;
+        font-size: 1.25rem;
+        margin: 0 0 8px;
+        color: var(--mck-gray-70);
+      }
+
+      .page > p.lede {
+        margin: 0 0 24px;
+        font-size: 0.875rem;
+        color: var(--mck-gray-54);
+        max-width: 70ch;
+      }
+
+      .deck {
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+      }
+
+      /* 16:9 slide surface */
+      .slide {
+        position: relative;
+        aspect-ratio: 16 / 9;
+        width: 100%;
+        background: var(--mck-white);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+        overflow: hidden;
+        container-type: inline-size;
+      }
+
+      .slide-inner {
+        height: 100%;
+        padding: var(--slide-pad);
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* —— Cover (PDF page 1 structure: notice strip + title cluster) —— */
+      .slide--cover {
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+      }
+
+      .cover-top-strip {
+        flex: 0 0 auto;
+        background: #f2f2f2;
+        border-bottom: 1px solid #d9d9d9;
+        padding: 6px clamp(10px, 2vw, 16px);
+        font-size: clamp(0.45rem, 0.95cqw, 0.55rem);
+        line-height: 1.25;
+        color: var(--mck-gray-70);
+      }
+
+      .cover-grid {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+      }
+
+      .cover-band {
+        background: var(--mck-accent1);
+        color: var(--mck-white);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: var(--slide-pad);
+        min-height: 0;
+      }
+
+      .cover-band h2 {
+        margin: 0 0 0.35em;
+        font-family: var(--font-title);
+        font-weight: 700;
+        font-size: clamp(1.5rem, 4.2cqw, 2.75rem);
+        line-height: 0.95;
+        letter-spacing: -0.01em;
+      }
+
+      .cover-main {
+        padding: var(--slide-pad);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 12px;
+      }
+
+      .cover-kicker {
+        font-size: clamp(0.7rem, 1.6cqw, 0.95rem);
+        color: var(--mck-gray-54);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .cover-title {
+        margin: 0;
+        font-family: var(--font-title);
+        font-weight: 700;
+        font-size: clamp(1.1rem, 2.8cqw, 1.65rem);
+        line-height: 1.15;
+        color: var(--mck-text);
+      }
+
+      .cover-date {
+        margin-top: auto;
+        font-size: clamp(0.65rem, 1.5cqw, 0.875rem);
+        color: var(--mck-gray-70);
+      }
+
+      /* —— Content slide —— */
+      .slide-title {
+        margin: 0 0 0.5em;
+        padding-bottom: 0.28em;
+        border-bottom: 3px solid var(--mck-accent1);
+        font-family: var(--font-title);
+        font-weight: 700;
+        font-size: clamp(1.05rem, 2.5cqw, 1.5625rem);
+        line-height: 0.93;
+        max-width: 95%;
+      }
+
+      .slide-body {
+        flex: 1;
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+        gap: clamp(12px, 2.5cqw, 28px);
+        min-height: 0;
+      }
+
+      @media (max-width: 720px) {
+        .cover-grid {
+          grid-template-columns: 1fr;
+          grid-template-rows: auto 1fr;
+        }
+        .cover-band {
+          min-height: 28%;
+        }
+        .slide-body {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .bullets {
+        margin: 0;
+        padding-left: 1.1em;
+        font-size: clamp(0.8rem, 1.55cqw, 1rem);
+        line-height: 1.2;
+      }
+
+      .bullets > li {
+        margin-bottom: 0.55em;
+      }
+
+      .bullets ul {
+        margin: 0.4em 0 0;
+        padding-left: 1.15em;
+        list-style-type: disc;
+      }
+
+      .pull-quote {
+        background: var(--mck-gray-10);
+        border-left: 4px solid var(--mck-accent1);
+        padding: 12px 14px 12px 16px;
+        font-size: clamp(0.78rem, 1.35cqw, 0.95rem);
+        color: var(--mck-text);
+      }
+
+      .pull-quote q {
+        display: block;
+        font-style: italic;
+        quotes: "“" "”" "‘" "’";
+        margin-bottom: 0.5em;
+      }
+
+      .pull-quote cite {
+        display: block;
+        font-style: normal;
+        font-size: 0.85em;
+        color: var(--mck-gray-70);
+      }
+
+      .source {
+        margin-top: 10px;
+        font-size: clamp(0.55rem, 1.1cqw, 0.625rem);
+        color: var(--mck-gray-70);
+        line-height: 1.25;
+      }
+
+      .footer {
+        position: absolute;
+        left: var(--slide-pad);
+        right: var(--slide-pad);
+        bottom: calc(var(--slide-pad) * 0.65);
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+        font-size: clamp(0.5rem, 1cqw, 0.5625rem);
+        color: var(--mck-text);
+      }
+
+      .footer-foot {
+        flex: 1 1 auto;
+        min-width: 0;
+        color: var(--mck-gray-70);
+      }
+
+      .footer-brand {
+        flex: 0 0 auto;
+        font-weight: 400;
+        white-space: nowrap;
+      }
+
+      .footer-page {
+        flex: 0 0 auto;
+        font-weight: 400;
+        color: var(--mck-gray-70);
+      }
+
+      .tag {
+        display: inline-block;
+        margin-bottom: 12px;
+        padding: 3px 8px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--mck-white);
+        background: var(--mck-accent2);
+      }
+    </style>
+  
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:_dlc_DocId msdt:dt="string">DE7XN4DZS357-1263605440-18452</mso:_dlc_DocId>
+<mso:_dlc_DocIdItemGuid msdt:dt="string">9c84ea3f-6d60-42ab-98ac-b682e86fd0f0</mso:_dlc_DocIdItemGuid>
+<mso:_dlc_DocIdUrl msdt:dt="string">https://mckinsey.sharepoint.com/sites/spt-int-6jj6kewnj5r70j/_layouts/15/DocIdRedir.aspx?ID=DE7XN4DZS357-1263605440-18452, DE7XN4DZS357-1263605440-18452</mso:_dlc_DocIdUrl>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+  <body>
+    <div class="page">
+      <h1>McKinsey-style LoP — formatting preview</h1>
+      <p class="lede">
+        <strong>PDF-first:</strong> spacing and fonts are tuned to match the
+        export
+        <code>928635 Gold Standard … GEM LOP Guide.pdf</code> (960×540&nbsp;pt,
+        embedded <strong>Georgia-Bold</strong> + <strong>Arial</strong> +
+        <strong>Wingdings</strong>). Hex colors still come from the source
+        <code>.pptx</code> theme. Not an official template — pair with
+        <code>mckinsey-lop-formatting-spec.md</code>.
+      </p>
+
+      <div class="deck">
+        <article class="slide slide--cover" aria-label="Cover slide preview">
+          <div class="cover-top-strip">
+            <strong>Placeholder only.</strong> The real PDF opens with a
+            confidential / proprietary notice — copy wording from your
+            pursuit-approved source (e.g. PDF page&nbsp;1 of the GEM guide), not
+            from this HTML.
+          </div>
+          <div class="cover-grid">
+            <div class="cover-band">
+              <h2>Discussion document</h2>
+            </div>
+            <div class="cover-main">
+              <span class="cover-kicker">Letter of proposal</span>
+              <p class="cover-title">
+                Asset-enabled IDP — illustrative title for HTML export
+              </p>
+              <p class="cover-date">May 2026</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="slide" aria-label="Content slide preview">
+          <div class="slide-inner">
+            <span class="tag">Setting the stage</span>
+            <h2 class="slide-title">
+              1. Market context headline in Georgia 25pt equivalent
+            </h2>
+            <div class="slide-body">
+              <div>
+                <ul class="bullets">
+                  <li>
+                    First-level body in Arial 16pt equivalent — short,
+                    scannable bullets with firm spacing.
+                  </li>
+                  <li>
+                    Second-level bullets nest visually; in PPT, level-2 uses
+                    Wingdings marker (web uses disc for simplicity).
+                    <ul>
+                      <li>Nested point supporting the parent claim.</li>
+                    </ul>
+                  </li>
+                  <li>
+                    Keep one idea per bullet; prefer outcomes over process.
+                  </li>
+                </ul>
+                <p class="source">
+                  Source: McKinsey Value Intelligence database; illustrative
+                  footnote at ~8pt equivalent, gray #4D4D4D.
+                </p>
+              </div>
+              <aside class="pull-quote" aria-label="Pull quote">
+                <q
+                  >Sales motions haven’t changed, but there’s more pressure than
+                  ever to get three things right: talent, process rigor, and
+                  tech.</q
+                >
+                <cite>Former CCO, F10 tech company</cite>
+              </aside>
+            </div>
+            <div class="footer">
+              <span class="footer-page" aria-hidden="true">7</span>
+              <span class="footer-foot"
+                >Footnote / source row — mirror PDF placement; use approved
+                boilerplate only.</span
+              >
+              <span class="footer-brand">McKinsey &amp; Company</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </body>
+</html>

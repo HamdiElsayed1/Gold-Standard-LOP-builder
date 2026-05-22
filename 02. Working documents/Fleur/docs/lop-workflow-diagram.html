@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LOP Builder — Detailed End-to-End Workflow</title>
+<style>
+/* ── Reset & base ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #eef0f4;
+  color: #1a1a2e;
+  padding: 2rem 1rem 4rem;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.page { max-width: 1060px; margin: 0 auto; }
+
+/* ── Header ────────────────────────────────────────────────────── */
+header {
+  background: linear-gradient(135deg, #1a2744 0%, #0d3b6e 100%);
+  color: #fff;
+  border-radius: 12px;
+  padding: 2rem 2.5rem;
+  margin-bottom: 1.5rem;
+}
+header h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.3px; }
+header p  { margin-top: 0.4rem; font-size: 0.82rem; opacity: 0.72; }
+
+/* ── Legend bar ────────────────────────────────────────────────── */
+.legend-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  background: #fff;
+  border: 1px solid #dde1e7;
+  border-radius: 10px;
+  padding: 0.8rem 1.4rem;
+  margin-bottom: 2rem;
+  align-items: center;
+}
+.legend-bar-title {
+  font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.7px; color: #6c757d; margin-right: 0.25rem;
+}
+.leg { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: #343a40; }
+.leg-icon {
+  font-size: 1rem; width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+}
+.leg-badge {
+  font-size: 0.68rem; font-weight: 700; padding: 2px 8px;
+  border-radius: 20px; letter-spacing: 0.3px;
+}
+.badge-agent  { background: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; }
+.badge-human  { background: #e3f2fd; color: #0d47a1; border: 1px solid #90caf9; }
+.badge-gate   { background: #fff8e1; color: #e65100; border: 1px solid #ffcc80; }
+.badge-tool   { background: #f3e5f5; color: #6a1b9a; border: 1px solid #ce93d8; }
+.badge-source { background: #fce4ec; color: #880e4f; border: 1px solid #f48fb1; }
+
+/* ── Flow container ────────────────────────────────────────────── */
+.flow { display: flex; flex-direction: column; align-items: center; gap: 0; }
+
+/* ── Step card ─────────────────────────────────────────────────── */
+.step-card {
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  border: 1.5px solid #dde1e7;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.step-card:hover { box-shadow: 0 3px 14px rgba(0,0,0,0.1); }
+
+/* left accent per type */
+.card-agent    { border-left: 5px solid #2e7d32; }
+.card-human    { border-left: 5px solid #1565c0; }
+.card-bestprac { border-left: 5px solid #f9a825; border-top: 2px solid #ffe082; }
+
+/* ── Card header ───────────────────────────────────────────────── */
+.card-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.75rem 1.1rem 0.6rem;
+  border-bottom: 1px solid #f0f2f5;
+}
+.card-hd-left { display: flex; align-items: center; gap: 0.6rem; }
+.card-step-icon { font-size: 1.3rem; }
+.card-title {
+  font-size: 0.95rem; font-weight: 700; color: #1a1a2e; letter-spacing: -0.2px;
+}
+.card-subtitle { font-size: 0.72rem; color: #6c757d; margin-top: 1px; }
+
+/* agent header tint */
+.card-agent    .card-hd { background: #f1f8f1; }
+.card-human    .card-hd { background: #f0f6ff; }
+.card-bestprac .card-hd { background: #fffde7; }
+
+/* best practice persistent banner */
+.bp-banner {
+  background: #fff9c4; border: 1.5px solid #f9a825; border-radius: 10px;
+  padding: 0.65rem 1.1rem; margin-bottom: 1.25rem;
+  display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.78rem; color: #5d4037;
+  line-height: 1.5;
+}
+.bp-banner-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
+.bp-banner strong { color: #795548; }
+
+/* step 0 persistent indicator on downstream cards */
+.bp-ref-bar {
+  background: #fffde7; border-top: 1px solid #ffe082;
+  padding: 0.35rem 1.1rem;
+  font-size: 0.68rem; color: #795548;
+  display: flex; align-items: center; gap: 5px;
+}
+
+/* chapter map pill for Step 0 */
+.cp-s0 { background: #fff9c4; color: #795548; border: 1px solid #f9a825; font-weight: 700; }
+
+/* ── Card body grid ────────────────────────────────────────────── */
+.card-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+  gap: 0;
+  border-bottom: 1px solid #f0f2f5;
+}
+.card-col {
+  padding: 0.8rem 1rem;
+  border-right: 1px solid #f0f2f5;
+}
+.card-col:last-child { border-right: none; }
+
+.col-label {
+  font-size: 0.64rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.7px; color: #9e9e9e; margin-bottom: 0.4rem;
+  display: flex; align-items: center; gap: 4px;
+}
+.col-label-icon { font-size: 0.85rem; }
+
+/* source tags */
+.tag-list { display: flex; flex-direction: column; gap: 4px; }
+.tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 0.71rem; padding: 2px 7px; border-radius: 4px;
+  width: fit-content;
+}
+.tag-doc   { background: #fce4ec; color: #880e4f; border: 1px solid #f48fb1; }
+.tag-web   { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+.tag-kb    { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+.tag-voice { background: #f3e5f5; color: #6a1b9a; border: 1px solid #ce93d8; }
+.tag-prev  { background: #fff3e0; color: #bf360c; border: 1px solid #ffb74d; }
+.tag-cfg   { background: #f5f5f5; color: #424242; border: 1px solid #bdbdbd; }
+.tag-bp    { background: #fff9c4; color: #795548; border: 2px solid #f9a825; font-weight: 600; }
+
+/* tool tags */
+.tool-list { display: flex; flex-direction: column; gap: 4px; }
+.tool {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 0.71rem; padding: 2px 7px; border-radius: 4px;
+  background: #f3e5f5; color: #6a1b9a; border: 1px solid #ce93d8;
+  width: fit-content;
+}
+.tool-stub {
+  background: #f9f9f9; color: #9e9e9e; border: 1px dashed #bdbdbd;
+}
+
+/* transformation steps */
+.transform-steps { display: flex; flex-direction: column; gap: 5px; }
+.t-step {
+  display: flex; align-items: flex-start; gap: 6px;
+  font-size: 0.75rem; color: #343a40;
+}
+.t-num {
+  min-width: 18px; height: 18px;
+  background: #1a2744; color: #fff;
+  border-radius: 50%; font-size: 0.6rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px; flex-shrink: 0;
+}
+.t-text { line-height: 1.45; }
+.t-highlight { font-weight: 600; color: #1a2744; }
+
+/* ── Card output bar ───────────────────────────────────────────── */
+.card-out {
+  padding: 0.55rem 1.1rem;
+  display: flex; align-items: flex-start; gap: 0.5rem;
+  background: #f8f9fa;
+}
+.out-label {
+  font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.6px; color: #9e9e9e; white-space: nowrap; margin-top: 1px;
+  flex-shrink: 0;
+}
+.out-artifacts {
+  display: flex; flex-wrap: wrap; gap: 5px;
+}
+.artifact {
+  font-size: 0.72rem; padding: 2px 9px; border-radius: 20px;
+  background: #e8eaf6; color: #283593; border: 1px solid #9fa8da;
+  font-weight: 500;
+}
+.artifact-green {
+  background: #e8f5e9; color: #1b5e20; border-color: #a5d6a7;
+}
+
+/* ── Gate card ─────────────────────────────────────────────────── */
+.gate-card {
+  width: 82%;
+  background: #fffde7;
+  border: 2px solid #f9a825;
+  border-radius: 12px;
+  box-shadow: 0 1px 6px rgba(249,168,37,0.2);
+  overflow: hidden;
+}
+.gate-hd {
+  background: #fff8e1;
+  padding: 0.7rem 1.2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid #ffe082;
+}
+.gate-title { font-size: 0.92rem; font-weight: 700; color: #bf360c; }
+.gate-body { padding: 0.75rem 1.2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.gate-section-label {
+  font-size: 0.63rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.6px; color: #9e9e9e; margin-bottom: 0.3rem;
+  display: flex; align-items: center; gap: 4px;
+}
+.gate-text { font-size: 0.76rem; color: #424242; line-height: 1.5; }
+.gate-actions { display: flex; flex-direction: column; gap: 5px; }
+.gate-action {
+  display: flex; align-items: flex-start; gap: 6px;
+  font-size: 0.74rem; line-height: 1.4;
+}
+.gate-action-pill {
+  font-size: 0.65rem; font-weight: 700; padding: 1px 7px; border-radius: 20px;
+  white-space: nowrap; margin-top: 1px; flex-shrink: 0;
+}
+.pill-approve { background: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; }
+.pill-revise  { background: #fff3e0; color: #e65100; border: 1px solid #ffb74d; }
+.pill-accept  { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+
+/* ── Connector arrow ───────────────────────────────────────────── */
+.connector {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0; height: 36px; position: relative;
+}
+.connector-line {
+  width: 2px; flex: 1; background: #90a4ae;
+}
+.connector-arrow {
+  width: 0; height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 9px solid #90a4ae;
+}
+.connector-label {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  left: calc(50% + 10px);
+  font-size: 0.66rem; color: #78909c; white-space: nowrap;
+  background: #eef0f4; padding: 1px 5px; border-radius: 3px;
+}
+
+/* ── Chapter map section ───────────────────────────────────────── */
+.chap-section { margin-bottom: 2rem; }
+.section-hd {
+  font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.8px; color: #6c757d; margin-bottom: 0.7rem; padding-left: 2px;
+}
+.chap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 0.65rem;
+}
+.ch {
+  background: #fff; border: 1.5px solid #e0e0e0;
+  border-radius: 8px; padding: 0.65rem 0.9rem 0.65rem 1rem;
+  position: relative;
+}
+.ch::before {
+  content: ""; position: absolute;
+  left: 0; top: 6px; bottom: 6px; width: 4px; border-radius: 2px;
+}
+.ch-client::before  { background: #00897b; }
+.ch-mckinsey::before{ background: #1565c0; }
+.ch-delivery::before{ background: #c2185b; }
+.ch-team::before    { background: #6a1b9a; }
+.ch-support::before { background: #ef6c00; }
+
+.ch-name { font-size: 0.8rem; font-weight: 600; color: #1a1a2e; margin-bottom: 0.25rem; }
+.ch-desc { font-size: 0.7rem; color: #6c757d; margin-bottom: 0.35rem; line-height: 1.35; }
+.ch-pills { display: flex; flex-wrap: wrap; gap: 3px; }
+.ch-pill {
+  font-size: 0.62rem; font-weight: 600; padding: 1px 5px;
+  border-radius: 10px; white-space: nowrap;
+}
+.cp-s1 { background: #fce4ec; color: #880e4f; border: 1px solid #f48fb1; }
+.cp-s2 { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+.cp-s3 { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+.cp-s4 { background: #fce4ec; color: #ad1457; border: 1px solid #e91e63; }
+.cp-s6 { background: #fff8e1; color: #e65100; border: 1px solid #ffcc80; }
+.ch-grp {
+  grid-column: 1 / -1; font-size: 0.67rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.6px; padding: 0.15rem 0;
+  margin-top: 0.3rem;
+}
+.grp-client   { color: #00695c; }
+.grp-mckinsey { color: #1565c0; }
+.grp-delivery { color: #ad1457; }
+.grp-team     { color: #6a1b9a; }
+.grp-support  { color: #e65100; }
+
+/* ── Misc ──────────────────────────────────────────────────────── */
+footer {
+  margin-top: 2.5rem; font-size: 0.7rem;
+  color: #b0bec5; text-align: center;
+}
+.section-divider {
+  width: 100%; height: 1px; background: #dde1e7; margin: 2rem 0 1.5rem;
+}
+@media (max-width: 700px) {
+  .card-body { grid-template-columns: 1fr; }
+  .gate-body { grid-template-columns: 1fr; }
+  .gate-card { width: 100%; }
+}
+</style>
+
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:_dlc_DocId msdt:dt="string">DE7XN4DZS357-1263605440-18836</mso:_dlc_DocId>
+<mso:_dlc_DocIdItemGuid msdt:dt="string">4e31f9cd-88c8-4cb0-9bb3-e0bb855b20be</mso:_dlc_DocIdItemGuid>
+<mso:_dlc_DocIdUrl msdt:dt="string">https://mckinsey.sharepoint.com/sites/spt-int-6jj6kewnj5r70j/_layouts/15/DocIdRedir.aspx?ID=DE7XN4DZS357-1263605440-18836, DE7XN4DZS357-1263605440-18836</mso:_dlc_DocIdUrl>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+<body>
+<div class="page">
+
+<!-- ── Header ──────────────────────────────────────────────────── -->
+<header>
+  <h1>LOP Builder — Detailed End-to-End Workflow</h1>
+  <p>Step 0 + 10 steps · 3 HITL gates · 11 LOP chapters · Best Practice LOP anchor at every stage · data sources, tools, and transformations</p>
+</header>
+
+<!-- ── Legend ──────────────────────────────────────────────────── -->
+<div class="legend-bar">
+  <span class="legend-bar-title">Legend</span>
+  <span class="leg"><span class="leg-icon">🤖</span><span class="leg-badge badge-agent">AGENTIC</span>System acts autonomously</span>
+  <span class="leg"><span class="leg-icon">👤</span><span class="leg-badge badge-human">HUMAN + SYSTEM</span>Human leads, system supports</span>
+  <span class="leg"><span class="leg-icon">🚦</span><span class="leg-badge badge-gate">HITL GATE</span>Hard block — human decides before flow continues</span>
+  <span class="leg"><span class="leg-icon">🔧</span><span class="leg-badge badge-tool">TOOL</span>Software capability used</span>
+  <span class="leg"><span class="leg-icon">📥</span><span class="leg-badge badge-source">SOURCE</span>Data source or input type</span>
+  <span class="leg"><span class="leg-icon">⭐</span><span class="leg-badge" style="background:#fff9c4;color:#795548;border:1px solid #f9a825;">BEST PRACTICE LOP</span>Practice/industry gold standard document — persistent anchor throughout the workflow</span>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     CHAPTER MAP
+══════════════════════════════════════════════════════════════ -->
+<div class="chap-section">
+  <div class="section-hd">📄 LOP chapter structure — what the workflow is building toward</div>
+
+  <div class="bp-banner">
+    <span class="bp-banner-icon">⭐</span>
+    <div>
+      <strong>Best Practice LOP document (retrieved in Step 0)</strong> — the quality anchor for the entire workflow.
+      Before any intake or research begins, the agent identifies the <strong>industry &amp; practice area</strong> from the RFP
+      and retrieves the matching gold-standard LOP document from the Best Practice Library.
+      This document defines what excellence looks like for each of the 11 chapters below,
+      and is referenced at every stage: gap detection (S1), synthesis framing (S3), structure (S6), drafting (S7), and coaching (S8).
+      These documents already exist; new ones will be created per practice area over time.
+    </div>
+  </div>
+
+  <div class="chap-grid">
+
+    <div class="ch-grp grp-client">Client context &amp; market</div>
+
+    <div class="ch ch-client">
+      <div class="ch-name">Context &amp; Objectives</div>
+      <div class="ch-desc">Client situation, goals, and the problem we are being asked to solve</div>
+      <div class="ch-pills">
+        <span class="ch-pill cp-s0">S0 Best Practice</span>
+        <span class="ch-pill cp-s1">S1 Intake</span>
+        <span class="ch-pill cp-s2">S2 Research</span>
+        <span class="ch-pill cp-s3">S3 Synthesis</span>
+        <span class="ch-pill cp-s4">S4 Partner</span>
+      </div>
+    </div>
+    <div class="ch ch-client">
+      <div class="ch-name">Market Trends</div>
+      <div class="ch-desc">Relevant macro forces, competitive landscape, sector dynamics</div>
+      <div class="ch-pills">
+        <span class="ch-pill cp-s0">S0 Best Practice</span>
+        <span class="ch-pill cp-s2">S2 Research</span>
+      </div>
+    </div>
+
+    <div class="ch-grp grp-mckinsey">McKinsey value proposition</div>
+
+    <div class="ch ch-mckinsey">
+      <div class="ch-name">Why McKinsey</div>
+      <div class="ch-desc">Our unique angle — why we are the right partner for this work</div>
+      <div class="ch-pills">
+        <span class="ch-pill cp-s0">S0 Best Practice</span>
+        <span class="ch-pill cp-s1">S1 Intake</span>
+        <span class="ch-pill cp-s2">S2 Research</span>
+        <span class="ch-pill cp-s4">S4 Partner</span>
+      </div>
+    </div>
+    <div class="ch ch-mckinsey">
+      <div class="ch-name">Prior Examples / Comparable Cases</div>
+      <div class="ch-desc">"Have we done this 100×?" — evidence from McKinsey KB</div>
+      <div class="ch-pills">
+        <span class="ch-pill cp-s2">S2 Research</span>
+      </div>
+    </div>
+    <div class="ch ch-mckinsey">
+      <div class="ch-name">Credentials</div>
+      <div class="ch-desc">Sector expertise, client history, relevant accolades</div>
+      <div class="ch-pills">
+        <span class="ch-pill cp-s1">S1 Intake</span>
+        <span class="ch-pill cp-s2">S2 Research</span>
+      </div>
+    </div>
+
+    <div class="ch-grp grp-delivery">Delivery &amp; commercials</div>
+
+    <div class="ch ch-delivery">
+      <div class="ch-name">Approach</div>
+      <div class="ch-desc">How we will deliver — phases, workstreams, methodology</div>
+      <div class="ch-pills">
+        <span class="ch-pill cp-s0">S0 Best Practice</span>
+        <span class="ch-pill cp-s3">S3 Synthesis</span>
+        <span class="ch-pill cp-s4">S4 Partner</span>
+        <span class="ch-pill cp-s6">S6 Structure</span>
+      </div>
+    </div>
+    <div class="ch ch-delivery">
+      <div class="ch-name">Fees</div>
+      <div class="ch-desc">Commercial structure, rate cards, payment milestones</div>
+      <div class="ch-pills">
+        <span class="ch-pill cp-s1">S1 Intake</span>
+        <span class="ch-pill cp-s4">S4 Partner</span>
+      </div>
+    </div>
+
+    <div class="ch-grp grp-team">Our team</div>
+
+    <div class="ch ch-team">
+      <div class="ch-name">Team</div>
+      <div class="ch-desc">Proposed team structure, roles, availability, time allocation</div>
+      <div class="ch-pills">
+        <span class="ch-pill cp-s1">S1 Intake</span>
+        <span class="ch-pill cp-s4">S4 Partner</span>
+      </div>
+    </div>
+    <div class="ch ch-team">
+      <div class="ch-name">Team CVs</div>
+      <div class="ch-desc">Individual bios and relevant experience summaries</div>
+      <div class="ch-pills">
+        <span class="ch-pill cp-s1">S1 Intake</span>
+      </div>
+    </div>
+
+    <div class="ch-grp grp-support">Supporting materials</div>
+
+    <div class="ch ch-support">
+      <div class="ch-name">References</div>
+      <div class="ch-desc">Source index compiled across all research and drafting steps</div>
+      <div class="ch-pills">
+        <span class="ch-pill cp-s1">S1 Intake</span>
+        <span class="ch-pill cp-s2">S2 Research</span>
+        <span class="ch-pill cp-s6">S6 Structure</span>
+      </div>
+    </div>
+    <div class="ch ch-support">
+      <div class="ch-name">Appendix</div>
+      <div class="ch-desc">Additional exhibits, data tables, supporting evidence</div>
+      <div class="ch-pills">
+        <span class="ch-pill cp-s2">S2 Research</span>
+        <span class="ch-pill cp-s6">S6 Structure</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section-divider"></div>
+<div class="section-hd">🔄 End-to-end workflow — data sources · tools · transformations</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     FLOW
+══════════════════════════════════════════════════════════════ -->
+<div class="flow">
+
+  <!-- ═══════════ STEP 0 ═══════════ -->
+  <div class="step-card card-bestprac">
+    <div class="card-hd">
+      <div class="card-hd-left">
+        <span class="card-step-icon">⭐</span>
+        <div>
+          <div class="card-title">Step 0 — Practice Area Identification &amp; Best Practice LOP Retrieval</div>
+          <div class="card-subtitle">Before any intake: identify industry/practice context → retrieve the gold-standard LOP document that anchors the entire workflow</div>
+        </div>
+      </div>
+      <span class="leg-badge" style="background:#fff9c4;color:#795548;border:1px solid #f9a825;">AGENTIC — ANCHOR STEP</span>
+    </div>
+    <div class="card-body">
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">📥</span>Data sources</div>
+        <div class="tag-list">
+          <span class="tag tag-doc">📄 RFP / RFI (industry &amp; practice signals)</span>
+          <span class="tag tag-bp">⭐ Best Practice LOP Library</span>
+          <span class="tag tag-cfg">⚙️ Practice area taxonomy (config)</span>
+          <span class="tag tag-cfg">⚙️ Engagement type classifier (competitive / non-competitive / exploratory / relationship)</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">🔧</span>Tools</div>
+        <div class="tool-list">
+          <span class="tool">🏷️ Practice area classifier</span>
+          <span class="tool">🔍 Best Practice LOP retriever</span>
+          <span class="tool">📋 Quality criteria extractor</span>
+          <span class="tool tool-stub">📚 Best Practice Library (document store — documents exist; expanded over time)</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">⚡</span>Transformation</div>
+        <div class="transform-steps">
+          <div class="t-step"><div class="t-num">1</div><div class="t-text">Read RFP signals → classify <span class="t-highlight">industry</span> (e.g. Financial Services, Operations, Technology) and <span class="t-highlight">practice area</span></div></div>
+          <div class="t-step"><div class="t-num">2</div><div class="t-text">Classify <span class="t-highlight">engagement type</span>: competitive tender / non-competitive / exploratory / relationship-building — each requires a different LOP tone and emphasis</div></div>
+          <div class="t-step"><div class="t-num">3</div><div class="t-text">Query Best Practice LOP Library → retrieve the matching gold-standard document(s) for this practice + engagement type</div></div>
+          <div class="t-step"><div class="t-num">4</div><div class="t-text">Extract key quality criteria from the best practice doc: chapter depth expectations, evidence density, tone, win-theme structure</div></div>
+          <div class="t-step"><div class="t-num">5</div><div class="t-text">Package as <span class="t-highlight">quality benchmark</span> — this becomes the persistent reference for Steps 1, 3, 6, 7, and 8</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-out">
+      <span class="out-label">📤 Output</span>
+      <div class="out-artifacts">
+        <span class="artifact">Identified practice area &amp; engagement type</span>
+        <span class="artifact" style="background:#fff9c4;color:#795548;border:1px solid #f9a825;font-weight:600;">⭐ Best Practice LOP reference document</span>
+        <span class="artifact">Quality criteria checklist (per chapter)</span>
+        <span class="artifact artifact-green">Persistent anchor → Steps 1, 3, 6, 7, 8</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector">
+    <div class="connector-line"></div>
+    <div class="connector-arrow"></div>
+    <span class="connector-label">Practice area + Best Practice LOP reference</span>
+  </div>
+
+  <!-- ═══════════ STEP 1 ═══════════ -->
+  <div class="step-card card-agent">
+    <div class="card-hd">
+      <div class="card-hd-left">
+        <span class="card-step-icon">🤖</span>
+        <div>
+          <div class="card-title">Step 1 — Intake &amp; Capture</div>
+          <div class="card-subtitle">Ingest all available materials; map coverage against 11 LOP chapters</div>
+        </div>
+      </div>
+      <span class="leg-badge badge-agent">AGENTIC</span>
+    </div>
+    <div class="card-body">
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">📥</span>Data sources</div>
+        <div class="tag-list">
+          <span class="tag tag-bp">⭐ Best Practice LOP (Step 0)</span>
+          <span class="tag tag-doc">📄 RFP / RFI document</span>
+          <span class="tag tag-doc">📄 Objectives brief</span>
+          <span class="tag tag-doc">📄 Team roster &amp; CVs</span>
+          <span class="tag tag-doc">📄 Fee schedule</span>
+          <span class="tag tag-doc">📄 Prior engagement refs</span>
+          <span class="tag tag-doc">📄 Existing CST context</span>
+          <span class="tag tag-doc">📄 Appendix / exhibits</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">🔧</span>Tools</div>
+        <div class="tool-list">
+          <span class="tool">📑 Doc parser (PDF/DOCX/PPTX)</span>
+          <span class="tool">✂️ Text chunker</span>
+          <span class="tool">🏷️ Chapter-theme tagger</span>
+          <span class="tool">📊 Gap analyzer</span>
+          <span class="tool">💾 Intake store</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">⚡</span>Transformation</div>
+        <div class="transform-steps">
+          <div class="t-step"><div class="t-num">1</div><div class="t-text">Parse binary files (PDF, DOCX, PPTX) → extract clean text</div></div>
+          <div class="t-step"><div class="t-num">2</div><div class="t-text">Chunk text into topic segments; preserve source metadata</div></div>
+          <div class="t-step"><div class="t-num">3</div><div class="t-text">Tag each chunk to one of the <span class="t-highlight">11 LOP chapters</span></div></div>
+          <div class="t-step"><div class="t-num">4</div><div class="t-text">Score coverage per chapter vs <span class="t-highlight">Best Practice LOP expectations</span>: complete / partial / missing / below standard</div></div>
+          <div class="t-step"><div class="t-num">5</div><div class="t-text">Emit ranked gap list — chapters needing research or partner input to meet best practice depth</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-out">
+      <span class="out-label">📤 Output</span>
+      <div class="out-artifacts">
+        <span class="artifact">Structured intake package</span>
+        <span class="artifact">Chapter gap list (benchmarked against Best Practice LOP)</span>
+        <span class="artifact artifact-green">Flows to → Step 2</span>
+      </div>
+    </div>
+    <div class="bp-ref-bar">⭐ Best Practice LOP active — gap scoring calibrated against practice-area quality expectations</div>
+  </div>
+
+  <div class="connector">
+    <div class="connector-line"></div>
+    <div class="connector-arrow"></div>
+    <span class="connector-label">Intake package + chapter gap list</span>
+  </div>
+
+  <!-- ═══════════ STEP 2 ═══════════ -->
+  <div class="step-card card-agent">
+    <div class="card-hd">
+      <div class="card-hd-left">
+        <span class="card-step-icon">🤖</span>
+        <div>
+          <div class="card-title">Step 2 — Build Context</div>
+          <div class="card-subtitle">Fill chapter gaps with external research; build client &amp; market picture</div>
+        </div>
+      </div>
+      <span class="leg-badge badge-agent">AGENTIC</span>
+    </div>
+    <div class="card-body">
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">📥</span>Data sources</div>
+        <div class="tag-list">
+          <span class="tag tag-prev">🔗 Chapter gap list (Step 1)</span>
+          <span class="tag tag-web">🌐 Web (client site, news, analyst reports)</span>
+          <span class="tag tag-web">🌐 Market &amp; competitor public data</span>
+          <span class="tag tag-kb">📚 McKinsey Know / KB</span>
+          <span class="tag tag-kb">📚 MVI (McKinsey Value Intelligence)</span>
+          <span class="tag tag-doc">📄 CST prior work notes</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">🔧</span>Tools</div>
+        <div class="tool-list">
+          <span class="tool">🌐 Web search connector</span>
+          <span class="tool">📚 McKinsey Know API</span>
+          <span class="tool tool-stub">📚 MVI connector (stub v1)</span>
+          <span class="tool">🔍 Research synthesis LLM</span>
+          <span class="tool">📎 Citation tracker</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">⚡</span>Transformation</div>
+        <div class="transform-steps">
+          <div class="t-step"><div class="t-num">1</div><div class="t-text">For each gap chapter → formulate targeted search queries</div></div>
+          <div class="t-step"><div class="t-num">2</div><div class="t-text">Retrieve from web + McKinsey KB; de-duplicate + rank by relevance</div></div>
+          <div class="t-step"><div class="t-num">3</div><div class="t-text">Synthesize per chapter; attach source citations</div></div>
+          <div class="t-step"><div class="t-num">4</div><div class="t-text"><span class="t-highlight">Chapters enriched:</span> Context &amp; Objectives · Market Trends · Why McKinsey · Prior Examples · Credentials</div></div>
+          <div class="t-step"><div class="t-num">5</div><div class="t-text">Flag residual evidence gaps where retrieval returned nothing useful</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-out">
+      <span class="out-label">📤 Output</span>
+      <div class="out-artifacts">
+        <span class="artifact">Enriched context doc (per chapter)</span>
+        <span class="artifact">Source citation index</span>
+        <span class="artifact">Residual evidence-gap flags</span>
+        <span class="artifact artifact-green">Flows to → Step 3</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector">
+    <div class="connector-line"></div>
+    <div class="connector-arrow"></div>
+    <span class="connector-label">Enriched context + citations</span>
+  </div>
+
+  <!-- ═══════════ STEP 3 ═══════════ -->
+  <div class="step-card card-agent">
+    <div class="card-hd">
+      <div class="card-hd-left">
+        <span class="card-step-icon">🤖</span>
+        <div>
+          <div class="card-title">Step 3 — Synthesis</div>
+          <div class="card-subtitle">Merge everything known; produce problem statement and targeted partner question list</div>
+        </div>
+      </div>
+      <span class="leg-badge badge-agent">AGENTIC</span>
+    </div>
+    <div class="card-body">
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">📥</span>Data sources</div>
+        <div class="tag-list">
+          <span class="tag tag-bp">⭐ Best Practice LOP (Step 0)</span>
+          <span class="tag tag-prev">🔗 Structured intake (Step 1)</span>
+          <span class="tag tag-prev">🔗 Enriched context (Step 2)</span>
+          <span class="tag tag-prev">🔗 Chapter gap list (Step 1)</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">🔧</span>Tools</div>
+        <div class="tool-list">
+          <span class="tool">🧠 Synthesis LLM</span>
+          <span class="tool">📝 Problem statement framer</span>
+          <span class="tool">❓ Question list generator</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">⚡</span>Transformation</div>
+        <div class="transform-steps">
+          <div class="t-step"><div class="t-num">1</div><div class="t-text">Merge intake + research into single coherent picture</div></div>
+          <div class="t-step"><div class="t-num">2</div><div class="t-text">Identify key themes, tensions, and must-win angles — using <span class="t-highlight">Best Practice LOP</span> to calibrate what a winning narrative looks like for this practice area</div></div>
+          <div class="t-step"><div class="t-num">3</div><div class="t-text">Sharpen <span class="t-highlight">problem statement</span>; frame Context &amp; Objectives chapter</div></div>
+          <div class="t-step"><div class="t-num">4</div><div class="t-text">Generate <span class="t-highlight">partner question list</span> — only questions unanswerable from docs; designed for ~10-min voice answer</div></div>
+          <div class="t-step"><div class="t-num">5</div><div class="t-text">Flag any conflicting inputs for human review at Gate A</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-out">
+      <span class="out-label">📤 Output</span>
+      <div class="out-artifacts">
+        <span class="artifact">Brief synthesis doc</span>
+        <span class="artifact">Sharpened problem statement</span>
+        <span class="artifact">~10-min partner question list</span>
+        <span class="artifact artifact-green">Flows to → Gate A</span>
+      </div>
+    </div>
+    <div class="bp-ref-bar">⭐ Best Practice LOP active — narrative calibrated against practice-area win-theme patterns</div>
+  </div>
+
+  <div class="connector">
+    <div class="connector-line"></div>
+    <div class="connector-arrow"></div>
+    <span class="connector-label">Synthesis doc + question list</span>
+  </div>
+
+  <!-- ═══════════ GATE A ═══════════ -->
+  <div class="gate-card">
+    <div class="gate-hd">
+      <div style="display:flex;align-items:center;gap:0.5rem;">
+        <span style="font-size:1.2rem;">🚦</span>
+        <span class="gate-title">Gate A — Human Decision: Review synthesis &amp; question list</span>
+      </div>
+      <span class="leg-badge badge-gate">HITL GATE</span>
+    </div>
+    <div class="gate-body">
+      <div>
+        <div class="gate-section-label"><span>👤</span> Human role</div>
+        <div class="gate-text">
+          Read synthesis + problem statement. Verify accuracy and priorities.
+          Check question list covers all chapter gaps — especially
+          <strong>Approach, Fees, Why McKinsey, Team</strong>.
+          Flag any conflicting inputs before dispatching to partner.
+        </div>
+      </div>
+      <div>
+        <div class="gate-section-label"><span>↩️</span> Decision paths</div>
+        <div class="gate-actions">
+          <div class="gate-action"><span class="gate-action-pill pill-approve">✓ Approve</span>Dispatch question list to partner → proceed to Step 4</div>
+          <div class="gate-action"><span class="gate-action-pill pill-revise">↩ Revise</span>Return to Step 3 with specific correction notes</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector">
+    <div class="connector-line"></div>
+    <div class="connector-arrow"></div>
+    <span class="connector-label">Approved question list</span>
+  </div>
+
+  <!-- ═══════════ STEP 4 ═══════════ -->
+  <div class="step-card card-human">
+    <div class="card-hd">
+      <div class="card-hd-left">
+        <span class="card-step-icon">👤</span>
+        <div>
+          <div class="card-title">Step 4 — Partner Input via Speech-to-Text</div>
+          <div class="card-subtitle">Partner answers question list by voice; system transcribes</div>
+        </div>
+      </div>
+      <span class="leg-badge badge-human">HUMAN + SYSTEM</span>
+    </div>
+    <div class="card-body">
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">📥</span>Data sources</div>
+        <div class="tag-list">
+          <span class="tag tag-prev">🔗 Question list (Step 3 / Gate A)</span>
+          <span class="tag tag-voice">🎙️ Partner voice recording</span>
+          <span class="tag tag-doc">📄 Any docs partner shares</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">🔧</span>Tools</div>
+        <div class="tool-list">
+          <span class="tool tool-stub">📧 Email / dispatch connector (stub v1)</span>
+          <span class="tool tool-stub">🎙️ Voice-to-text transcriber (stub v1)</span>
+          <span class="tool">📝 Answer structurer</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">⚡</span>Transformation</div>
+        <div class="transform-steps">
+          <div class="t-step"><div class="t-num">1</div><div class="t-text"><span class="t-highlight">SYSTEM:</span> Dispatch question list to partner via email/link</div></div>
+          <div class="t-step"><div class="t-num">2</div><div class="t-text"><span class="t-highlight">HUMAN:</span> Partner answers by voice (~10 min recording)</div></div>
+          <div class="t-step"><div class="t-num">3</div><div class="t-text"><span class="t-highlight">SYSTEM:</span> Transcribe voice → structured text</div></div>
+          <div class="t-step"><div class="t-num">4</div><div class="t-text"><span class="t-highlight">Chapters filled:</span> Approach · Fees · Why McKinsey · Team composition · any remaining context gaps</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-out">
+      <span class="out-label">📤 Output</span>
+      <div class="out-artifacts">
+        <span class="artifact">Transcribed partner answers</span>
+        <span class="artifact">Structured Q&amp;A pairs</span>
+        <span class="artifact artifact-green">Flows to → Step 5</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector">
+    <div class="connector-line"></div>
+    <div class="connector-arrow"></div>
+    <span class="connector-label">Transcribed answers</span>
+  </div>
+
+  <!-- ═══════════ STEP 5 ═══════════ -->
+  <div class="step-card card-agent">
+    <div class="card-hd">
+      <div class="card-hd-left">
+        <span class="card-step-icon">🤖</span>
+        <div>
+          <div class="card-title">Step 5 — Validate Answers &amp; Flag Gaps</div>
+          <div class="card-subtitle">Cross-reference answers against all chapter gaps; score completeness</div>
+        </div>
+      </div>
+      <span class="leg-badge badge-agent">AGENTIC</span>
+    </div>
+    <div class="card-body">
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">📥</span>Data sources</div>
+        <div class="tag-list">
+          <span class="tag tag-prev">🔗 Transcribed answers (Step 4)</span>
+          <span class="tag tag-prev">🔗 Chapter gap list (Step 1)</span>
+          <span class="tag tag-prev">🔗 Question checklist (Step 3)</span>
+          <span class="tag tag-prev">🔗 Intake package (Step 1)</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">🔧</span>Tools</div>
+        <div class="tool-list">
+          <span class="tool">✅ Validation agent</span>
+          <span class="tool">📊 Completeness scorer</span>
+          <span class="tool">⚠️ Contradiction detector</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">⚡</span>Transformation</div>
+        <div class="transform-steps">
+          <div class="t-step"><div class="t-num">1</div><div class="t-text">Match each answer to its target chapter gap item</div></div>
+          <div class="t-step"><div class="t-num">2</div><div class="t-text">Check for contradictions with intake documents</div></div>
+          <div class="t-step"><div class="t-num">3</div><div class="t-text">Flag answers that are incomplete, vague, or ambiguous</div></div>
+          <div class="t-step"><div class="t-num">4</div><div class="t-text">Score <span class="t-highlight">residual gaps</span> by chapter: severity (blocks structure / acceptable unknown)</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-out">
+      <span class="out-label">📤 Output</span>
+      <div class="out-artifacts">
+        <span class="artifact">Validated answers</span>
+        <span class="artifact">Residual chapter gap report (severity-ranked)</span>
+        <span class="artifact artifact-green">Flows to → Gate B</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector">
+    <div class="connector-line"></div>
+    <div class="connector-arrow"></div>
+    <span class="connector-label">Validated answers + gap report</span>
+  </div>
+
+  <!-- ═══════════ GATE B ═══════════ -->
+  <div class="gate-card">
+    <div class="gate-hd">
+      <div style="display:flex;align-items:center;gap:0.5rem;">
+        <span style="font-size:1.2rem;">🚦</span>
+        <span class="gate-title">Gate B — Human Decision: Resolve chapter gaps before structuring</span>
+      </div>
+      <span class="leg-badge badge-gate">HITL GATE</span>
+    </div>
+    <div class="gate-body">
+      <div>
+        <div class="gate-section-label"><span>👤</span> Human role</div>
+        <div class="gate-text">
+          Review gap report. For each flagged chapter decide:
+          provide additional information, accept as known unknown
+          (will be flagged in the LOP), or escalate to partner for follow-up.
+          <strong>Nothing that blocks the Approach or Fees chapter can pass through unresolved.</strong>
+        </div>
+      </div>
+      <div>
+        <div class="gate-section-label"><span>↩️</span> Decision paths</div>
+        <div class="gate-actions">
+          <div class="gate-action"><span class="gate-action-pill pill-approve">✓ Resolved</span>Gaps filled or formally accepted → proceed to Step 6</div>
+          <div class="gate-action"><span class="gate-action-pill pill-accept">📋 Accept gap</span>Mark as known unknown in LOP → proceed to Step 6 with flag</div>
+          <div class="gate-action"><span class="gate-action-pill pill-revise">↩ More info</span>Human provides additional context → re-run Step 5 validation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector">
+    <div class="connector-line"></div>
+    <div class="connector-arrow"></div>
+    <span class="connector-label">Gaps resolved / accepted</span>
+  </div>
+
+  <!-- ═══════════ STEP 6 ═══════════ -->
+  <div class="step-card card-agent">
+    <div class="card-hd">
+      <div class="card-hd-left">
+        <span class="card-step-icon">🤖</span>
+        <div>
+          <div class="card-title">Step 6 — Dot-Dash Structure</div>
+          <div class="card-subtitle">Map all validated content to 11 chapters; generate page-level outlines with strong descriptions</div>
+        </div>
+      </div>
+      <span class="leg-badge badge-agent">AGENTIC + optional human steering</span>
+    </div>
+    <div class="card-body">
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">📥</span>Data sources</div>
+        <div class="tag-list">
+          <span class="tag tag-bp">⭐ Best Practice LOP (Step 0)</span>
+          <span class="tag tag-prev">🔗 Validated answers (Step 5)</span>
+          <span class="tag tag-prev">🔗 Problem statement (Step 3)</span>
+          <span class="tag tag-prev">🔗 Enriched context (Step 2)</span>
+          <span class="tag tag-cfg">⚙️ Per-chapter guidelines (config)</span>
+          <span class="tag tag-cfg">⚙️ Stakeholder map</span>
+          <span class="tag tag-cfg">⚙️ Approved sources list</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">🔧</span>Tools</div>
+        <div class="tool-list">
+          <span class="tool">🏗️ Structure agent</span>
+          <span class="tool">📋 Guidelines loader</span>
+          <span class="tool">🔗 Chapter dependency resolver</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">⚡</span>Transformation</div>
+        <div class="transform-steps">
+          <div class="t-step"><div class="t-num">1</div><div class="t-text">Map all validated content to the <span class="t-highlight">11 LOP chapters</span></div></div>
+          <div class="t-step"><div class="t-num">2</div><div class="t-text">Use <span class="t-highlight">Best Practice LOP</span> chapter structure as the template — mirror its chapter depth, page count, and evidence density for this practice area</div></div>
+          <div class="t-step"><div class="t-num">3</div><div class="t-text">Apply per-chapter guidelines; resolve chapter ordering dependencies</div></div>
+          <div class="t-step"><div class="t-num">4</div><div class="t-text">Generate <span class="t-highlight">dot-dash outline:</span> chapter → pages → per-page strong descriptions</div></div>
+          <div class="t-step"><div class="t-num">5</div><div class="t-text">Human may steer outline before handoff to drafters (optional)</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-out">
+      <span class="out-label">📤 Output</span>
+      <div class="out-artifacts">
+        <span class="artifact">Dot-dash structure doc (11 chapters → N pages → per-page descriptions)</span>
+        <span class="artifact artifact-green">Flows to → Step 7</span>
+      </div>
+    </div>
+    <div class="bp-ref-bar">⭐ Best Practice LOP active — chapter structure and page depth modelled on practice-area gold standard</div>
+  </div>
+
+  <div class="connector">
+    <div class="connector-line"></div>
+    <div class="connector-arrow"></div>
+    <span class="connector-label">Dot-dash structure → chapter briefs</span>
+  </div>
+
+  <!-- ═══════════ STEP 7 ═══════════ -->
+  <div class="step-card card-agent">
+    <div class="card-hd">
+      <div class="card-hd-left">
+        <span class="card-step-icon">🤖</span>
+        <div>
+          <div class="card-title">Step 7 — Draft Pages</div>
+          <div class="card-subtitle">Chapter drafter agents write each of the 11 chapters in parallel</div>
+        </div>
+      </div>
+      <span class="leg-badge badge-agent">AGENTIC — parallelised</span>
+    </div>
+    <div class="card-body">
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">📥</span>Data sources</div>
+        <div class="tag-list">
+          <span class="tag tag-bp">⭐ Best Practice LOP (Step 0)</span>
+          <span class="tag tag-prev">🔗 Dot-dash structure (Step 6)</span>
+          <span class="tag tag-prev">🔗 Full research pack (Steps 1 + 2)</span>
+          <span class="tag tag-prev">🔗 Validated answers (Step 5)</span>
+          <span class="tag tag-cfg">⚙️ Approved sources list</span>
+          <span class="tag tag-cfg">⚙️ Style &amp; tone guidance</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">🔧</span>Tools</div>
+        <div class="tool-list">
+          <span class="tool">✍️ Chapter drafter agents (×11)</span>
+          <span class="tool">🔗 Evidence retriever</span>
+          <span class="tool">📎 Citation inserter</span>
+          <span class="tool">🚩 Evidence-needed tagger</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">⚡</span>Transformation</div>
+        <div class="transform-steps">
+          <div class="t-step"><div class="t-num">1</div><div class="t-text">Each drafter receives its chapter's dot-dash brief and source bundle</div></div>
+          <div class="t-step"><div class="t-num">2</div><div class="t-text">Write page-by-page to the dot-dash description; follow style guide; use <span class="t-highlight">Best Practice LOP</span> as the writing quality target for tone, argument density, and evidence use</div></div>
+          <div class="t-step"><div class="t-num">3</div><div class="t-text">Retrieve and insert supporting evidence from research pack</div></div>
+          <div class="t-step"><div class="t-num">4</div><div class="t-text">Tag <span class="t-highlight">[EVIDENCE NEEDED]</span> placeholders where sourcing is missing</div></div>
+          <div class="t-step"><div class="t-num">5</div><div class="t-text">Chapters run in parallel where dependency DAG allows</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-out">
+      <span class="out-label">📤 Output</span>
+      <div class="out-artifacts">
+        <span class="artifact">Full draft — all 11 chapters</span>
+        <span class="artifact">Evidence-needed placeholders</span>
+        <span class="artifact artifact-green">Flows to → Step 8</span>
+      </div>
+    </div>
+    <div class="bp-ref-bar">⭐ Best Practice LOP active — chapter writing quality benchmarked against practice-area gold standard</div>
+  </div>
+
+  <div class="connector">
+    <div class="connector-line"></div>
+    <div class="connector-arrow"></div>
+    <span class="connector-label">Page drafts + evidence placeholders</span>
+  </div>
+
+  <!-- ═══════════ STEP 8 ═══════════ -->
+  <div class="step-card card-agent">
+    <div class="card-hd">
+      <div class="card-hd-left">
+        <span class="card-step-icon">🤖</span>
+        <div>
+          <div class="card-title">Step 8 — LOP Coach — Critical Analysis</div>
+          <div class="card-subtitle">Score draft for quality, unsupported claims, and gaps; produce must-fix list</div>
+        </div>
+      </div>
+      <span class="leg-badge badge-agent">AGENTIC</span>
+    </div>
+    <div class="card-body">
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">📥</span>Data sources</div>
+        <div class="tag-list">
+          <span class="tag tag-bp">⭐ Best Practice LOP (Step 0) — primary scoring benchmark</span>
+          <span class="tag tag-prev">🔗 Full draft (Step 7)</span>
+          <span class="tag tag-prev">🔗 Source citation index (Step 2)</span>
+          <span class="tag tag-cfg">⚙️ LOP quality rubric</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">🔧</span>Tools</div>
+        <div class="tool-list">
+          <span class="tool">🔍 LOP coach agent</span>
+          <span class="tool">📊 Quality rubric engine</span>
+          <span class="tool">⚠️ Claim validator</span>
+          <span class="tool">📋 Chapter coherence checker</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">⚡</span>Transformation</div>
+        <div class="transform-steps">
+          <div class="t-step"><div class="t-num">1</div><div class="t-text">Analyze each page against LOP quality rubric AND the <span class="t-highlight">Best Practice LOP</span> for this practice area</div></div>
+          <div class="t-step"><div class="t-num">2</div><div class="t-text">Score chapter-by-chapter quality delta vs best practice: argument strength, evidence density, win-theme clarity</div></div>
+          <div class="t-step"><div class="t-num">3</div><div class="t-text">Identify unsupported claims — flag any assertion without a source citation</div></div>
+          <div class="t-step"><div class="t-num">4</div><div class="t-text">Check chapter coherence — does the narrative flow logically across all 11 chapters?</div></div>
+          <div class="t-step"><div class="t-num">5</div><div class="t-text">Categorise issues: <span class="t-highlight">must-fix</span> (blocks send) vs nice-to-have; cite specific best practice gap where relevant</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-out">
+      <span class="out-label">📤 Output</span>
+      <div class="out-artifacts">
+        <span class="artifact">Quality score per chapter vs Best Practice LOP</span>
+        <span class="artifact">Must-fix issues list</span>
+        <span class="artifact">Nice-to-have improvements</span>
+        <span class="artifact artifact-green">Flows to → Gate C</span>
+      </div>
+    </div>
+    <div class="bp-ref-bar">⭐ Best Practice LOP active — quality delta scored per chapter against practice-area gold standard</div>
+  </div>
+
+  <div class="connector">
+    <div class="connector-line"></div>
+    <div class="connector-arrow"></div>
+    <span class="connector-label">Scored issues list</span>
+  </div>
+
+  <!-- ═══════════ GATE C ═══════════ -->
+  <div class="gate-card">
+    <div class="gate-hd">
+      <div style="display:flex;align-items:center;gap:0.5rem;">
+        <span style="font-size:1.2rem;">🚦</span>
+        <span class="gate-title">Gate C — Human Decision: Approve draft for packaging &amp; external send</span>
+      </div>
+      <span class="leg-badge badge-gate">HITL GATE</span>
+    </div>
+    <div class="gate-body">
+      <div>
+        <div class="gate-section-label"><span>👤</span> Human role</div>
+        <div class="gate-text">
+          Review coach report and full draft. Verify all must-fix issues are addressed.
+          <strong>No external send without explicit human approval.</strong>
+          Optionally provide revision instructions chapter-by-chapter.
+        </div>
+      </div>
+      <div>
+        <div class="gate-section-label"><span>↩️</span> Decision paths</div>
+        <div class="gate-actions">
+          <div class="gate-action"><span class="gate-action-pill pill-approve">✓ Approved</span>Proceed to Step 9 (assemble + dispatch)</div>
+          <div class="gate-action"><span class="gate-action-pill pill-revise">↩ Loop back</span>Provide revision comments → Step 10 applies fixes; loops to Step 7 or 8</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector">
+    <div class="connector-line"></div>
+    <div class="connector-arrow"></div>
+    <span class="connector-label">Approved</span>
+  </div>
+
+  <!-- ═══════════ STEP 9 ═══════════ -->
+  <div class="step-card card-agent">
+    <div class="card-hd">
+      <div class="card-hd-left">
+        <span class="card-step-icon">🤖</span>
+        <div>
+          <div class="card-title">Step 9 — Assemble &amp; Send for Review</div>
+          <div class="card-subtitle">Render PPT / HTML; dispatch review-ready artifact to reviewers</div>
+        </div>
+      </div>
+      <span class="leg-badge badge-agent">AGENTIC</span>
+    </div>
+    <div class="card-body">
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">📥</span>Data sources</div>
+        <div class="tag-list">
+          <span class="tag tag-prev">🔗 Approved draft (Steps 7 / 8)</span>
+          <span class="tag tag-prev">🔗 Coach report (Step 8)</span>
+          <span class="tag tag-cfg">⚙️ Brand / style tokens</span>
+          <span class="tag tag-cfg">⚙️ PPT / HTML template</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">🔧</span>Tools</div>
+        <div class="tool-list">
+          <span class="tool tool-stub">📊 PPT assembler (stub v1)</span>
+          <span class="tool tool-stub">🌐 HTML renderer (stub v1)</span>
+          <span class="tool tool-stub">📧 Email / dispatch connector (stub v1)</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">⚡</span>Transformation</div>
+        <div class="transform-steps">
+          <div class="t-step"><div class="t-num">1</div><div class="t-text">Apply brand template → render all 11 chapters as slides / HTML pages</div></div>
+          <div class="t-step"><div class="t-num">2</div><div class="t-text">Package PPT / HTML artifact with coach quality report attached</div></div>
+          <div class="t-step"><div class="t-num">3</div><div class="t-text">Quality-check formatting (broken layouts, missing images, font issues)</div></div>
+          <div class="t-step"><div class="t-num">4</div><div class="t-text">Dispatch to reviewer list via email connector</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-out">
+      <span class="out-label">📤 Output</span>
+      <div class="out-artifacts">
+        <span class="artifact">PPT / HTML artifact</span>
+        <span class="artifact">Dispatch confirmation</span>
+        <span class="artifact artifact-green">Flows to → Step 10</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector">
+    <div class="connector-line"></div>
+    <div class="connector-arrow"></div>
+    <span class="connector-label">PPT / HTML artifact to reviewers</span>
+  </div>
+
+  <!-- ═══════════ STEP 10 ═══════════ -->
+  <div class="step-card card-human">
+    <div class="card-hd">
+      <div class="card-hd-left">
+        <span class="card-step-icon">👤</span>
+        <div>
+          <div class="card-title">Step 10 — Capture Comments &amp; Iterate</div>
+          <div class="card-subtitle">Human prioritises reviewer comments; system applies only approved fixes</div>
+        </div>
+      </div>
+      <span class="leg-badge badge-human">HUMAN + SYSTEM</span>
+    </div>
+    <div class="card-body">
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">📥</span>Data sources</div>
+        <div class="tag-list">
+          <span class="tag tag-voice">💬 Reviewer comments</span>
+          <span class="tag tag-prev">🔗 Current draft (Step 7 / 9)</span>
+          <span class="tag tag-prev">🔗 Coach report (Step 8)</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">🔧</span>Tools</div>
+        <div class="tool-list">
+          <span class="tool">📝 Comment parser</span>
+          <span class="tool">✏️ Revision agent</span>
+          <span class="tool">📋 Change log</span>
+        </div>
+      </div>
+      <div class="card-col">
+        <div class="col-label"><span class="col-label-icon">⚡</span>Transformation</div>
+        <div class="transform-steps">
+          <div class="t-step"><div class="t-num">1</div><div class="t-text"><span class="t-highlight">HUMAN:</span> Provide reviewer comments; tag as must-fix vs optional per chapter</div></div>
+          <div class="t-step"><div class="t-num">2</div><div class="t-text"><span class="t-highlight">SYSTEM:</span> Parse comments → group by chapter → apply <em>only</em> human-approved fixes</div></div>
+          <div class="t-step"><div class="t-num">3</div><div class="t-text">Log all changes to prevent infinite rewrite loops</div></div>
+          <div class="t-step"><div class="t-num">4</div><div class="t-text">Route back: <span class="t-highlight">revise pages</span> → Step 7 · <span class="t-highlight">re-coach only</span> → Step 8</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-out">
+      <span class="out-label">📤 Output</span>
+      <div class="out-artifacts">
+        <span class="artifact">Revised draft</span>
+        <span class="artifact">Change log</span>
+        <span class="artifact artifact-green">Loops to → Step 7 (revise pages) or Step 8 (re-coach)</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /flow -->
+
+<footer>LOP Builder workplan · docs/lop-workflow-diagram.html · source: hamdi-agentic-lop-workplan.md</footer>
+
+</div><!-- /page -->
+</body>
+</html>

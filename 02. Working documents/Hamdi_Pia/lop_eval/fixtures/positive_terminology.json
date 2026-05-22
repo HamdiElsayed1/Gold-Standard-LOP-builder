@@ -1,0 +1,19 @@
+{
+  "document_id": "positive_terminology",
+  "title": "Stable labels",
+  "sections": [
+    {
+      "id": "main",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The digital program will run for six months."
+        },
+        {
+          "type": "paragraph",
+          "text": "We will staff the program with a core team."
+        }
+      ]
+    }
+  ]
+}

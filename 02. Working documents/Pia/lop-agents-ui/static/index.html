@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="LoP workflow: orchestrator phases, agent modules, and CLI map for lop_workflow." />
+  <title>LoP builder — agents dashboard</title>
+  <style>
+    :root {
+      --bg: #eef1f6;
+      --surface: #ffffff;
+      --text: #12161c;
+      --muted: #5c6570;
+      --border: #c9d1dc;
+      --accent: #0b5cab;
+      --accent-soft: #e3ecf8;
+      --checkpoint: #a35c00;
+      --checkpoint-bg: #fff8e6;
+      --radius: 10px;
+      --font: "Segoe UI", system-ui, -apple-system, sans-serif;
+      --nav-h: 52px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1117;
+        --surface: #161b22;
+        --text: #e8edf3;
+        --muted: #8b949e;
+        --border: #30363d;
+        --accent: #58a6ff;
+        --accent-soft: #21262d;
+        --checkpoint: #d29922;
+        --checkpoint-bg: #2d2a1e;
+      }
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 15px;
+      padding-top: var(--nav-h);
+    }
+    .top-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      padding: 0.5rem 1rem;
+      background: color-mix(in srgb, var(--surface) 92%, transparent);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      font-size: 0.82rem;
+    }
+    .top-nav a {
+      color: var(--accent);
+      text-decoration: none;
+      padding: 0.35rem 0.55rem;
+      border-radius: 6px;
+    }
+    .top-nav a:hover { background: var(--accent-soft); }
+    .top-nav .brand { font-weight: 600; color: var(--text); margin-right: 0.5rem; }
+    .app { max-width: 960px; margin: 0 auto; padding: 1rem 1rem 3rem; }
+    h1 { font-size: 1.45rem; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 0.35rem; }
+    .lede { margin: 0 0 1rem; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    .section-title {
+      font-size: 1.05rem; font-weight: 600; margin: 2rem 0 0.65rem;
+      padding-bottom: 0.35rem; border-bottom: 1px solid var(--border);
+      scroll-margin-top: calc(var(--nav-h) + 0.5rem);
+    }
+    .section-title:first-of-type { margin-top: 0.5rem; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin: 0.75rem 0 0; }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      align-items: center;
+      margin: 0.75rem 0 1rem;
+    }
+    .toolbar label { font-size: 0.78rem; color: var(--muted); display: flex; align-items: center; gap: 0.4rem; flex: 1 1 200px; }
+    .toolbar input[type="search"] {
+      width: 100%;
+      min-width: 0;
+      padding: 0.45rem 0.65rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font: inherit;
+      background: var(--surface);
+      color: var(--text);
+    }
+    .toolbar input[type="search"]::placeholder { color: var(--muted); opacity: 0.8; }
+    .timeline {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0.5rem 0 1rem;
+      margin: 0 -0.25rem;
+      scrollbar-width: thin;
+    }
+    .tl-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 4.5rem;
+      flex: 0 0 auto;
+    }
+    .tl-node {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--muted);
+      transition: border-color 0.15s, box-shadow 0.15s, color 0.15s;
+    }
+    .tl-node:hover { border-color: var(--accent); color: var(--accent); }
+    .tl-node.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-soft);
+      box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--accent);
+    }
+    .tl-node.hitl { border-color: var(--checkpoint); color: var(--checkpoint); }
+    .tl-node.hitl.active { background: var(--checkpoint-bg); }
+    .tl-bar {
+      flex: 0 0 1.25rem;
+      height: 3px;
+      background: var(--border);
+      align-self: center;
+      margin-top: -1.5rem;
+      border-radius: 2px;
+      min-width: 0.5rem;
+    }
+    .tl-label {
+      font-size: 0.62rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 0.35rem;
+      max-width: 4.5rem;
+      line-height: 1.2;
+      word-break: break-word;
+    }
+    .phase-flow { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.25rem; }
+    .phase-pill {
+      border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 0.65rem;
+      font-size: 0.82rem; background: var(--surface); cursor: pointer; text-align: left;
+      flex: 1 1 140px; min-width: 120px; font-family: inherit; color: inherit;
+    }
+    .phase-pill:hover { border-color: var(--accent); }
+    .phase-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .phase-pill.hidden { display: none; }
+    .phase-pill.selected { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+    .phase-pill strong {
+      display: block; font-size: 0.72rem; font-weight: 600; color: var(--accent);
+      margin-bottom: 0.2rem; font-family: ui-monospace, Consolas, monospace;
+    }
+    .phase-pill.checkpoint strong { color: var(--checkpoint); }
+    .phase-pill span { color: var(--muted); font-size: 0.78rem; }
+    .detail-wrap { margin-top: 1rem; }
+    .detail-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .detail-nav button {
+      font: inherit;
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+    }
+    .detail-nav button:hover { border-color: var(--accent); color: var(--accent); }
+    .detail-nav button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .detail-nav .kbd-hint { font-size: 0.75rem; color: var(--muted); margin-left: auto; }
+    .detail {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+    }
+    .detail h3 { margin: 0 0 0.4rem; font-size: 1rem; }
+    .detail .body { margin: 0; font-size: 0.9rem; color: var(--muted); }
+    .detail .body code {
+      font-size: 0.84em;
+      background: var(--bg);
+      padding: 0.1em 0.35em;
+      border-radius: 4px;
+      font-family: ui-monospace, Consolas, monospace;
+    }
+    .detail .cp { margin: 0.65rem 0 0; font-size: 0.82rem; color: var(--checkpoint); }
+    .detail .idline { margin: 0.5rem 0 0; font-size: 0.78rem; font-family: ui-monospace, Consolas, monospace; color: var(--muted); }
+    .card-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.75rem;
+    }
+    .card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 1rem 1.1rem; transition: opacity 0.15s;
+    }
+    .card.dim { opacity: 0.35; pointer-events: none; }
+    .card.hidden { display: none; }
+    .card h3 { margin: 0 0 0.4rem; font-size: 0.95rem; }
+    .card p { margin: 0; font-size: 0.88rem; color: var(--muted); }
+    .card p code { font-size: 0.88em; }
+    .card code.path {
+      display: block; margin-top: 0.5rem;
+      font-size: 0.78rem; background: var(--bg); padding: 0.35rem 0.45rem; border-radius: 4px; word-break: break-all;
+      font-family: ui-monospace, Consolas, monospace;
+    }
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 0.65rem;
+    }
+    .link-card {
+      display: block;
+      padding: 0.85rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .link-card:hover { border-color: var(--accent); box-shadow: var(--shadow, 0 2px 8px rgba(0,0,0,.06)); }
+    .link-card strong { display: block; font-size: 0.9rem; color: var(--accent); margin-bottom: 0.25rem; }
+    .link-card span { font-size: 0.8rem; color: var(--muted); }
+    .mono-list { font-size: 0.82rem; color: var(--muted); margin: 0.5rem 0 0; padding-left: 1.2rem; }
+    .mono-list li { margin: 0.25rem 0; }
+    .footer-note { font-size: 0.82rem; color: var(--muted); margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+    .step-form {
+      margin-top: 1.15rem;
+      padding-top: 1rem;
+      border-top: 1px dashed var(--border);
+    }
+    .step-form h4 {
+      margin: 0 0 0.65rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+    .step-form .row2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+    }
+    @media (max-width: 560px) { .step-form .row2 { grid-template-columns: 1fr; } }
+    .step-form label {
+      display: block;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin: 0.5rem 0 0.25rem;
+    }
+    .step-form label:first-of-type { margin-top: 0; }
+    .step-form input[type="text"],
+    .step-form select,
+    .step-form textarea {
+      width: 100%;
+      padding: 0.45rem 0.55rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font: inherit;
+      background: var(--surface);
+      color: var(--text);
+    }
+    .step-form textarea { min-height: 100px; resize: vertical; }
+    .step-form .save-hint { font-size: 0.78rem; color: var(--muted); margin: 0.5rem 0 0; min-height: 1.2rem; }
+    .step-form .save-hint.ok { color: var(--accent); }
+    .tl-node.has-user-data::after {
+      content: "";
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      top: -2px;
+      right: -2px;
+    }
+    .tl-step { position: relative; }
+    .tl-node { position: relative; }
+    .tl-node.hitl.has-user-data::after { background: var(--checkpoint); }
+    .phase-pill.has-user-data { border-left: 3px solid var(--accent); }
+    .phase-pill.checkpoint.has-user-data { border-left-color: var(--checkpoint); }
+    .data-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      align-items: center;
+      margin-top: 0.5rem;
+    }
+    .data-actions button, .data-actions label.file-btn {
+      font: inherit;
+      font-size: 0.82rem;
+      padding: 0.35rem 0.65rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+    }
+    .data-actions button:hover, .data-actions label.file-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .data-actions input[type="file"] { display: none; }
+    @media print {
+      .top-nav, .toolbar, .timeline, .detail-nav, .phase-flow { display: none !important; }
+      body { padding-top: 0; }
+      .detail { break-inside: avoid; }
+    }
+  </style>
+
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:_dlc_DocId msdt:dt="string">DE7XN4DZS357-1263605440-18531</mso:_dlc_DocId>
+<mso:_dlc_DocIdItemGuid msdt:dt="string">b8a181e3-12e5-4a75-9d1a-e4b07360cf75</mso:_dlc_DocIdItemGuid>
+<mso:_dlc_DocIdUrl msdt:dt="string">https://mckinsey.sharepoint.com/sites/spt-int-6jj6kewnj5r70j/_layouts/15/DocIdRedir.aspx?ID=DE7XN4DZS357-1263605440-18531, DE7XN4DZS357-1263605440-18531</mso:_dlc_DocIdUrl>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+<body>
+  <nav class="top-nav" aria-label="Section navigation">
+    <span class="brand">LoP agents</span>
+    <a href="#phases">Phases</a>
+    <a href="#modules">Modules</a>
+    <a href="#cli">CLI</a>
+    <a href="#tools">Tools</a>
+  </nav>
+
+  <div class="app">
+    <header>
+      <h1>LoP builder — agents dashboard</h1>
+      <p class="lede">
+        Maps the Python package <code>lop_workflow</code> to orchestrator phases and human gates.
+        For each step, add status, owner, notes, and links — saved in this browser only. Export or import JSON below.
+        Keyboard: <kbd>←</kbd> <kbd>→</kbd> between phases when not typing in a field; <kbd>/</kbd> focuses search.
+      </p>
+    </header>
+
+    <h2 class="section-title" id="phases">Orchestrator phases</h2>
+    <p class="hint">Aligned with <code>lop_workflow.orchestrator.state.Phase</code> and <code>LopWorkflow.advance</code>.</p>
+
+    <div class="toolbar">
+      <label>
+        Filter phases &amp; modules
+        <input type="search" id="q" placeholder="e.g. export, coach, intake…" autocomplete="off" />
+      </label>
+    </div>
+
+    <div class="timeline" id="timeline" role="tablist" aria-label="Phase timeline"></div>
+
+    <div class="phase-flow" id="phaseFlow"></div>
+
+    <div class="detail-wrap">
+      <div class="detail-nav">
+        <button type="button" id="btnPrev" aria-label="Previous phase">← Previous</button>
+        <button type="button" id="btnNext" aria-label="Next phase">Next →</button>
+        <span class="kbd-hint">← → to navigate (not in form fields)</span>
+      </div>
+      <div class="data-actions" aria-label="All step data">
+        <button type="button" id="btnExportSteps">Export all step data (.json)</button>
+        <label class="file-btn">Import step data<input type="file" id="importSteps" accept="application/json,.json" /></label>
+        <button type="button" id="btnClearSteps">Clear all step data</button>
+      </div>
+      <div class="detail" id="phaseDetail" role="region" aria-live="polite" aria-atomic="false"></div>
+    </div>
+
+    <h2 class="section-title" id="modules">Agent modules &amp; packages</h2>
+    <p class="hint" id="pipelineNote"></p>
+    <div class="card-grid" id="moduleGrid"></div>
+
+    <h2 class="section-title" id="cli">CLI entry points</h2>
+    <ul class="mono-list">
+      <li><code>lop-workflow paths</code> — Background Material &amp; export dirs</li>
+      <li><code>lop-workflow run</code> — demo run to export (optional <code>--stub-agents</code>)</li>
+      <li><code>lop-workflow step</code> — scripted checkpoints for integration tests</li>
+    </ul>
+
+    <h2 class="section-title" id="tools">Related tools</h2>
+    <div class="links-grid">
+      <a class="link-card" href="../../lop-builder-dashboard.html">
+        <strong>Step-by-step LoP builder</strong>
+        <span>Browser wizard — intake, spine, fees, export (same Pia folder).</span>
+      </a>
+      <a class="link-card" href="../../Jasper/lop-workflow-overview.html">
+        <strong>Jasper — workflow overview</strong>
+        <span>v0.1 map of artifacts and runbook links.</span>
+      </a>
+      <a class="link-card" href="../../Jasper/lop-cursor-runbook.md">
+        <strong>Cursor runbook</strong>
+        <span>Step 0 manifest, gates, PPT + HTML (open in editor).</span>
+      </a>
+    </div>
+
+    <p class="footer-note">
+      Served at <a href="http://127.0.0.1:3000/">http://127.0.0.1:3000/</a> via <code>serve.bat</code> / Python — or open this file directly (<code>file://</code>).
+    </p>
+  </div>
+
+  <script>
+(function () {
+  var STORAGE_KEY = "lop-agents-dashboard-step-data-v1";
+
+  var PHASE_SEQUENCE = [
+    { id: "human_intake", label: "Human intake", description: "`PipelineAgentContext` — confirm brief & LoP category (manifest discipline).", checkpoint: "intake" },
+    { id: "workplan", label: "Workplan", description: "`synthesize_workplan` → problem statement from brief." },
+    { id: "info_gather", label: "Information gathering", description: "`run_research` indexes Background Material (md/txt/pptx/pdf → extracted cache)." },
+    { id: "agent_bootstrap", label: "Agent bootstrap", description: "`identify_agents` — logical roles (ingestion, research, planner, writers, coach)." },
+    { id: "divide_work", label: "Divide work", description: "`build_scaffolding` ToC + questions; `build_section_spec` → section specs." },
+    { id: "human_post_toc", label: "Human post–ToC", description: "Approve direction before drafting.", checkpoint: "post_toc" },
+    { id: "write_elements", label: "Write elements", description: "`write_all_sections` — gold-pattern catalog + optional LLM in `writers`." },
+    { id: "compose", label: "Compose", description: "`compose` / `harmonize` for cross-chapter consistency." },
+    { id: "lop_coach", label: "LoP coach", description: "`lop_coach` rubric: RFP fit, narrative, fees, appendix, gold-pattern fit." },
+    { id: "human_pre_final", label: "Human pre-final", description: "Approve export or send back with feedback.", checkpoint: "pre_final" },
+    { id: "export", label: "Export", description: "`do_export` → HTML, PPTX, fees XLSX under `lop_exports_dir`." },
+    { id: "done", label: "Done", description: "Run complete." },
+  ];
+
+  var AGENT_MODULES = [
+    { title: "Ingestion", path: "lop_workflow.agents.ingestion", body: "Voice / intake → structured brief fields; ties to Step 0 manifest discipline.", kw: "brief voice manifest" },
+    { title: "Research", path: "lop_workflow.corpus.background_material", body: "Loads indexed Background Material; excerpts feed writers and coach.", kw: "corpus rag pptx pdf" },
+    { title: "Planner / scaffolding", path: "lop_workflow.orchestrator.graph.NoOpAgents.build_scaffolding", body: "Default 11-chapter spine unless gold/RFP overrides; emits clarifying questions.", kw: "toc questions divide" },
+    { title: "Writers", path: "lop_workflow.agents.writers", body: "Per-section handlers + catalog patterns; LLM when `OPENAI_API_KEY` set, else placeholders.", kw: "draft llm gold" },
+    { title: "Composer", path: "lop_workflow.agents.composer", body: "Harmonize sections for narrative flow before coach + export.", kw: "merge" },
+    { title: "LoP coach", path: "lop_workflow.agents.coach", body: "Scores fit vs RFP, fees clarity, appendix completeness; chapter issue table.", kw: "rubric quality" },
+    { title: "Export", path: "lop_workflow.export", body: "HTML (`html_export`), PPT (`ppt_export`), fees workbook (`excel_export`).", kw: "pptx xlsx html" },
+  ];
+
+  var PIPELINE_NOTE = "`PipelineAgentContext` implements `AgentContext`: real corpus + optional OpenAI. `NoOpAgents` is offline-safe for demos and CI.";
+
+  var selectedIndex = 0;
+  var stepData = {};
+  var saveTimer;
+
+  function esc(s) {
+    var d = document.createElement("div");
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  function formatDescription(s) {
+    var parts = s.split("`");
+    var html = "";
+    for (var i = 0; i < parts.length; i++) {
+      html += i % 2 === 0 ? esc(parts[i]) : "<code>" + esc(parts[i]) + "</code>";
+    }
+    return html;
+  }
+
+  function loadStepData() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) stepData = JSON.parse(raw);
+    } catch (e) {
+      stepData = {};
+    }
+  }
+
+  function persistStepData() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(stepData));
+    } catch (e) {}
+  }
+
+  function getStep(phaseId) {
+    if (!stepData[phaseId]) {
+      stepData[phaseId] = { status: "", owner: "", notes: "", links: "" };
+    }
+    return stepData[phaseId];
+  }
+
+  function stepHasUserData(phaseId) {
+    var s = getStep(phaseId);
+    if ((s.notes || "").trim()) return true;
+    if ((s.owner || "").trim()) return true;
+    if ((s.links || "").trim()) return true;
+    if (s.status && s.status !== "") return true;
+    return false;
+  }
+
+  function flashSaveHint() {
+    var el = document.getElementById("stepSaveHint");
+    if (!el) return;
+    el.textContent = "Saved in this browser.";
+    el.className = "save-hint ok";
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function () {
+      el.textContent = "";
+      el.className = "save-hint";
+    }, 1400);
+  }
+
+  function bindCurrentStepForm(phaseId) {
+    var st = document.getElementById("stepStatus");
+    var ow = document.getElementById("stepOwner");
+    var no = document.getElementById("stepNotes");
+    var li = document.getElementById("stepLinks");
+    if (!st || !ow || !no || !li) return;
+
+    function pull() {
+      var s = getStep(phaseId);
+      s.status = st.value;
+      s.owner = ow.value;
+      s.notes = no.value;
+      s.links = li.value;
+      persistStepData();
+      flashSaveHint();
+      renderTimeline();
+      renderPhases();
+    }
+
+    st.onchange = pull;
+    ow.oninput = function () {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(pull, 400);
+    };
+    no.oninput = function () {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(pull, 400);
+    };
+    li.oninput = function () {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(pull, 400);
+    };
+  }
+
+  function phaseMatches(row, q) {
+    if (!q) return true;
+    var s = getStep(row.id);
+    var extra = ((s.notes || "") + " " + (s.owner || "") + " " + (s.links || "") + " " + (s.status || "")).toLowerCase();
+    var hay = (row.id + " " + row.label + " " + row.description + " " + (row.checkpoint || "") + " " + extra).toLowerCase();
+    return hay.indexOf(q) !== -1;
+  }
+
+  function moduleMatches(m, q) {
+    if (!q) return true;
+    var hay = (m.title + " " + m.path + " " + m.body + " " + (m.kw || "")).toLowerCase();
+    return hay.indexOf(q) !== -1;
+  }
+
+  function getSelectedRow() {
+    return PHASE_SEQUENCE[selectedIndex] || PHASE_SEQUENCE[0];
+  }
+
+  function renderDetail() {
+    var row = getSelectedRow();
+    var pid = row.id;
+    var s = getStep(pid);
+
+    var root = document.getElementById("phaseDetail");
+    root.innerHTML = "";
+
+    var h3 = document.createElement("h3");
+    h3.textContent = row.label;
+    root.appendChild(h3);
+
+    var p = document.createElement("p");
+    p.className = "body";
+    p.innerHTML = formatDescription(row.description);
+    root.appendChild(p);
+
+    if (row.checkpoint) {
+      var cp = document.createElement("p");
+      cp.className = "cp";
+      cp.innerHTML = "<strong>Human checkpoint:</strong> " + esc(String(row.checkpoint).replace(/_/g, " "));
+      root.appendChild(cp);
+    }
+
+    var idl = document.createElement("p");
+    idl.className = "idline";
+    idl.textContent = "Phase." + row.id;
+    root.appendChild(idl);
+
+    var form = document.createElement("div");
+    form.className = "step-form";
+    form.innerHTML =
+      "<h4>Your data for this step</h4>" +
+      "<div class=\"row2\">" +
+      "<div><label for=\"stepStatus\">Status</label>" +
+      "<select id=\"stepStatus\" aria-label=\"Step status\">" +
+      "<option value=\"\">— Select —</option>" +
+      "<option value=\"not_started\">Not started</option>" +
+      "<option value=\"in_progress\">In progress</option>" +
+      "<option value=\"blocked\">Blocked</option>" +
+      "<option value=\"done\">Done</option>" +
+      "</select></div>" +
+      "<div><label for=\"stepOwner\">Owner / role</label>" +
+      "<input id=\"stepOwner\" type=\"text\" placeholder=\"e.g. Partner, CST, you\" autocomplete=\"off\" /></div>" +
+      "</div>" +
+      "<label for=\"stepNotes\">Notes &amp; decisions</label>" +
+      "<textarea id=\"stepNotes\" placeholder=\"What happened, open questions, links to sources…\"></textarea>" +
+      "<label for=\"stepLinks\">Links / paths (one per line)</label>" +
+      "<textarea id=\"stepLinks\" placeholder=\"e.g. \\\\share\\pursuit\\RFP.pdf (one per line)\"></textarea>" +
+      "<p class=\"save-hint\" id=\"stepSaveHint\" aria-live=\"polite\"></p>";
+    root.appendChild(form);
+
+    document.getElementById("stepStatus").value = s.status || "";
+    document.getElementById("stepOwner").value = s.owner || "";
+    document.getElementById("stepNotes").value = s.notes || "";
+    document.getElementById("stepLinks").value = s.links || "";
+
+    bindCurrentStepForm(pid);
+  }
+
+  function setSelectedIndex(i) {
+    clearTimeout(saveTimer);
+    i = Math.max(0, Math.min(PHASE_SEQUENCE.length - 1, i));
+    selectedIndex = i;
+    renderTimeline();
+    renderPhases();
+    renderDetail();
+  }
+
+  function renderTimeline() {
+    var host = document.getElementById("timeline");
+    host.innerHTML = "";
+    PHASE_SEQUENCE.forEach(function (row, i) {
+      if (i > 0) {
+        var bar = document.createElement("div");
+        bar.className = "tl-bar";
+        bar.setAttribute("aria-hidden", "true");
+        host.appendChild(bar);
+      }
+      var wrap = document.createElement("div");
+      wrap.className = "tl-step";
+      var btn = document.createElement("button");
+      btn.type = "button";
+      var hasD = stepHasUserData(row.id);
+      btn.className =
+        "tl-node" +
+        (row.checkpoint ? " hitl" : "") +
+        (i === selectedIndex ? " active" : "") +
+        (hasD ? " has-user-data" : "");
+      btn.textContent = String(i + 1);
+      btn.title = row.label + (row.checkpoint ? " (HITL)" : "") + (hasD ? " — has notes" : "");
+      btn.addEventListener("click", function () { setSelectedIndex(i); });
+      var lab = document.createElement("div");
+      lab.className = "tl-label";
+      lab.textContent = row.id.replace(/_/g, " ");
+      wrap.appendChild(btn);
+      wrap.appendChild(lab);
+      host.appendChild(wrap);
+    });
+  }
+
+  function renderPhases() {
+    var q = (document.getElementById("q").value || "").trim().toLowerCase();
+    var host = document.getElementById("phaseFlow");
+    host.innerHTML = "";
+    PHASE_SEQUENCE.forEach(function (row, i) {
+      var match = phaseMatches(row, q);
+      var hasD = stepHasUserData(row.id);
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className =
+        "phase-pill" +
+        (row.checkpoint ? " checkpoint" : "") +
+        (i === selectedIndex ? " selected" : "") +
+        (!match ? " hidden" : "") +
+        (hasD ? " has-user-data" : "");
+      btn.innerHTML = "<strong>" + esc(row.id) + "</strong>" + esc(row.label) + (row.checkpoint ? "<span> · HITL</span>" : "");
+      btn.addEventListener("click", function () { setSelectedIndex(i); });
+      host.appendChild(btn);
+    });
+
+    var grid = document.getElementById("moduleGrid");
+    var cards = grid.querySelectorAll(".card");
+    for (var c = 0; c < cards.length; c++) {
+      var show = cards[c].dataset.match !== "0";
+      cards[c].classList.toggle("hidden", !show);
+      cards[c].classList.toggle("dim", q && show);
+    }
+    if (q) {
+      for (var j = 0; j < cards.length; j++) {
+        if (cards[j].dataset.match === "1") cards[j].classList.remove("dim");
+      }
+    }
+  }
+
+  function buildModuleCards() {
+    var grid = document.getElementById("moduleGrid");
+    grid.innerHTML = "";
+    AGENT_MODULES.forEach(function (m) {
+      var div = document.createElement("article");
+      div.className = "card";
+      div.dataset.match = "1";
+      div.innerHTML = "<h3>" + esc(m.title) + "</h3><p>" + formatDescription(m.body) + "</p><code class=\"path\">" + esc(m.path) + "</code>";
+      grid.appendChild(div);
+    });
+  }
+
+  function applyModuleFilter() {
+    var q = (document.getElementById("q").value || "").trim().toLowerCase();
+    AGENT_MODULES.forEach(function (m, i) {
+      var el = document.getElementById("moduleGrid").children[i];
+      if (!el) return;
+      el.dataset.match = moduleMatches(m, q) ? "1" : "0";
+    });
+    renderPhases();
+  }
+
+  function exportAllSteps() {
+    var payload = {
+      exportedAt: new Date().toISOString(),
+      version: 1,
+      phases: {},
+    };
+    PHASE_SEQUENCE.forEach(function (row) {
+      var s = getStep(row.id);
+      payload.phases[row.id] = {
+        label: row.label,
+        status: s.status || "",
+        owner: s.owner || "",
+        notes: s.notes || "",
+        links: s.links || "",
+      };
+    });
+    var blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "lop-agents-step-data.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  function importStepsFile(file) {
+    var r = new FileReader();
+    r.onload = function () {
+      try {
+        var o = JSON.parse(r.result);
+        var phases = o.phases || o;
+        if (typeof phases !== "object" || phases === null) throw new Error("Invalid shape");
+        Object.keys(phases).forEach(function (k) {
+          var p = phases[k];
+          if (!p || typeof p !== "object") return;
+          stepData[k] = {
+            status: p.status != null ? String(p.status) : "",
+            owner: p.owner != null ? String(p.owner) : "",
+            notes: p.notes != null ? String(p.notes) : "",
+            links: p.links != null ? String(p.links) : "",
+          };
+        });
+        persistStepData();
+        renderTimeline();
+        renderPhases();
+        renderDetail();
+        flashSaveHint();
+      } catch (err) {
+        alert("Could not import JSON: " + (err && err.message ? err.message : String(err)));
+      }
+    };
+    r.readAsText(file);
+  }
+
+  document.getElementById("pipelineNote").innerHTML = formatDescription(PIPELINE_NOTE);
+
+  loadStepData();
+
+  document.getElementById("btnPrev").addEventListener("click", function () {
+    setSelectedIndex(selectedIndex - 1);
+  });
+  document.getElementById("btnNext").addEventListener("click", function () {
+    setSelectedIndex(selectedIndex + 1);
+  });
+
+  document.getElementById("btnExportSteps").addEventListener("click", exportAllSteps);
+  document.getElementById("btnClearSteps").addEventListener("click", function () {
+    if (!confirm("Remove all saved step data from this browser?")) return;
+    stepData = {};
+    persistStepData();
+    renderTimeline();
+    renderPhases();
+    renderDetail();
+  });
+  document.getElementById("importSteps").addEventListener("change", function (e) {
+    var f = e.target.files && e.target.files[0];
+    e.target.value = "";
+    if (f) importStepsFile(f);
+  });
+
+  document.getElementById("q").addEventListener("input", applyModuleFilter);
+
+  document.addEventListener("keydown", function (e) {
+    var t = e.target;
+    var tag = t && t.tagName;
+    var isSearch = tag === "INPUT" && t.id === "q";
+    if (tag === "TEXTAREA" || tag === "SELECT" || (tag === "INPUT" && !isSearch)) {
+      if (e.key === "/" && tag !== "INPUT") {
+        e.preventDefault();
+        document.getElementById("q").focus();
+      }
+      return;
+    }
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      setSelectedIndex(selectedIndex - 1);
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      setSelectedIndex(selectedIndex + 1);
+    } else if (e.key === "/") {
+      e.preventDefault();
+      document.getElementById("q").focus();
+    }
+  });
+
+  buildModuleCards();
+  renderTimeline();
+  renderPhases();
+  renderDetail();
+})();
+  </script>
+</body>
+</html>

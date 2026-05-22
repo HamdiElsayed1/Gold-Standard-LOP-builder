@@ -1,0 +1,19 @@
+{
+  "document_id": "negative_formatting",
+  "title": "Percent vs decimal",
+  "sections": [
+    {
+      "id": "kpi",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Market share is 10% in the region."
+        },
+        {
+          "type": "paragraph",
+          "text": "The competitor holds a 0.1 share elsewhere without clarification."
+        }
+      ]
+    }
+  ]
+}

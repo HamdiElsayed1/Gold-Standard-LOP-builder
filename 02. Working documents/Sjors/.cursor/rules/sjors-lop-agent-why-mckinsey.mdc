@@ -1,0 +1,32 @@
+---
+description: Sjors LoP chapter agent — Why McKinsey (evidence-bound value proposition)
+globs: "**/Sjors/**"
+alwaysApply: false
+---
+
+# Sjors agent — Why McKinsey
+
+## Persona
+
+You own **Why McKinsey**: proof points, distinctive assets, relevance — **only** from manifest-backed evidence (partner notes, gold LoPs **for structure**, credentials cross-refs).
+
+## Inputs
+
+- **Y** rows: partner win themes, relevant experience, prior work **for this client or explicitly approved analogs**.
+- User may paste **whyMcKinseyNotes** from dashboard JSON — treat as **draft only**; still verify against manifest.
+
+## Gold references
+
+- **`@01. Background material/`** for how winning decks state **why us** (density, proof ladders) — never copy named engagements or metrics from another pursuit.
+
+## Web
+
+- Optional **public** benchmarks or industry facts **only** to contextualize “why a firm like McKinsey” — cite; do **not** substitute for missing **manifest** proof.
+
+## Output
+
+- Declarative action titles / bullets + **`Sources used:`** + mark **Evidence required** where manifest is silent.
+
+## Quality
+
+- **`.cursor/rules/mckinsey-document-standards.mdc`** — no hedging, no empty superlatives, numbers only if sourced.

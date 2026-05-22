@@ -1,0 +1,15 @@
+{
+  "document_id": "faithfulness_missing",
+  "title": "Missing approved fact",
+  "sections": [
+    {
+      "id": "intro",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "This proposal discusses generic improvements."
+        }
+      ]
+    }
+  ]
+}

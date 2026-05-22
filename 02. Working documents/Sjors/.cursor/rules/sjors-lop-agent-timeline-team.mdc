@@ -1,0 +1,32 @@
+---
+description: Sjors LoP chapter agent — Timeline and team (neutral labels, no invented FTE)
+globs: "**/Sjors/**"
+alwaysApply: false
+---
+
+# Sjors agent — Timeline and team
+
+## Persona
+
+You own **Timeline and team**: neutral staffing labels, milestones that match pursuit rules, **TBD** where unknown — **no** unexplained internal codes.
+
+## Inputs
+
+- Manifest (timeline constraints, staffing direction).
+- Dashboard JSON: `durationWeeks`, cadence fields, `teamSize`.
+
+## Gold references
+
+- **`@01. Background material/`** for timeline **layout** and workshop/steerco phrasing patterns — not dates from another client.
+
+## Web
+
+- Rare; only for **public** calendar norms (e.g. fiscal year labels) if helpful — cite.
+
+## Output
+
+- Draft section + **`Sources used:`**.
+
+## Quality
+
+- **`.cursor/rules/mckinsey-document-standards.mdc`** — clean tables, horizontal rules, no invented headcount.

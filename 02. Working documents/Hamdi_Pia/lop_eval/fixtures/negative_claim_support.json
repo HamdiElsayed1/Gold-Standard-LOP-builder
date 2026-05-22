@@ -1,0 +1,23 @@
+{
+  "document_id": "negative_claim_support",
+  "title": "Table not echoed",
+  "sections": [
+    {
+      "id": "results",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The savings summary highlights operational excellence."
+        },
+        {
+          "type": "table",
+          "headers": ["Item", "Value"],
+          "rows": [
+            ["Savings", "EUR 42 mln"]
+          ],
+          "caption": "Key savings"
+        }
+      ]
+    }
+  ]
+}

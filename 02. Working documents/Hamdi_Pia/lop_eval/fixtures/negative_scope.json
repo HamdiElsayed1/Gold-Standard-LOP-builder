@@ -1,0 +1,24 @@
+{
+  "document_id": "negative_scope",
+  "title": "Scope conflict",
+  "sections": [
+    {
+      "id": "a",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The engagement covers EMEA only."
+        }
+      ]
+    },
+    {
+      "id": "b",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "This is a global change effort."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+---
+description: Alexander LoP workspace — sketch-first Markdown playbook, Cursor runbook
+globs: "**/Alexander/**"
+alwaysApply: false
+---
+
+# Alexander workspace (personal LoP tree)
+
+When the user’s paths include **`02. Working documents/Alexander/`**:
+
+- **Default execution path**: **Markdown + Cursor** — start from `02. Working documents/Alexander/instructions/playbook-from-sketch.md` and the sketch `02. Working documents/Workflow.jpeg`. **Optional Python:** `02. Working documents/Alexander/scripts/kickoff_from_intake.py` (stdlib) lists Background Material paths and prints kickoff text; use if the user wants it. Pia under `02. Working documents/Pia` is separate automation — only if asked.
+- **Working tree**: Treat **`Alexander/`** as their pursuit home — not `Fleur/` unless they explicitly switch.
+- **Runbook + gates**: Follow **`Jasper/lop-cursor-runbook.md`**, Step 0 manifest (**Y**-confirmed sources only), and HITL gates A/B/C per tracker.
+- **Peer folders**: Do not edit siblings under **`02. Working documents/`** unless the user asks for that path.
+
+Primary references: **`Alexander/README.md`**, **`Alexander/instructions/playbook-from-sketch.md`**, **`Alexander/instructions/flow-intake-to-lop.md`** (intake + `@` Background Material → LoP), **`Alexander/workflow-from-sketch.md`**.

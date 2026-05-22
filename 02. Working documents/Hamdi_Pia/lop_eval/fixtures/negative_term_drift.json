@@ -1,0 +1,19 @@
+{
+  "document_id": "negative_term_drift",
+  "title": "Label drift",
+  "sections": [
+    {
+      "id": "main",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The transformation covers all workstreams."
+        },
+        {
+          "type": "paragraph",
+          "text": "The sprint must finish before board review."
+        }
+      ]
+    }
+  ]
+}

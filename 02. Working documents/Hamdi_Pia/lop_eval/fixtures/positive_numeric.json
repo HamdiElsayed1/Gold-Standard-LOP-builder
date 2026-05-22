@@ -1,0 +1,20 @@
+{
+  "document_id": "positive_numeric",
+  "title": "Consistent revenue figures",
+  "sections": [
+    {
+      "id": "exec",
+      "title": "Summary",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Revenue reached EUR 100 mln in FY2024."
+        },
+        {
+          "type": "paragraph",
+          "text": "Full-year revenue was EUR 100 million for fiscal 2024."
+        }
+      ]
+    }
+  ]
+}
